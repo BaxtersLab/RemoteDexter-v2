@@ -1,7 +1,6 @@
 package noise
 
 import (
-	noise "command-line-argumentsC:\\RemoteDexter\\src\\shared\\noise\\primitives.go"
 	"fmt"
 	noisepkg "remotedexter/desktop/shared/noise"
 	"remotedexter/desktop/shared/protocol"
@@ -17,7 +16,7 @@ func (h *Handshake) PerformNoiseHandshake() ([]byte, error) {
 	// Generate ephemeral keypair
 	ephemeralPub, ephemeralPriv, err := noisepkg.GenerateKeyPair()
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	// Construct NoiseInit
@@ -35,7 +34,7 @@ func (h *Handshake) PerformNoiseHandshake() ([]byte, error) {
 	// In real, receive from network
 	respPub, _, err := noisepkg.GenerateKeyPair()
 	if err != nil {
-		return err
+		return nil, err
 	}
 	respMsg := protocol.NoiseResponse{
 		EphemeralPublicKey: respPub,
@@ -46,20 +45,20 @@ func (h *Handshake) PerformNoiseHandshake() ([]byte, error) {
 	// Decode
 	receivedResp, err := protocol.DecodeNoiseResponse(respFramed[4:]) // skip frame
 	if err != nil {
-		return err
+		return nil, err
 	}
 	fmt.Println("NoiseResponse received")
 
 	// Derive shared secret
 	shared, err := noisepkg.SharedSecret(ephemeralPriv, receivedResp.EphemeralPublicKey)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	// Run HKDF
 	sessionKey, err := noisepkg.HKDF(shared, nil, []byte("session"), 32)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	fmt.Printf("Session keys derived: %x\n", sessionKey[:4])

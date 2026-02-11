@@ -16,7 +16,9 @@ type Console struct {
 	handshake  *noise.Handshake
 	selector   *transport.Selector
 	sessionKey []byte
-	nonce      uint64	debug      bool}
+	nonce      uint64
+	debug      bool
+}
 
 func NewConsole() *Console {
 	return &Console{

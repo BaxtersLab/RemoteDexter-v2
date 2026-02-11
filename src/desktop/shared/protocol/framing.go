@@ -98,3 +98,65 @@ func DecodeNoiseResponse(data []byte) (NoiseResponse, error) {
 		Payload:            payload,
 	}, nil
 }
+
+// EncodeCommandRequest encodes CommandRequest to bytes
+func EncodeCommandRequest(req CommandRequest) []byte {
+	buf := make([]byte, 0)
+	buf = append(buf, byte(len(req.Type)))
+	buf = append(buf, []byte(req.Type)...)
+	buf = append(buf, byte(len(req.Payload)))
+	buf = append(buf, req.Payload...)
+	return FrameMessage(buf)
+}
+
+// DecodeCommandRequest decodes bytes to CommandRequest
+func DecodeCommandRequest(data []byte) (CommandRequest, error) {
+	if len(data) < 2 {
+		return CommandRequest{}, errors.New("data too short")
+	}
+	typeLen := int(data[0])
+	if len(data) < 1+typeLen+1 {
+		return CommandRequest{}, errors.New("data too short for type")
+	}
+	cmdType := string(data[1 : 1+typeLen])
+	payloadLen := int(data[1+typeLen])
+	payload := data[1+typeLen+1:]
+	if len(payload) != payloadLen {
+		return CommandRequest{}, errors.New("payload length mismatch")
+	}
+	return CommandRequest{
+		Type:    cmdType,
+		Payload: payload,
+	}, nil
+}
+
+// EncodeCommandResponse encodes CommandResponse to bytes
+func EncodeCommandResponse(resp CommandResponse) []byte {
+	buf := make([]byte, 0)
+	buf = append(buf, byte(len(resp.Status)))
+	buf = append(buf, []byte(resp.Status)...)
+	buf = append(buf, byte(len(resp.Payload)))
+	buf = append(buf, resp.Payload...)
+	return FrameMessage(buf)
+}
+
+// DecodeCommandResponse decodes bytes to CommandResponse
+func DecodeCommandResponse(data []byte) (CommandResponse, error) {
+	if len(data) < 2 {
+		return CommandResponse{}, errors.New("data too short")
+	}
+	statusLen := int(data[0])
+	if len(data) < 1+statusLen+1 {
+		return CommandResponse{}, errors.New("data too short for status")
+	}
+	status := string(data[1 : 1+statusLen])
+	payloadLen := int(data[1+statusLen])
+	payload := data[1+statusLen+1:]
+	if len(payload) != payloadLen {
+		return CommandResponse{}, errors.New("payload length mismatch")
+	}
+	return CommandResponse{
+		Status:  status,
+		Payload: payload,
+	}, nil
+}

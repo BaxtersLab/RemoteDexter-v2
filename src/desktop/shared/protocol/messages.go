@@ -37,3 +37,15 @@ type NoiseResponse struct {
 	EphemeralPublicKey []byte
 	Payload            []byte
 }
+
+// CommandRequest for sending commands
+type CommandRequest struct {
+	Type    string
+	Payload []byte
+}
+
+// CommandResponse for command responses
+type CommandResponse struct {
+	Status  string
+	Payload []byte
+}
