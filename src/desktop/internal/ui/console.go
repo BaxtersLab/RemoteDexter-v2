@@ -51,7 +51,10 @@ func (c *Console) showMenu() {
 	fmt.Println("4: Send ping")
 	fmt.Println("5: Start screen streaming")
 	fmt.Println("6: Stop screen streaming")
-	fmt.Println("7: Exit")
+	fmt.Println("7: Toggle mouse mode")
+	fmt.Println("8: Toggle touch mode")
+	fmt.Println("9: Toggle precision mode")
+	fmt.Println("10: Exit")
 	fmt.Print("Choice: ")
 }
 
@@ -70,6 +73,12 @@ func (c *Console) handleChoice(choice string) {
 	case "6":
 		c.stopStreaming()
 	case "7":
+		c.setInputMode("mouse")
+	case "8":
+		c.setInputMode("touch")
+	case "9":
+		c.setInputMode("precision")
+	case "10":
 		os.Exit(0)
 	default:
 		fmt.Println("Invalid choice")
@@ -142,5 +151,26 @@ func (c *Console) stopStreaming() {
 		fmt.Printf("Streaming stop failed: %v\n", err)
 	} else {
 		fmt.Println("Streaming stopped successfully")
+	}
+}
+
+func (c *Console) setInputMode(mode string) {
+	if c.sessionKey == nil {
+		fmt.Println("No session key, perform handshake first")
+		return
+	}
+
+	fmt.Printf("UI: Setting input mode to %s\n", mode)
+
+	req := protocol.CommandRequest{
+		Type:    "set_input_mode",
+		Payload: []byte(mode),
+	}
+
+	resp, err := c.selector.SendCommand(req, c.sessionKey, &c.nonce)
+	if err != nil {
+		fmt.Printf("Set input mode failed: %v\n", err)
+	} else {
+		fmt.Printf("Input mode set to %s: %s\n", mode, resp.Status)
 	}
 }

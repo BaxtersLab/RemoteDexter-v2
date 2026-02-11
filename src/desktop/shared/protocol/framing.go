@@ -160,3 +160,91 @@ func DecodeCommandResponse(data []byte) (CommandResponse, error) {
 		Payload: payload,
 	}, nil
 }
+
+// EncodeTouchEvent encodes TouchEvent to bytes
+func EncodeTouchEvent(event TouchEvent) []byte {
+	buf := make([]byte, 0)
+	buf = append(buf, byte(event.X>>8), byte(event.X&0xFF))
+	buf = append(buf, byte(event.Y>>8), byte(event.Y&0xFF))
+	buf = append(buf, byte(event.Action))
+	return FrameMessage(buf)
+}
+
+// DecodeTouchEvent decodes bytes to TouchEvent
+func DecodeTouchEvent(data []byte) (TouchEvent, error) {
+	if len(data) < 5 {
+		return TouchEvent{}, errors.New("data too short")
+	}
+	x := int(data[0])<<8 | int(data[1])
+	y := int(data[2])<<8 | int(data[3])
+	action := int(data[4])
+	return TouchEvent{X: x, Y: y, Action: action}, nil
+}
+
+// EncodeMouseMove encodes MouseMove to bytes
+func EncodeMouseMove(event MouseMove) []byte {
+	buf := make([]byte, 0)
+	buf = append(buf, byte(event.DX>>8), byte(event.DX&0xFF))
+	buf = append(buf, byte(event.DY>>8), byte(event.DY&0xFF))
+	return FrameMessage(buf)
+}
+
+// DecodeMouseMove decodes bytes to MouseMove
+func DecodeMouseMove(data []byte) (MouseMove, error) {
+	if len(data) < 4 {
+		return MouseMove{}, errors.New("data too short")
+	}
+	dx := int(data[0])<<8 | int(data[1])
+	dy := int(data[2])<<8 | int(data[3])
+	return MouseMove{DX: dx, DY: dy}, nil
+}
+
+// EncodeMouseClick encodes MouseClick to bytes
+func EncodeMouseClick(event MouseClick) []byte {
+	buf := make([]byte, 0)
+	buf = append(buf, byte(event.Button))
+	buf = append(buf, byte(event.Action))
+	return FrameMessage(buf)
+}
+
+// DecodeMouseClick decodes bytes to MouseClick
+func DecodeMouseClick(data []byte) (MouseClick, error) {
+	if len(data) < 2 {
+		return MouseClick{}, errors.New("data too short")
+	}
+	return MouseClick{Button: int(data[0]), Action: int(data[1])}, nil
+}
+
+// EncodeKeyEvent encodes KeyEvent to bytes
+func EncodeKeyEvent(event KeyEvent) []byte {
+	buf := make([]byte, 0)
+	buf = append(buf, byte(event.KeyCode>>8), byte(event.KeyCode&0xFF))
+	buf = append(buf, byte(event.Action))
+	return FrameMessage(buf)
+}
+
+// DecodeKeyEvent decodes bytes to KeyEvent
+func DecodeKeyEvent(data []byte) (KeyEvent, error) {
+	if len(data) < 3 {
+		return KeyEvent{}, errors.New("data too short")
+	}
+	keyCode := int(data[0])<<8 | int(data[1])
+	action := int(data[2])
+	return KeyEvent{KeyCode: keyCode, Action: action}, nil
+}
+
+// EncodeScrollEvent encodes ScrollEvent to bytes
+func EncodeScrollEvent(event ScrollEvent) []byte {
+	buf := make([]byte, 0)
+	buf = append(buf, byte(event.Amount>>8), byte(event.Amount&0xFF))
+	return FrameMessage(buf)
+}
+
+// DecodeScrollEvent decodes bytes to ScrollEvent
+func DecodeScrollEvent(data []byte) (ScrollEvent, error) {
+	if len(data) < 2 {
+		return ScrollEvent{}, errors.New("data too short")
+	}
+	amount := int(data[0])<<8 | int(data[1])
+	return ScrollEvent{Amount: amount}, nil
+}
