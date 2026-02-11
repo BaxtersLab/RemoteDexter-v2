@@ -6,6 +6,7 @@ import (
 	"os"
 	"remotedexter/desktop/internal/bluetooth"
 	"remotedexter/desktop/internal/noise"
+	"remotedexter/desktop/internal/streaming"
 	"remotedexter/desktop/internal/transport"
 	"remotedexter/desktop/shared/protocol"
 	"strings"
@@ -15,6 +16,7 @@ type Console struct {
 	discovery  *bluetooth.Discovery
 	handshake  *noise.Handshake
 	selector   *transport.Selector
+	streaming  *streaming.StreamingSession
 	sessionKey []byte
 	nonce      uint64
 	debug      bool
@@ -25,6 +27,7 @@ func NewConsole() *Console {
 		discovery: bluetooth.NewDiscovery(),
 		handshake: noise.NewHandshake(),
 		selector:  transport.NewSelector(),
+		streaming: streaming.NewStreamingSession(),
 	}
 }
 
@@ -46,7 +49,9 @@ func (c *Console) showMenu() {
 	fmt.Println("2: Bootstrap Android")
 	fmt.Println("3: Perform handshake")
 	fmt.Println("4: Send ping")
-	fmt.Println("5: Exit")
+	fmt.Println("5: Start screen streaming")
+	fmt.Println("6: Stop screen streaming")
+	fmt.Println("7: Exit")
 	fmt.Print("Choice: ")
 }
 
@@ -61,6 +66,10 @@ func (c *Console) handleChoice(choice string) {
 	case "4":
 		c.sendPing()
 	case "5":
+		c.startStreaming()
+	case "6":
+		c.stopStreaming()
+	case "7":
 		os.Exit(0)
 	default:
 		fmt.Println("Invalid choice")
@@ -109,5 +118,29 @@ func (c *Console) sendPing() {
 		fmt.Printf("Command failed: %v\n", err)
 	} else {
 		fmt.Printf("ping → %s\n", string(resp.Payload))
+	}
+}
+
+func (c *Console) startStreaming() {
+	if c.sessionKey == nil {
+		fmt.Println("No session key, perform handshake first")
+		return
+	}
+
+	fmt.Println("UI: Starting screen streaming")
+	c.streaming.SetSessionKeys(c.sessionKey, c.nonce)
+	if err := c.streaming.StartStreaming(); err != nil {
+		fmt.Printf("Streaming start failed: %v\n", err)
+	} else {
+		fmt.Println("Streaming started successfully")
+	}
+}
+
+func (c *Console) stopStreaming() {
+	fmt.Println("UI: Stopping screen streaming")
+	if err := c.streaming.StopStreaming(); err != nil {
+		fmt.Printf("Streaming stop failed: %v\n", err)
+	} else {
+		fmt.Println("Streaming stopped successfully")
 	}
 }
