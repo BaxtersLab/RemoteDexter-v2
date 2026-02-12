@@ -49,3 +49,49 @@ type CommandResponse struct {
 	Status  string
 	Payload []byte
 }
+
+// TrustedDevice represents a trusted device entry
+type TrustedDevice struct {
+	DeviceName string `json:"device_name"`
+	DeviceID   string `json:"device_id"`
+	PublicKey  []byte `json:"public_key"`
+	AddedAt    string `json:"added_at"`
+	LastSeen   string `json:"last_seen"`
+}
+
+// RevokeDevice command payload
+type RevokeDevice struct {
+	DeviceID string `json:"device_id"`
+}
+
+// TerminateSession command payload
+type TerminateSession struct {
+	Reason string `json:"reason"`
+}
+
+// FileOffer represents a file transfer offer
+type FileOffer struct {
+	FileID   string `json:"file_id"`
+	FileName string `json:"file_name"`
+	Size     int64  `json:"size"`
+	MimeType string `json:"mime_type"`
+}
+
+// FileAccept represents acceptance of a file transfer
+type FileAccept struct {
+	FileID string `json:"file_id"`
+}
+
+// FileReject represents rejection of a file transfer
+type FileReject struct {
+	FileID string `json:"file_id"`
+	Reason string `json:"reason"`
+}
+
+// FileChunk represents a chunk of file data
+type FileChunk struct {
+	FileID string `json:"file_id"`
+	Offset int64  `json:"offset"`
+	Data   []byte `json:"data"`
+	EOF    bool   `json:"eof"`
+}

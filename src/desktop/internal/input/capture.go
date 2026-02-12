@@ -185,3 +185,21 @@ func (ic *InputCapture) SendScrollEvent(amount int) error {
 
 	return nil
 }
+
+// Close cleans up input capture resources
+func (ic *InputCapture) Close() error {
+	if ic.isCapturing {
+		ic.StopCapture()
+	}
+
+	// Zeroize session keys
+	if ic.sessionKey != nil {
+		for i := range ic.sessionKey {
+			ic.sessionKey[i] = 0
+		}
+		ic.sessionKey = nil
+	}
+
+	fmt.Println("Input capture closed")
+	return nil
+}

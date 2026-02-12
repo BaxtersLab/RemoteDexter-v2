@@ -98,3 +98,11 @@ func (s *Selector) SendCommand(req protocol.CommandRequest, sessionKey []byte, n
 	fmt.Printf("Response received via %s: %s\n", transportType, receivedResp.Status)
 	return receivedResp, nil
 }
+
+// Close closes all active transport connections
+func (s *Selector) Close() error {
+	// In a real implementation, this would close any persistent connections
+	// For now, just return success
+	fmt.Println("Transport selector closed")
+	return nil
+}
