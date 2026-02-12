@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="assets/Copilot_20260211_165230.png" alt="RemoteDexter Logo" width="600"/>
+</div>
+
 # RemoteDexter (RD)
 
 RemoteDexter (RD) is a user-owned, peer-to-peer remote access tool. It is designed so users can inspect the source, verify the architecture, and confirm that the system does not call home or depend on any third-party infrastructure.
