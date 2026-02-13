@@ -147,3 +147,5 @@ func (s *SessionState) DecryptMessage(ciphertext []byte) ([]byte, error) {
 	payload := ciphertext[12:]
 	return AEAD_Decrypt(key, nonceBytes, payload)
 
+}
+

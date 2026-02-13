@@ -100,7 +100,6 @@ func (l *Logger) sanitizeMessage(message string) string {
 // redactHexKeys redacts hexadecimal strings of a specific byte length
 func (l *Logger) redactHexKeys(message string, byteLength int) string {
 	hexLength := byteLength * 2
-	pattern := fmt.Sprintf(`[a-fA-F0-9]{%d}`, hexLength)
 
 	// Simple regex replacement (not using regexp for security)
 	words := strings.Fields(message)
