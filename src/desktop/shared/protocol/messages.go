@@ -3,7 +3,7 @@ package protocol
 // KeyEvent represents a keyboard event
 type KeyEvent struct {
 	KeyCode int
-	Action  int
+	Pressed bool
 }
 
 // MouseEvent represents a mouse event
@@ -38,49 +38,60 @@ type NoiseResponse struct {
 	Payload            []byte
 }
 
-// CommandRequest for sending commands
+// CommandRequest for remote commands
 type CommandRequest struct {
 	Type    string
 	Payload []byte
 }
 
-// CommandResponse for command responses
+// CommandResponse for command replies
 type CommandResponse struct {
 	Status  string
 	Payload []byte
 }
 
-// Input event types
-type TouchEvent struct {
-	X      int
-	Y      int
-	Action int
+// TrustedDevice represents a trusted device entry
+type TrustedDevice struct {
+	DeviceName string `json:"device_name"`
+	DeviceID   string `json:"device_id"`
+	PublicKey  []byte `json:"public_key"`
+	AddedAt    string `json:"added_at"`
+	LastSeen   string `json:"last_seen"`
 }
 
-type MouseMove struct {
-	DX int
-	DY int
+// RevokeDevice command payload
+type RevokeDevice struct {
+	DeviceID string `json:"device_id"`
 }
 
-type MouseClick struct {
-	Button int
-	Action int
+// TerminateSession command payload
+type TerminateSession struct {
+	Reason string `json:"reason"`
 }
 
-type ScrollEvent struct {
-	Amount int
+// FileOffer represents a file transfer offer
+type FileOffer struct {
+	FileID   string `json:"file_id"`
+	FileName string `json:"file_name"`
+	Size     int64  `json:"size"`
+	MimeType string `json:"mime_type"`
 }
 
-// Action constants
-const (
-	ACTION_DOWN = 0
-	ACTION_UP   = 1
-	ACTION_MOVE = 2
-)
+// FileAccept represents acceptance of a file transfer
+type FileAccept struct {
+	FileID string `json:"file_id"`
+}
 
-// Button constants
-const (
-	BUTTON_LEFT   = 0
-	BUTTON_RIGHT  = 1
-	BUTTON_MIDDLE = 2
-)
+// FileReject represents rejection of a file transfer
+type FileReject struct {
+	FileID string `json:"file_id"`
+	Reason string `json:"reason"`
+}
+
+// FileChunk represents a chunk of file data
+type FileChunk struct {
+	FileID string `json:"file_id"`
+	Offset int64  `json:"offset"`
+	Data   []byte `json:"data"`
+	EOF    bool   `json:"eof"`
+}

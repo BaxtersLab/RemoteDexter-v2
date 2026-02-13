@@ -1,0 +1,31 @@
+*** Begin Patch
+*** Add File: patches/preview_remove_parameter_lines.diff
++*** Preview patch: remove stray `<parameter ...>` lines (no changes applied)
++
++--- a/src/desktop/shared/noise/noise_test.go
+++++ b/src/desktop/shared/noise/noise_test.go
++@@
++  if err != nil {
++         t.Fatalf("AEAD validation failed: %v", err)
++ }
+-<parameter name="filePath">C:\RemoteDexter\src\shared\noise\noise_test.go
++
++
++--- a/src/desktop/shared/noise/session.go
+++++ b/src/desktop/shared/noise/session.go
++@@
++    // Decrypt the actual payload
++    payload := ciphertext[12:]
++    return AEAD_Decrypt(key, nonceBytes, payload)
+-}
+-<parameter name="filePath">C:\RemoteDexter\src\shared\noise\session.go
++
++
++--- a/src/desktop/shared/protocol/validator.go
+++++ b/src/desktop/shared/protocol/validator.go
++@@
++    return false
++}
+-<parameter name="filePath">C:\RemoteDexter\src\shared\protocol\validator.go
++
++*** End Patch

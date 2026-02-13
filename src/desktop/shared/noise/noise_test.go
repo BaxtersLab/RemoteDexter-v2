@@ -1,8 +1,6 @@
 package noise
+}
 
-import (
-	"bytes"
-	"testing"
 )
 
 // TestX25519KeyAgreement tests X25519 key agreement correctness

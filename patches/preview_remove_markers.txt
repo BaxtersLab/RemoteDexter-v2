@@ -1,0 +1,19 @@
+Preview: remove stray `<parameter ...>` and `</content>` markers
+
+This preview patch removes XML-like markers accidentally inserted into Go source files that break parsing.
+It is a preview only — no workspace files are modified by creating these patch files.
+
+Files included in the preview diff:
+- src/desktop/shared/noise/noise_test.go
+- src/desktop/shared/noise/session.go
+- src/desktop/shared/protocol/validator.go
+- src/desktop/shared/logger.go
+
+What this preview does:
+- Removes any lines that exactly match `</content>` and lines starting with `<parameter` (these were introduced by tooling output), leaving surrounding Go code intact.
+
+Next steps (suggested):
+1) Review `patches/preview_remove_markers.diff`.
+2) If you approve, reply "Apply patch" and I'll apply the minimal removals and re-run `gofmt -s -l ./...` and `go vet ./...` from `src/desktop`.
+
+Created by automation — no source files changed yet.

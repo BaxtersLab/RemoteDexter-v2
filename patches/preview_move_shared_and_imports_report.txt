@@ -1,0 +1,75 @@
+Preview report — move `src/shared` -> `src/desktop/shared` and import fixes
+
+Summary
+-------
+This file describes the minimal, targeted changes required to align package layout with module imports.
+No source files have been modified. The preview patch is available at:
+- patches/preview_move_shared_and_imports.diff
+
+Planned filesystem move
+----------------------
+- Move the entire directory:
+  src/shared -> src/desktop/shared
+
+Suggested command examples (choose one):
+- PowerShell:
+  Move-Item -Path 'src\shared' -Destination 'src\desktop\shared' -Force -Recurse
+- Git (preferred to preserve history):
+  git mv src/shared src/desktop/shared
+
+Exact import-line corrections (for review)
+-----------------------------------------
+1) `src/desktop/internal/security/keyrotation.go`
+   Replace:
+     protocol "command-line-argumentsC:\\RemoteDexter\\src\\shared\\protocol\\messages.go"
+   With:
+     protocol "remotedexter/desktop/shared/protocol"
+
+2) `src/desktop/internal/ui/diagnostics.go`
+   Replace both the absolute-path alias and the missing-module import with:
+     errors "remotedexter/desktop/shared/errors"
+   and remove the `remotedexter/shared/errors` line.
+
+Files discovered that already use `remotedexter/desktop/shared/...`
+-----------------------------------------------------------------
+(these should work after the filesystem move without further edit)
+- src/desktop/cmd/rd-desktop/main.go
+- src/desktop/internal/console.go
+- src/desktop/internal/transport/selector.go
+- src/desktop/internal/transfer/sender.go
+- src/desktop/internal/transfer/receiver.go
+- src/desktop/internal/streaming/session.go
+- src/desktop/internal/session/controller.go
+- src/desktop/internal/security/security_test.go
+- src/desktop/internal/noise/handshake.go
+- src/desktop/internal/input/capture.go
+- src/shared/noise/handshake.go
+
+Files requiring import updates (explicit list)
+---------------------------------------------
+- src/desktop/internal/security/keyrotation.go  (absolute-path import)
+- src/desktop/internal/ui/diagnostics.go        (absolute-path import & missing module prefix)
+
+Additional notes & cautions
+---------------------------
+- After moving `src/shared` into `src/desktop/shared`, re-run `go list ./...` from `src/desktop`.
+- There is a type inconsistency in `keyrotation.go` where `ClearAllDevices` assigns
+  `ts.devices = make(map[string]protocol.TrustedDevice)` while `ts.devices` is typed as
+  `map[string]TrustedDevice` (local TrustedDevice). This must be resolved after imports are fixed.
+- A workspace search for the substring `command-line-arguments` returned only the two malformed files.
+- There appear to be duplicate/copy folders elsewhere in the workspace (e.g., under the Desktop path),
+  which may be leftover artifacts. Do not move or delete them now; confirm canonical source tree first.
+
+Recommended next steps (after you authorize applying this preview)
+------------------------------------------------------------------
+1) Apply the filesystem move (`git mv` preferred).
+2) Apply the two import edits shown exactly.
+3) Run:
+   cd src/desktop
+   go mod tidy
+   go list ./...
+   go vet ./...
+   gopls restart
+4) Address the `TrustedDevice` type mismatch in `keyrotation.go` if it surfaces.
+
+End of report

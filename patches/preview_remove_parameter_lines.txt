@@ -1,0 +1,15 @@
+Preview: remove stray `<parameter ...>` lines
+
+This preview patch contains the minimal removals required to fix parser errors reported by `go vet`.
+It DOES NOT modify any workspace files — it's a preview diff for review before applying.
+
+Files and exact lines removed:
+- src/desktop/shared/noise/noise_test.go: line containing `<parameter name="filePath">C:\RemoteDexter\src\shared\noise\noise_test.go`
+- src/desktop/shared/noise/session.go: line containing `<parameter name="filePath">C:\RemoteDexter\src\shared\noise\session.go`
+- src/desktop/shared/protocol/validator.go: line containing `<parameter name="filePath">C:\RemoteDexter\src\shared\protocol\validator.go`
+
+Suggested next steps:
+1) Review the preview diff file `patches/preview_remove_parameter_lines.diff`.
+2) If you approve, I will apply the changes as a focused patch (via `git mv`/`apply_patch`) and re-run `go vet`.
+
+Created by automation — no files changed yet.

@@ -198,48 +198,33 @@ func (eh *ErrorHandler) notifyUI(err *RemoteDexterError) {
 
 // convertToUserMessage converts technical errors to user-friendly messages
 func (eh *ErrorHandler) convertToUserMessage(level ErrorLevel, category ErrorCategory, code, message string) string {
-	// Technical error messages mapped to user-friendly ones
 	messages := map[string]string{
-		// Network errors
-		"NET_TIMEOUT":     "Connection timed out. Please check your network and try again.",
-		"NET_DISCONNECT":  "Connection lost. Attempting to reconnect...",
-		"NET_UNREACHABLE": "Cannot reach the remote device. Check if it's online and try again.",
-
-		// Transport errors
+		"NET_TIMEOUT":        "Connection timed out. Please check your network and try again.",
+		"NET_DISCONNECT":     "Connection lost. Attempting to reconnect...",
+		"NET_UNREACHABLE":    "Cannot reach the remote device. Check if it's online and try again.",
 		"TRANS_USB_LOST":     "USB connection lost. Please check the cable.",
 		"TRANS_WIFI_LOST":    "Wi-Fi connection lost. Attempting to reconnect...",
 		"TRANS_BT_LOST":      "Bluetooth connection lost. Please check device pairing.",
 		"TRANS_NO_AVAILABLE": "No suitable connection method available. Please check device connections.",
-
-		// Security errors
 		"SEC_HANDSHAKE_FAIL": "Secure connection failed. Please try pairing the device again.",
 		"SEC_KEY_INVALID":    "Security key invalid. Device may need to be re-paired.",
-
-		// Streaming errors
 		"STREAM_START_FAIL":  "Failed to start screen sharing. Please try again.",
 		"STREAM_ENCODER_ERR": "Screen encoding error. Restarting stream...",
 		"STREAM_DECODER_ERR": "Screen decoding error. Please restart the session.",
-
-		// Input errors
-		"INPUT_INJECT_FAIL": "Input control failed. Please restart input control.",
-		"INPUT_PERMISSION":  "Input permissions missing. Please grant input permissions.",
-
-		// File transfer errors
-		"FT_REJECTED":      "File transfer was rejected by the remote device.",
-		"FT_SIZE_EXCEEDED": "File too large. Maximum size is 2GB.",
-		"FT_STORAGE_FULL":  "Not enough storage space on device.",
-		"FT_PERMISSION":    "File access permission denied.",
-
-		// System errors
-		"SYS_RESOURCE_LOW": "System resources low. Please close other applications.",
-		"SYS_MEMORY_LOW":   "Memory running low. Please restart the application.",
+		"INPUT_INJECT_FAIL":  "Input control failed. Please restart input control.",
+		"INPUT_PERMISSION":   "Input permissions missing. Please grant input permissions.",
+		"FT_REJECTED":        "File transfer was rejected by the remote device.",
+		"FT_SIZE_EXCEEDED":   "File too large. Maximum size is 2GB.",
+		"FT_STORAGE_FULL":    "Not enough storage space on device.",
+		"FT_PERMISSION":      "File access permission denied.",
+		"SYS_RESOURCE_LOW":   "System resources low. Please close other applications.",
+		"SYS_MEMORY_LOW":     "Memory running low. Please restart the application.",
 	}
 
 	if userMsg, exists := messages[code]; exists {
 		return userMsg
 	}
 
-	// Fallback to category-based messages
 	switch category {
 	case CategoryNetwork:
 		return "Network connection issue. Please check your connection and try again."
@@ -260,7 +245,6 @@ func (eh *ErrorHandler) convertToUserMessage(level ErrorLevel, category ErrorCat
 
 // GetErrorStats returns error statistics for diagnostics
 func (eh *ErrorHandler) GetErrorStats() map[string]int {
-	// In a real implementation, this would track error counts
 	return map[string]int{
 		"total_errors":     0,
 		"network_errors":   0,
@@ -276,8 +260,6 @@ func (eh *ErrorHandler) GetErrorStats() map[string]int {
 func (eh *ErrorHandler) Close() {
 	close(eh.errorChan)
 }
-
-// Helper functions for creating common errors
 
 // NewNetworkError creates a network-related error
 func NewNetworkError(code, message, details string, recoverable bool) *RemoteDexterError {

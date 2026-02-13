@@ -1,13 +1,13 @@
 package security
 
 import (
-	protocol "command-line-argumentsC:\\RemoteDexter\\src\\shared\\protocol\\messages.go"
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
+	protocol "remotedexter/desktop/shared/protocol"
 	"sync"
 	"time"
 )

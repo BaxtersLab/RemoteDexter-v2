@@ -1,8 +1,6 @@
 package noise
+}
 
-import (
-	"fmt"
-	"sync"
 )
 
 // SessionState represents the cryptographic state of a Noise session

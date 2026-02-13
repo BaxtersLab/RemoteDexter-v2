@@ -1,10 +1,9 @@
 package ui
 
 import (
-	errors "command-line-argumentsC:\\RemoteDexter\\src\\shared\\errors\\handler.go"
 	"fmt"
 	"remotedexter/desktop/internal/session"
-	"remotedexter/shared/errors"
+	errors "remotedexter/desktop/shared/errors"
 	"time"
 )
 

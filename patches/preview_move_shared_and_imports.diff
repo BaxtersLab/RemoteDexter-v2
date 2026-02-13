@@ -1,0 +1,89 @@
+# Preview patch (DO NOT APPLY) — Move `src/shared` into module root `src/desktop/shared`
+# Actions (manual/CLI or git operations suggested):
+# 1) Move the directory (PowerShell):
+#    Move-Item -Path 'src\shared' -Destination 'src\desktop\shared' -Force -Recurse
+#    or (git):
+#    git mv src/shared src/desktop/shared
+# 2) Update import lines in source files that reference the old/malformed paths (see list below).
+# 3) Re-run `go list ./...` and `go vet ./...` to verify.
+
+# Below are the exact import-line changes I recommend for the two known malformed files.
+
+*** Preview change: file `src/desktop/internal/security/keyrotation.go` (import only) ***
+@@
+-import (
+-    protocol "command-line-argumentsC:\\RemoteDexter\\src\\shared\\protocol\\messages.go"
+-    "crypto/sha256"
+-    "encoding/hex"
+-    "encoding/json"
+-    "fmt"
+-    "os"
+-    "path/filepath"
+-    "sync"
+-    "time"
+-)
++import (
++    protocol "remotedexter/desktop/shared/protocol"
++    "crypto/sha256"
++    "encoding/hex"
++    "encoding/json"
++    "fmt"
++    "os"
++    "path/filepath"
++    "sync"
++    "time"
++)
+
+# NOTE: After this import fix, also review the ClearAllDevices implementation: it currently uses
+# `ts.devices = make(map[string]protocol.TrustedDevice)` while `ts.devices` is defined as
+# `map[string]TrustedDevice` (local type). That is a separate type mismatch to address.
+
+*** Preview change: file `src/desktop/internal/ui/diagnostics.go` (import only) ***
+@@
+-import (
+-    errors "command-line-argumentsC:\\RemoteDexter\\src\\shared\\errors\\handler.go"
+-    "fmt"
+-    "remotedexter/desktop/internal/session"
+-    "remotedexter/shared/errors"
+-    "time"
+-)
++import (
++    errors "remotedexter/desktop/shared/errors"
++    "fmt"
++    "remotedexter/desktop/internal/session"
++    "time"
++)
+
+# Rationale: both the absolute-path artifact and the import missing the `desktop` segment
+# should be normalized to the module-qualified path `remotedexter/desktop/shared/errors`.
+
+# Files already importing `remotedexter/desktop/shared/...` (these should NOT need changes when
+# the `src/shared` tree is moved into `src/desktop/shared`):
+# - src/desktop/cmd/rd-desktop/main.go
+# - src/desktop/internal/console.go
+# - src/desktop/internal/transport/selector.go
+# - src/desktop/internal/transfer/sender.go
+# - src/desktop/internal/transfer/receiver.go
+# - src/desktop/internal/streaming/session.go
+# - src/desktop/internal/session/controller.go
+# - src/desktop/internal/noise/handshake.go
+# - src/desktop/internal/input/capture.go
+# - src/desktop/internal/security/security_test.go
+# - src/desktop/internal/noise/handshake.go
+# - src/shared/noise/handshake.go
+# (these were discovered by a workspace search; they already use the correct module-qualified imports)
+
+# Additional files that currently require import updates after the move:
+# - src/desktop/internal/ui/diagnostics.go  (will be updated as shown above)
+# - src/desktop/internal/security/keyrotation.go  (will be updated as shown above)
+# - Any other file containing the string `command-line-arguments` or absolute path references
+#   (workspace search found only the two files above; please confirm by running a search before applying).
+
+# Post-change validation steps (once move and import edits are applied):
+# - cd src/desktop
+# - go mod tidy
+# - go list ./...
+# - go vet ./...
+# - gopls restart in the editor
+
+# End of preview patch
