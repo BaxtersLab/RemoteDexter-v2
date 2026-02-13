@@ -5,7 +5,6 @@ import (
 	"log"
 	"os"
 	"strings"
-	"time"
 )
 
 // LogLevel represents the severity level of log messages
@@ -77,8 +76,8 @@ func (l *Logger) log(level, format string, args ...interface{}) {
 // sanitizeMessage removes or redacts sensitive information from log messages
 func (l *Logger) sanitizeMessage(message string) string {
 	// Redact cryptographic keys (hex strings of typical key lengths)
-	message = l.redactHexKeys(message, 32)  // 32 bytes = 64 hex chars
-	message = l.redactHexKeys(message, 64)  // 64 bytes = 128 hex chars
+	message = l.redactHexKeys(message, 32) // 32 bytes = 64 hex chars
+	message = l.redactHexKeys(message, 64) // 64 bytes = 128 hex chars
 
 	// Redact base64-like strings that might be keys
 	message = l.redactBase64Keys(message)
@@ -202,5 +201,4 @@ func LogDebug(format string, args ...interface{}) {
 
 func LogEvent(eventType, description string, metadata map[string]interface{}) {
 	DefaultLogger.Event(eventType, description, metadata)
-}</content>
-<parameter name="filePath">C:\RemoteDexter\src\shared\logger.go
+}

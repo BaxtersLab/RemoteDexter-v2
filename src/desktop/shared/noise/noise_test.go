@@ -268,5 +268,4 @@ func TestValidateAEAD(t *testing.T) {
 	if err != nil {
 		t.Fatalf("AEAD validation failed: %v", err)
 	}
-}</content>
-<parameter name="filePath">C:\RemoteDexter\src\shared\noise\noise_test.go
+}

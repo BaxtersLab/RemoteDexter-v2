@@ -286,5 +286,6 @@ func (cv *CommandValidator) IsAbusiveCommand(req *CommandRequest, recentCommands
 	}
 
 	return false
-}</content>
-<parameter name="filePath">C:\RemoteDexter\src\shared\protocol\validator.go
+}
+
+

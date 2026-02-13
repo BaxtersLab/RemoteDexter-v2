@@ -146,5 +146,4 @@ func (s *SessionState) DecryptMessage(ciphertext []byte) ([]byte, error) {
 	// Decrypt the actual payload
 	payload := ciphertext[12:]
 	return AEAD_Decrypt(key, nonceBytes, payload)
-}</content>
-<parameter name="filePath">C:\RemoteDexter\src\shared\noise\session.go
+
