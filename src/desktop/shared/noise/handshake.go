@@ -36,7 +36,7 @@ func (h *Handshake) InitiateHandshake(remoteStaticPublic []byte) (*protocol.Nois
 	}
 
 	// Generate ephemeral keypair
-	ephemeralPrivate, ephemeralPublic, err := GenerateKeyPair()
+	_, ephemeralPublic, err := GenerateKeyPair()
 	if err != nil {
 		return nil, fmt.Errorf("failed to generate ephemeral keypair: %v", err)
 	}
@@ -87,7 +87,7 @@ func (h *Handshake) AcceptHandshake(init *protocol.NoiseInit) (*protocol.NoiseRe
 	}
 
 	// Generate ephemeral keypair for response
-	ephemeralPrivate, ephemeralPublic, err := GenerateKeyPair()
+	_, ephemeralPublic, err := GenerateKeyPair()
 	if err != nil {
 		return nil, nil, fmt.Errorf("failed to generate ephemeral keypair: %v", err)
 	}

@@ -256,7 +256,7 @@ func (fs *FileSender) transferFile(transfer *FileTransfer, filePath string) {
 	// Wait for acceptance or cancellation
 	select {
 	case <-transfer.doneChan:
-		return
+		// acceptance received; continue with transfer
 	case <-transfer.cancelChan:
 		return
 	case <-time.After(30 * time.Second): // Timeout waiting for acceptance
