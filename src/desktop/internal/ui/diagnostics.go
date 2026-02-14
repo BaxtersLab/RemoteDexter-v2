@@ -96,9 +96,9 @@ func (dp *DiagnosticsPanel) ShowPanel() {
 	fmt.Println("SESSION:")
 	state := dp.controller.GetState()
 	fmt.Printf("  Active: %t\n", dp.controller.IsHealthy())
-	fmt.Printf("  Connected: %t\n", state.Connected)
-	fmt.Printf("  Streaming: %t\n", state.Streaming)
-	fmt.Printf("  Input Enabled: %t\n", state.InputEnabled)
+	fmt.Printf("  Connected: %t\n", state.IsConnected)
+	fmt.Printf("  Streaming: %t\n", state.IsStreaming)
+	fmt.Printf("  Input Enabled: %t\n", state.IsInputEnabled)
 	fmt.Printf("  Error Count: %d\n", state.ErrorCount)
 	fmt.Printf("  Last Error: %s\n", dp.getLastError())
 	fmt.Println()
@@ -176,7 +176,7 @@ func (dp *DiagnosticsPanel) getPacketsReceived() int64 {
 func (dp *DiagnosticsPanel) measureFrameRate() float64 {
 	// In a real implementation, this would measure actual FPS
 	// For now, simulate based on streaming status
-	if dp.controller.GetState().Streaming {
+	if dp.controller.GetState().IsStreaming {
 		return 30.0 // 30 FPS when streaming
 	}
 	return 0.0
@@ -205,7 +205,7 @@ func (dp *DiagnosticsPanel) getCPUUsage() float64 {
 
 // getStreamingStatus returns streaming status
 func (dp *DiagnosticsPanel) getStreamingStatus() string {
-	if dp.controller.GetState().Streaming {
+	if dp.controller.GetState().IsStreaming {
 		return "Active"
 	}
 	return "Inactive"
@@ -225,7 +225,7 @@ func (dp *DiagnosticsPanel) getEncoderInfo() string {
 
 // getInputStatus returns input control status
 func (dp *DiagnosticsPanel) getInputStatus() string {
-	if dp.controller.GetState().InputEnabled {
+	if dp.controller.GetState().IsInputEnabled {
 		return "Active"
 	}
 	return "Inactive"

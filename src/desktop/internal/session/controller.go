@@ -96,7 +96,6 @@ func NewSessionController(dataDir string) (*SessionController, error) {
 		isActive:           false,
 	}, nil
 }
-}
 
 // StartRemoteSession initiates a complete remote session
 func (sc *SessionController) StartRemoteSession() error {
@@ -418,7 +417,7 @@ func (sc *SessionController) RotateKeys() error {
 // ProcessCommand handles incoming commands from the remote device
 func (sc *SessionController) ProcessCommand(cmd protocol.CommandRequest) error {
 	// Validate command
-	if err := sc.validator.ValidateCommand(cmd); err != nil {
+	if err := sc.validator.ValidateCommand(&cmd); err != nil {
 		return fmt.Errorf("command validation failed: %v", err)
 	}
 
@@ -530,13 +529,15 @@ func (sc *SessionController) handleFileChunk(payload []byte) error {
 // InitializeFileTransfer sets up file transfer components
 func (sc *SessionController) InitializeFileTransfer(destDir string, acceptCallback func(fileID, fileName string, size int64) bool) error {
 	// Create file sender
-	sc.fileSender = transfer.NewFileSender(transfer.DefaultFileTransferConfig(), func(cmd protocol.CommandRequest) (protocol.CommandResponse, error) {
-		return sc.SendCommand(cmd.Type, cmd.Payload)
+	sc.fileSender = transfer.NewFileSender(transfer.DefaultFileTransferConfig(), func(cmd protocol.CommandRequest) error {
+		_, err := sc.SendCommand(cmd.Type, cmd.Payload)
+		return err
 	})
 
 	// Create file receiver
-	sc.fileReceiver = transfer.NewFileReceiver(transfer.DefaultFileTransferConfig(), func(cmd protocol.CommandRequest) (protocol.CommandResponse, error) {
-		return sc.SendCommand(cmd.Type, cmd.Payload)
+	sc.fileReceiver = transfer.NewFileReceiver(transfer.DefaultFileTransferConfig(), func(cmd protocol.CommandRequest) error {
+		_, err := sc.SendCommand(cmd.Type, cmd.Payload)
+		return err
 	}, acceptCallback, destDir)
 
 	return nil

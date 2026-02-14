@@ -100,7 +100,10 @@ func TestSessionStateHealth(t *testing.T) {
 }
 
 func TestSessionControllerCreation(t *testing.T) {
-	controller := NewSessionController()
+	controller, err := NewSessionController(t.TempDir())
+	if err != nil {
+		t.Fatalf("Expected SessionController creation to succeed: %v", err)
+	}
 
 	if controller == nil {
 		t.Error("Expected SessionController to be created")
@@ -112,7 +115,10 @@ func TestSessionControllerCreation(t *testing.T) {
 }
 
 func TestSessionControllerState(t *testing.T) {
-	controller := NewSessionController()
+	controller, err := NewSessionController(t.TempDir())
+	if err != nil {
+		t.Fatalf("Expected SessionController creation to succeed: %v", err)
+	}
 
 	// Test initial state
 	state := controller.GetState()

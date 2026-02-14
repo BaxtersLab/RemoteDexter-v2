@@ -2,7 +2,7 @@ package ui
 
 import (
 	"fmt"
-	// "remotedexter/desktop/internal/security"
+	"remotedexter/desktop/internal/security"
 	"remotedexter/desktop/internal/session"
 )
 
@@ -11,6 +11,11 @@ type FirstRunExperience struct {
 	trustStore *security.FileBasedTrustStore
 	controller *session.SessionController
 	dataDir    string
+}
+
+type freKeyPair struct {
+	PublicKey  []byte
+	PrivateKey []byte
 }
 
 // NewFirstRunExperience creates a new FRE instance
@@ -114,10 +119,10 @@ func (fre *FirstRunExperience) showSovereigntyExplanation() {
 }
 
 // generateNoiseKeypair generates a new Noise static keypair
-func (fre *FirstRunExperience) generateNoiseKeypair() (*security.KeyPair, error) {
+func (fre *FirstRunExperience) generateNoiseKeypair() (*freKeyPair, error) {
 	// In a real implementation, this would generate proper Noise keys
 	// For now, simulate key generation
-	keypair := &security.KeyPair{
+	keypair := &freKeyPair{
 		PublicKey:  make([]byte, 32),
 		PrivateKey: make([]byte, 32),
 	}

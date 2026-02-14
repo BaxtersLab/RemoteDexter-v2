@@ -42,8 +42,8 @@ func (tdp *TrustedDevicePanel) ShowPanel() {
 
 	// Display devices
 	for i, device := range tdp.devices {
-		fmt.Printf("%d. %s\n", i+1, device.Name)
-		fmt.Printf("   ID: %s\n", device.ID)
+		fmt.Printf("%d. %s\n", i+1, device.DeviceName)
+		fmt.Printf("   ID: %s\n", device.DeviceID)
 		fmt.Printf("   Last Seen: %s\n", tdp.formatLastSeen(device.LastSeen))
 		fmt.Printf("   Status: %s\n", tdp.getDeviceStatus(device))
 		fmt.Println()
@@ -64,12 +64,17 @@ func (tdp *TrustedDevicePanel) refreshDevices() {
 }
 
 // formatLastSeen formats the last seen timestamp
-func (tdp *TrustedDevicePanel) formatLastSeen(lastSeen time.Time) string {
-	if lastSeen.IsZero() {
+func (tdp *TrustedDevicePanel) formatLastSeen(lastSeen string) string {
+	if lastSeen == "" {
 		return "Never"
 	}
 
-	duration := time.Since(lastSeen)
+	t, err := time.Parse(time.RFC3339, lastSeen)
+	if err != nil {
+		return lastSeen
+	}
+
+	duration := time.Since(t)
 	if duration < time.Minute {
 		return "Just now"
 	} else if duration < time.Hour {
@@ -85,7 +90,11 @@ func (tdp *TrustedDevicePanel) formatLastSeen(lastSeen time.Time) string {
 func (tdp *TrustedDevicePanel) getDeviceStatus(device security.TrustedDevice) string {
 	// In a real implementation, this would check if the device is currently connected
 	// For now, just show "Available" if seen recently
-	if time.Since(device.LastSeen) < 24*time.Hour {
+	lastSeen, err := time.Parse(time.RFC3339, device.LastSeen)
+	if err != nil {
+		return "Unknown"
+	}
+	if time.Since(lastSeen) < 24*time.Hour {
 		return "Available"
 	}
 	return "Offline"
@@ -133,7 +142,7 @@ func (tdp *TrustedDevicePanel) renameDevice() {
 
 	fmt.Println("Select device to rename:")
 	for i, device := range tdp.devices {
-		fmt.Printf("%d. %s\n", i+1, device.Name)
+		fmt.Printf("%d. %s\n", i+1, device.DeviceName)
 	}
 
 	fmt.Print("Enter device number: ")
@@ -147,7 +156,7 @@ func (tdp *TrustedDevicePanel) renameDevice() {
 
 	device := tdp.devices[deviceNum-1]
 
-	fmt.Printf("Current name: %s\n", device.Name)
+	fmt.Printf("Current name: %s\n", device.DeviceName)
 	fmt.Print("Enter new name: ")
 	var newName string
 	fmt.Scanf("%s", &newName)
@@ -158,7 +167,7 @@ func (tdp *TrustedDevicePanel) renameDevice() {
 	}
 
 	// In a real implementation, update the device name in the trust store
-	fmt.Printf("Device '%s' renamed to '%s'\n", device.Name, newName)
+	fmt.Printf("Device '%s' renamed to '%s'\n", device.DeviceName, newName)
 }
 
 // revokeDevice removes a device from the trusted list
@@ -170,7 +179,7 @@ func (tdp *TrustedDevicePanel) revokeDevice() {
 
 	fmt.Println("Select device to revoke:")
 	for i, device := range tdp.devices {
-		fmt.Printf("%d. %s (%s)\n", i+1, device.Name, device.ID)
+		fmt.Printf("%d. %s (%s)\n", i+1, device.DeviceName, device.DeviceID)
 	}
 
 	fmt.Print("Enter device number: ")
@@ -184,7 +193,7 @@ func (tdp *TrustedDevicePanel) revokeDevice() {
 
 	device := tdp.devices[deviceNum-1]
 
-	fmt.Printf("Are you sure you want to revoke '%s'? (y/N): ", device.Name)
+	fmt.Printf("Are you sure you want to revoke '%s'? (y/N): ", device.DeviceName)
 	var confirm string
 	fmt.Scanf("%s", &confirm)
 
@@ -194,13 +203,13 @@ func (tdp *TrustedDevicePanel) revokeDevice() {
 	}
 
 	// Revoke the device
-	err := tdp.controller.RevokeDevice(device.ID)
+	err := tdp.controller.RevokeDevice(device.DeviceID)
 	if err != nil {
 		fmt.Printf("Error revoking device: %v\n", err)
 		return
 	}
 
-	fmt.Printf("Device '%s' has been revoked and removed from trusted list.\n", device.Name)
+	fmt.Printf("Device '%s' has been revoked and removed from trusted list.\n", device.DeviceName)
 	fmt.Println("Any active sessions with this device have been terminated.")
 }
 
