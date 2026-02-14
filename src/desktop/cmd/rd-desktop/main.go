@@ -24,7 +24,7 @@ func main() {
 	// Create data directory if it doesn't exist
 	dataDir := filepath.Join(os.Getenv("APPDATA"), "RemoteDexter")
 	if err := os.MkdirAll(dataDir, 0755); err != nil {
-		logger.Error("Failed to create data directory", logger.Field("error", err))
+		logger.Error("Failed to create data directory", logger.NewField("error", err))
 		fmt.Printf("Warning: Failed to create data directory: %v\n", err)
 		dataDir = "" // Fallback to current directory
 	}
