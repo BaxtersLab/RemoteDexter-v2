@@ -3,13 +3,28 @@ plugins {
     id "org.jetbrains.kotlin.android"
 }
 
+def requiredSigningEnv = [
+        "RD_KEYSTORE_PATH",
+        "RD_KEYSTORE_ALIAS",
+        "RD_KEYSTORE_PASSWORD",
+        "RD_KEY_PASSWORD"
+]
+
+def requireEnv = { String key ->
+    def value = System.getenv(key)
+    if (value == null || value.trim().isEmpty()) {
+        throw new RuntimeException("Missing required signing environment variable: ${key}")
+    }
+    return value
+}
+
 android {
     namespace "com.remotedexter.mobile"
     compileSdk 34
 
     defaultConfig {
         applicationId "com.remotedexter.mobile"
-        minSdk 28
+        minSdk 24
         targetSdk 34
         versionCode 1
         versionName "1.0"
@@ -17,15 +32,38 @@ android {
         buildConfigField "String", "KNOCK_AUDIENCE", "\"agent-01\""
     }
 
+    signingConfigs {
+        release {
+            if (System.getenv("RD_KEYSTORE_PATH") != null) {
+                storeFile file(requireEnv("RD_KEYSTORE_PATH"))
+                storePassword requireEnv("RD_KEYSTORE_PASSWORD")
+                keyAlias requireEnv("RD_KEYSTORE_ALIAS")
+                keyPassword requireEnv("RD_KEY_PASSWORD")
+            }
+        }
+    }
+
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
+            debuggable false
+            jniDebuggable false
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             buildConfigField "boolean", "BYPASS_NFC", "false"
         }
         debug {
             minifyEnabled false
             buildConfigField "boolean", "BYPASS_NFC", "true"
+        }
+    }
+
+    splits {
+        abi {
+            enable false
+            universalApk true
+            reset()
         }
     }
 
@@ -41,6 +79,18 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
+
+    packaging {
+        jniLibs {
+            useLegacyPackaging false
+        }
+    }
+}
+
+androidComponents {
+    beforeVariants(selector().withBuildType("debug")) { variantBuilder ->
+        variantBuilder.enable = false
+    }
 }
 
 dependencies {
@@ -51,3 +101,65 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.7.0"
     implementation "com.squareup.okhttp3:okhttp:4.12.0"
 }
+
+def requiredRustDeskBackend = [
+        RUSTDESK_BACKEND_TAG           : "1.2.3",
+        RUSTDESK_BACKEND_COMMIT        : "c5f3e2b",
+        RUSTDESK_BACKEND_SOURCE        : "github-release-backend-core",
+        RUSTDESK_BACKEND_VANILLA       : "true",
+        RUSTDESK_BACKEND_COMPONENT_SCOPE: "transport,frame_decode,input_injection,clipboard_sync",
+        RUSTDESK_BACKEND_TRANSPORT_POLICY: "intact"
+]
+
+tasks.register("validateRustDeskBackendPin") {
+    doLast {
+        requiredRustDeskBackend.each { key, expected ->
+            def actual = rootProject.findProperty(key)?.toString()
+            if (actual != expected) {
+                throw new RuntimeException("Block B backend pin mismatch for ${key}: expected '${expected}', got '${actual}'")
+            }
+        }
+
+        def patchesDir = file("${rootDir}/rustdesk/patches")
+        if (patchesDir.exists() && (patchesDir.listFiles()?.length ?: 0) > 0) {
+            throw new RuntimeException("Block B requires vanilla RustDesk backend. Remove custom patch files from ${patchesDir}")
+        }
+    }
+}
+
+tasks.register("validateReleaseSigningEnv") {
+    doLast {
+        requiredSigningEnv.each { envName ->
+            requireEnv(envName)
+        }
+    }
+}
+
+tasks.register("validateReleaseReproducibility") {
+    doLast {
+        def sourceDateEpoch = System.getenv("SOURCE_DATE_EPOCH")
+        if (sourceDateEpoch == null || sourceDateEpoch.trim().isEmpty()) {
+            throw new RuntimeException("SOURCE_DATE_EPOCH is required for deterministic release builds")
+        }
+
+        if (!(sourceDateEpoch ==~ /\d+/)) {
+            throw new RuntimeException("SOURCE_DATE_EPOCH must be an integer epoch value")
+        }
+    }
+}
+
+tasks.register("validateReleaseOutputStructure") {
+    doLast {
+        def outputDir = file("${buildDir}/outputs/apk/release")
+        if (!outputDir.path.replace('\\', '/').endsWith("app/build/outputs/apk/release")) {
+            throw new RuntimeException("Release output directory mismatch: ${outputDir}")
+        }
+    }
+}
+
+tasks.register("validateReleasePipeline") {
+    dependsOn("validateRustDeskBackendPin", "validateReleaseSigningEnv", "validateReleaseReproducibility", "validateReleaseOutputStructure")
+}
+
+preBuild.dependsOn("validateRustDeskBackendPin")
+preBuild.dependsOn("validateReleasePipeline")

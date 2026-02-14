@@ -22,3 +22,8 @@ node_modules/
 *.out
 *.ipa
 *.app
+
+# Local toolchains and generated workspace artifacts
+.tools/
+src/mobile/android/.gradle/
+src/mobile/android/logs/

@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">RD Mobile</string>
+    <string name="copy_label">Copy</string>
+    <string name="paste_label">Pasta</string>
+    <string name="copy_content_desc">Copy remote selection</string>
+    <string name="paste_content_desc">Paste clipboard to remote</string>
+    <string name="remote_surface_content_desc">Remote session rendering surface</string>
 </resources>

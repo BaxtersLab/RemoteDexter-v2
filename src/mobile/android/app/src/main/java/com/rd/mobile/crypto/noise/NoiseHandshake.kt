@@ -6,6 +6,23 @@ import com.rd.mobile.protocol.ProtocolFraming
 
 class NoiseHandshake {
 
+    data class HandshakeResult(
+        val sessionKey: ByteArray,
+        val nonceStart: Long = 1L,
+        val pattern: String = AUTHORITATIVE_PATTERN
+    )
+
+    fun performHandshakeXX(): Result<HandshakeResult> {
+        return runCatching {
+            val key = performHandshake() ?: throw IllegalStateException("Noise XX handshake failed")
+            HandshakeResult(
+                sessionKey = key,
+                nonceStart = 1L,
+                pattern = AUTHORITATIVE_PATTERN
+            )
+        }
+    }
+
     fun performHandshake(): ByteArray? {
         // Generate ephemeral keypair (simulate)
         val ephemeralPrivate = generateKey()
@@ -17,7 +34,7 @@ class NoiseHandshake {
 
         // Construct NoiseResponse
         val response = NoiseResponse(ephemeralPublic, byteArrayOf())
-        val framed = ProtocolFraming.encodeNoiseResponse(response)
+        ProtocolFraming.encodeNoiseResponse(response)
 
         println("NoiseInit received")
         println("NoiseResponse sent")
@@ -46,5 +63,9 @@ class NoiseHandshake {
     private fun hkdf(secret: ByteArray, salt: ByteArray, info: ByteArray, length: Int): ByteArray {
         // Placeholder HKDF
         return secret.copyOf(length)
+    }
+
+    companion object {
+        const val AUTHORITATIVE_PATTERN = "XX"
     }
 }
