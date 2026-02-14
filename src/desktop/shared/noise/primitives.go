@@ -58,6 +58,9 @@ func AEAD_Decrypt(key, nonce, ciphertext []byte) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
+	if len(nonce) != aesgcm.NonceSize() {
+		return nil, errors.New("invalid nonce length")
+	}
 	return aesgcm.Open(nil, nonce, ciphertext, nil)
 }
 

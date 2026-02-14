@@ -1,9 +1,12 @@
 package protocol
 
+import "encoding/json"
+
 // KeyEvent represents a keyboard event
 type KeyEvent struct {
 	KeyCode int
 	Pressed bool
+	Action  int
 }
 
 // MouseEvent represents a mouse event
@@ -11,6 +14,23 @@ type MouseEvent struct {
 	X, Y    int
 	Button  int
 	Pressed bool
+}
+
+// MouseMove represents a relative mouse movement
+type MouseMove struct {
+	DX int `json:"dx"`
+	DY int `json:"dy"`
+}
+
+// MouseClick represents a mouse button click
+type MouseClick struct {
+	Button int `json:"button"`
+	Action int `json:"action"`
+}
+
+// ScrollEvent represents a scroll wheel event
+type ScrollEvent struct {
+	Amount int `json:"amount"`
 }
 
 // PairingRequest for initial pairing
@@ -94,4 +114,25 @@ type FileChunk struct {
 	Offset int64  `json:"offset"`
 	Data   []byte `json:"data"`
 	EOF    bool   `json:"eof"`
+}
+
+// Encoding helpers for simple event types
+func EncodeMouseMove(m MouseMove) []byte {
+	b, _ := json.Marshal(m)
+	return b
+}
+
+func EncodeMouseClick(c MouseClick) []byte {
+	b, _ := json.Marshal(c)
+	return b
+}
+
+func EncodeKeyEvent(k KeyEvent) []byte {
+	b, _ := json.Marshal(k)
+	return b
+}
+
+func EncodeScrollEvent(s ScrollEvent) []byte {
+	b, _ := json.Marshal(s)
+	return b
 }

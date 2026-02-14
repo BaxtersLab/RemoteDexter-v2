@@ -1,4 +1,4 @@
-﻿package noise
+package noise
 
 import (
 	"fmt"
@@ -7,11 +7,11 @@ import (
 
 // SessionState represents the cryptographic state of a Noise session
 type SessionState struct {
-	sendNonce    uint64
-	recvNonce    uint64
-	sessionKey   []byte
+	sendNonce     uint64
+	recvNonce     uint64
+	sessionKey    []byte
 	isEstablished bool
-	mu           sync.RWMutex
+	mu            sync.RWMutex
 }
 
 // NewSessionState creates a new session state
@@ -148,4 +148,3 @@ func (s *SessionState) DecryptMessage(ciphertext []byte) ([]byte, error) {
 	return AEAD_Decrypt(key, nonceBytes, payload)
 
 }
-

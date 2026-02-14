@@ -1,4 +1,4 @@
-﻿package protocol
+package protocol
 
 import (
 	"fmt"
@@ -8,9 +8,9 @@ import (
 
 // ValidationError represents a command validation error
 type ValidationError struct {
-	Field   string
-	Value   interface{}
-	Reason  string
+	Field  string
+	Value  interface{}
+	Reason string
 }
 
 func (ve ValidationError) Error() string {
@@ -67,7 +67,7 @@ func (cv *CommandValidator) ValidateCommand(req *CommandRequest) error {
 	case "terminate_session":
 		return cv.validateTerminateSessionCommand(req.Payload)
 	default:
-		// Allow unknown commands but log them
+		// Unknown commands are allowed for forward compatibility.
 		return nil
 	}
 }
@@ -267,6 +267,19 @@ func (cv *CommandValidator) SanitizeCommand(req *CommandRequest) *CommandRequest
 	return sanitized
 }
 
+// SanitizePayload sanitizes raw payload bytes for safer downstream handling.
+func (cv *CommandValidator) SanitizePayload(payload []byte) []byte {
+	sanitized := make([]byte, len(payload))
+	copy(sanitized, payload)
+
+	s := string(sanitized)
+	s = strings.ReplaceAll(s, "<script>", "")
+	s = strings.ReplaceAll(s, "</script>", "")
+	s = strings.ReplaceAll(s, "rm -rf", "")
+
+	return []byte(s)
+}
+
 // IsAbusiveCommand checks if a command shows signs of abuse
 func (cv *CommandValidator) IsAbusiveCommand(req *CommandRequest, recentCommands []*CommandRequest) bool {
 	// Check for command flooding (more than 100 commands in last second would be abusive)
@@ -287,5 +300,3 @@ func (cv *CommandValidator) IsAbusiveCommand(req *CommandRequest, recentCommands
 
 	return false
 }
-
-
