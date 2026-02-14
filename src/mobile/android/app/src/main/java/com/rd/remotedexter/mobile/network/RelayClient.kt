@@ -1,4 +1,4 @@
-package com.rd.mobile.network
+package com.rd.remotedexter.mobile.network
 
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient

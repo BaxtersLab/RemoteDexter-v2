@@ -1,4 +1,4 @@
-package com.rd.mobile.util
+package com.rd.remotedexter.mobile.util
 
 import android.content.Context
 

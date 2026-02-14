@@ -1,4 +1,4 @@
-package com.rd.mobile.util
+package com.rd.remotedexter.mobile.util
 
 object TimeUtils {
     fun nowUtcSeconds(): Long {

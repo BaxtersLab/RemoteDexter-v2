@@ -1,4 +1,4 @@
-package com.rd.mobile.crypto
+package com.rd.remotedexter.mobile.crypto
 
 import java.nio.ByteBuffer
 import java.security.PrivateKey

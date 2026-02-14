@@ -1,4 +1,4 @@
-package com.rd.mobile.protocol
+package com.rd.remotedexter.mobile.protocol
 
 data class NoiseInit(val ephemeralPublicKey: ByteArray, val staticPublicKey: ByteArray, val payload: ByteArray)
 

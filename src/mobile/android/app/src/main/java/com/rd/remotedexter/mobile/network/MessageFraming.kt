@@ -1,4 +1,4 @@
-package com.rd.mobile.network
+package com.rd.remotedexter.mobile.network
 
 data class FramedMessage(
     val type: Int,

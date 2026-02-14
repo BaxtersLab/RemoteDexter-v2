@@ -1,4 +1,4 @@
-package com.rd.mobile.crypto.noise
+package com.rd.remotedexter.mobile.crypto.noise
 
 data class NoiseKeys(
     val controlSendKey: ByteArray,

@@ -1,4 +1,4 @@
-package com.rd.mobile
+package com.rd.remotedexter.mobile
 
 import android.content.Context
 import android.content.Intent

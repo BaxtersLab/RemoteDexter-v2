@@ -1,4 +1,4 @@
-package com.rd.mobile.session
+package com.rd.remotedexter.mobile.session
 
 import android.content.Context
 import android.content.SharedPreferences

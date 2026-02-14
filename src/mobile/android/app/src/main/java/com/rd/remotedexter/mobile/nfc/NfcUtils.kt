@@ -1,4 +1,4 @@
-package com.rd.mobile.nfc
+package com.rd.remotedexter.mobile.nfc
 
 import android.nfc.Tag
 

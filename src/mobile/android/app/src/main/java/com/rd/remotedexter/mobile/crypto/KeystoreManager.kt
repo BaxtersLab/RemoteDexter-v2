@@ -1,4 +1,4 @@
-package com.rd.mobile.crypto
+package com.rd.remotedexter.mobile.crypto
 
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties

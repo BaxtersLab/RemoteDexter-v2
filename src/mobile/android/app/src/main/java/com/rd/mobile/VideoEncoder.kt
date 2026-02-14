@@ -1,4 +1,4 @@
-package com.rd.mobile
+package com.rd.remotedexter.mobile
 
 import android.media.MediaCodec
 import android.media.MediaCodecInfo

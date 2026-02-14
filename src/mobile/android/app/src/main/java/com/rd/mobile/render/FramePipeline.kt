@@ -1,4 +1,4 @@
-package com.rd.mobile.render
+package com.rd.remotedexter.mobile.render
 
 import android.graphics.Bitmap
 import android.graphics.Canvas

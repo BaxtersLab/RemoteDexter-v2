@@ -1,4 +1,4 @@
-package com.rd.mobile.transport
+package com.rd.remotedexter.mobile.transport
 
 interface TransportBootstrap {
     fun initiate()

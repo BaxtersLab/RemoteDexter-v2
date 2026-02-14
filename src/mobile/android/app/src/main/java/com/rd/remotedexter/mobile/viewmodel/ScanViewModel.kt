@@ -1,4 +1,4 @@
-package com.rd.mobile.viewmodel
+package com.rd.remotedexter.mobile.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
