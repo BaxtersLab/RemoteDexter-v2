@@ -49,6 +49,29 @@
         android:contentDescription="@string/remote_surface_content_desc"
         android:importantForAccessibility="no" />
 
+    <LinearLayout
+        android:id="@+id/controller_toolbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="8dp">
+
+        <Button
+            android:id="@+id/btn_copy"
+            android:layout_width="60dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="8dp"
+            android:text="Copy" />
+
+        <Button
+            android:id="@+id/btn_paste"
+            android:layout_width="60dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="8dp"
+            android:text="Pasta" />
+
+    </LinearLayout>
+
     <TextView
         android:id="@+id/status_text"
         android:layout_width="match_parent"
