@@ -7,8 +7,16 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
     <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+    <uses-permission android:name="android.permission.USB_HOST" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <uses-feature android:name="android.hardware.nfc" android:required="true" />
+    <uses-feature android:name="android.hardware.usb.host" android:required="false" />
+    <uses-feature android:name="android.hardware.wifi.direct" android:required="false" />
 
     <application
         android:allowBackup="false"
@@ -30,6 +38,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".OnboardingActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".DiagnosticsActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".DeveloperModeActivity"
+            android:exported="false" />
 
     </application>
 </manifest>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="@android:color/white"
+    android:gravity="center">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Welcome to RemoteDexter"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+        android:gravity="center"
+        android:layout_marginBottom="32dp" />
+
+    <TextView
+        android:id="@+id/statusText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:gravity="center"
+        android:layout_marginBottom="32dp"
+        android:lineSpacingExtra="4dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Choose Transport Method:"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+        android:layout_marginBottom="16dp" />
+
+    <RadioGroup
+        android:id="@+id/transportRadioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp">
+
+        <RadioButton
+            android:id="@+id/usbRadio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="USB Cable (Recommended)"
+            android:textSize="16sp"
+            android:layout_marginBottom="8dp" />
+
+        <RadioButton
+            android:id="@+id/wifiRadio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Wi-Fi Direct"
+            android:textSize="16sp"
+            android:layout_marginBottom="8dp" />
+
+        <RadioButton
+            android:id="@+id/bluetoothRadio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Bluetooth"
+            android:textSize="16sp" />
+
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/testConnectionButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Test Connection"
+        android:layout_marginBottom="16dp" />
+
+    <Button
+        android:id="@+id/continueButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Continue to App"
+        android:enabled="false"
+        android:backgroundTint="@android:color/darker_gray" />
+
+</LinearLayout>

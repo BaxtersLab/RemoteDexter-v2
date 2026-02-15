@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Header -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="RemoteDexter Diagnostics"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            android:gravity="center"
+            android:layout_marginBottom="24dp" />
+
+        <!-- Transport Selector -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Transport:"
+                android:textSize="16sp"
+                android:textColor="@android:color/black" />
+
+            <Spinner
+                android:id="@+id/transportSpinner"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2" />
+        </LinearLayout>
+
+        <!-- Connection Status -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Status:"
+                android:textSize="16sp"
+                android:textColor="@android:color/black" />
+
+            <ImageView
+                android:id="@+id/connectionStatusIndicator"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="8dp"
+                android:src="@drawable/status_green" />
+
+            <TextView
+                android:id="@+id/statusText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="Loading..."
+                android:textSize="14sp"
+                android:textColor="@android:color/black" />
+        </LinearLayout>
+
+        <!-- RTT -->
+        <TextView
+            android:id="@+id/rttText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="RTT: -- ms"
+            android:textSize="14sp"
+            android:textColor="@android:color/black"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Frames -->
+        <TextView
+            android:id="@+id/framesText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Frames: -- sent, -- received"
+            android:textSize="14sp"
+            android:textColor="@android:color/black"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Bytes -->
+        <TextView
+            android:id="@+id/bytesText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Data: -- sent, -- received"
+            android:textSize="14sp"
+            android:textColor="@android:color/black"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Reconnects -->
+        <TextView
+            android:id="@+id/reconnectsText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Reconnects: --"
+            android:textSize="14sp"
+            android:textColor="@android:color/black"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Watchdog -->
+        <TextView
+            android:id="@+id/watchdogText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Watchdog: -- timeouts"
+            android:textSize="14sp"
+            android:textColor="@android:color/black"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Streaming -->
+        <TextView
+            android:id="@+id/streamingText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Streaming: -- FPS, -- dropped"
+            android:textSize="14sp"
+            android:textColor="@android:color/black"
+            android:layout_marginBottom="24dp" />
+
+        <!-- Action Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
+
+            <Button
+                android:id="@+id/copyTelemetryButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Copy Telemetry"
+                android:layout_marginEnd="8dp" />
+
+            <Button
+                android:id="@+id/copySystemReportButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Copy Report"
+                android:layout_marginStart="8dp" />
+        </LinearLayout>
+
+        <!-- Developer Mode Button -->
+        <Button
+            android:id="@+id/developerModeButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Developer Mode"
+            android:backgroundTint="@android:color/holo_blue_light" />
+
+        <!-- Refresh Button -->
+        <Button
+            android:id="@+id/refreshButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Refresh Now" />
+
+    </LinearLayout>
+</ScrollView>

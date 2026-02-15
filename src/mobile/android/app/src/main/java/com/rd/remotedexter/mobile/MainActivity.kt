@@ -16,17 +16,19 @@ import android.view.SurfaceView
 import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
-import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
-import com.rd.mobile.protocol.CommandValidatorShim
-import com.rd.mobile.protocol.CommandRequest
-import com.rd.mobile.protocol.CommandResponse
+import android.os.Handler
+import android.os.Looper
+import com.rd.remotedexter.mobile.ConnectionStatusView
+import com.rd.remotedexter.mobile.protocol.CommandValidatorShim
+import com.rd.remotedexter.mobile.protocol.CommandRequest
+import com.rd.remotedexter.mobile.protocol.CommandResponse
 import com.rd.mobile.render.RustDeskFrameBridge
 import com.rd.mobile.render.SurfaceFramePipeline
 import com.rd.mobile.session.AndroidSessionManager
 
 class MainActivity : AppCompatActivity() {
     private lateinit var statusText: TextView
+    private lateinit var connectionStatusView: ConnectionStatusView
     private lateinit var controllerToolbar: LinearLayout
     private lateinit var remoteSurface: SurfaceView
     private lateinit var copyButton: Button
@@ -43,6 +45,8 @@ class MainActivity : AppCompatActivity() {
     private var sessionActive = false
     private var applyingRemoteClipboard = false
     private lateinit var sessionManager: AndroidSessionManager
+    private lateinit var statusUpdateHandler: Handler
+    private lateinit var statusUpdateRunnable: Runnable
 
     private val clipboardChangedListener = ClipboardManager.OnPrimaryClipChangedListener {
         if (!sessionActive || applyingRemoteClipboard) {
@@ -65,11 +69,29 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Check if onboarding is needed
+        val prefs = getSharedPreferences("RemoteDexter", MODE_PRIVATE)
+        val onboardingCompleted = prefs.getBoolean("onboarding_completed", false)
+
+        if (!onboardingCompleted) {
+            // Show onboarding first
+            startActivity(Intent(this, OnboardingActivity::class.java))
+            finish()
+            return
+        }
+
         setContentView(R.layout.activity_main)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LOCKED
 
         statusText = findViewById(R.id.status_text)
         statusText.text = "RD Mobile Running"
+
+        connectionStatusView = findViewById(R.id.connectionStatusView)
+        connectionStatusView.setOnClickListener {
+            val intent = Intent(this, DiagnosticsActivity::class.java)
+            startActivity(intent)
+        }
 
         controllerToolbar = findViewById(R.id.controller_toolbar)
         remoteSurface = findViewById(R.id.remote_surface)
@@ -86,6 +108,13 @@ class MainActivity : AppCompatActivity() {
 
         setSessionActive(false)
         sessionManager = AndroidSessionManager(this)
+
+        statusUpdateHandler = Handler(Looper.getMainLooper())
+        statusUpdateRunnable = Runnable {
+            connectionStatusView.updateStatus()
+            statusUpdateHandler.postDelayed(statusUpdateRunnable, 2000) // Update every 2 seconds
+        }
+        statusUpdateHandler.post(statusUpdateRunnable)
 
         copyButton.setOnClickListener {
             sendKeyCombo("Ctrl+C")
@@ -543,6 +572,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         frameBridge.submitDecodedFrame(width, height, frameBytes)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        statusUpdateHandler.removeCallbacks(statusUpdateRunnable)
     }
 }
 

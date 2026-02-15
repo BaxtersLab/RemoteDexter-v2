@@ -1,0 +1,80 @@
+# RemoteDexter v1.0.0 Release Notes
+
+## Overview
+RemoteDexter is a professional remote desktop solution for Android devices, providing seamless access to desktop computers through multiple transport protocols with comprehensive telemetry and diagnostics.
+
+## What's New in v1.0.0
+- **Multi-Transport Support**: USB, Bluetooth, and Wi-Fi Direct connectivity
+- **Professional UI**: Complete onboarding, diagnostics panel, and developer tools
+- **Comprehensive Telemetry**: Real-time health monitoring and performance metrics
+- **Chaos Testing**: Built-in stability testing for development and QA
+- **Secure Protocol**: Noise-encrypted communication with deterministic framing
+
+## Key Features
+- **Seamless Remote Control**: Mouse, keyboard, and clipboard synchronization
+- **High-Performance Streaming**: 60 FPS video streaming with optimized encoding
+- **Connection Health Monitoring**: Real-time diagnostics and automatic recovery
+- **Developer Tools**: Advanced debugging and testing capabilities
+- **Privacy-Focused**: No sensitive data logging, minimal permissions
+
+## System Requirements
+- **Android**: API 24+ (Android 7.0+)
+- **Permissions**: Bluetooth, USB (optional), Wi-Fi Direct (optional)
+- **Storage**: ~50MB free space
+
+## Installation
+1. Download `RemoteDexter_v1.0.0.apk`
+2. Enable "Install from Unknown Sources" in Android settings
+3. Install the APK
+4. Launch RemoteDexter and complete onboarding
+
+## First-Time Setup
+1. **Transport Selection**: Choose USB (recommended), Wi-Fi Direct, or Bluetooth
+2. **Connection Test**: Verify your selected transport works
+3. **Desktop Pairing**: Follow on-screen instructions to connect to your desktop
+
+## Usage
+- **Connection Status**: Tap the status indicator for diagnostics
+- **Controls**: Use on-screen buttons for copy/paste operations
+- **Diagnostics**: Access advanced tools via status indicator → Diagnostics
+- **Developer Mode**: Unlock advanced features in Diagnostics → Developer Mode
+
+## Security
+- All communication is encrypted using the Noise protocol
+- No sensitive data is logged or transmitted
+- Minimal required permissions only
+- Built-in watchdog monitoring for connection integrity
+
+## Performance
+- **Startup**: <3 seconds
+- **Streaming**: 60 FPS target with adaptive quality
+- **RTT**: <50ms typical for local connections
+- **Memory**: ~100MB baseline usage
+- **Battery**: Optimized for minimal impact
+
+## Troubleshooting
+- **Connection Issues**: Check transport selection and device compatibility
+- **Performance Problems**: Use diagnostics panel to identify bottlenecks
+- **Crashes**: Export logs from Developer Mode for support
+
+## Support
+For issues or questions:
+1. Use the diagnostics panel to gather system information
+2. Export telemetry snapshots and logs
+3. Include device information and Android version
+
+## Known Limitations
+- Screen capture requires Android's MediaProjection API
+- USB transport requires compatible cable and drivers
+- Some Bluetooth devices may have limited bandwidth
+
+## Future Updates
+- Enhanced transport protocols
+- Additional security features
+- Performance optimizations
+- Expanded platform support
+
+---
+**Release Date**: February 14, 2026
+**Build**: v1.0.0 (1)
+**Platform**: Android 7.0+

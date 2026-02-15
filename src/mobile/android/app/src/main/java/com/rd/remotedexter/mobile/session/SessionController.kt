@@ -4,11 +4,11 @@ import android.content.Context
 import android.util.Log
 import com.rd.remotedexter.mobile.crypto.NoiseHandshake
 import com.rd.remotedexter.mobile.network.TransportManager
-import com.rd.remotedexter.mobile.transport.ScreenCaptureService
-import com.rd.remotedexter.mobile.transport.VideoEncoder
-import com.rd.remotedexter.mobile.transport.InputInjector
-import com.rd.remotedexter.mobile.shared.protocol.CommandRequest
-import com.rd.remotedexter.mobile.shared.protocol.CommandResponse
+import com.rd.remotedexter.mobile.transport.TransportManager
+import com.rd.remotedexter.mobile.transport.TransportType
+import com.rd.remotedexter.mobile.transport.AndroidTransportManager
+import com.rd.remotedexter.mobile.protocol.CommandRequest
+import com.rd.remotedexter.mobile.protocol.CommandResponse
 import com.rd.remotedexter.mobile.shared.protocol.SessionEvent
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -61,16 +61,22 @@ class SessionController(private val context: Context) {
             _sessionState.value = SessionState.CONNECTING
 
             // Initialize components
-            transportManager = TransportManager(context)
+            transportManager = AndroidTransportManager(context)
             screenCaptureService = ScreenCaptureService(context)
             videoEncoder = VideoEncoder()
             inputInjector = InputInjector(context)
             noiseHandshake = NoiseHandshake()
 
             // Step 1: Establish transport connection
-            val transportResult = transportManager?.establishConnection()
-            if (transportResult?.isFailure == true) {
-                throw Exception("Transport connection failed: ${transportResult.exceptionOrNull()?.message}")
+            val availableTransports = transportManager?.getAvailableTransports()
+            if (availableTransports.isNullOrEmpty()) {
+                throw Exception("No transports available")
+            }
+            // Auto-select highest priority transport
+            transportManager?.setActiveTransport(availableTransports.first())
+            val transportResult = transportManager?.connect()
+            if (transportResult != true) {
+                throw Exception("Transport connection failed")
             }
 
             // Step 2: Perform Noise handshake

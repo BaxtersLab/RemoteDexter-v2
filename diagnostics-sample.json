@@ -1,0 +1,68 @@
+{
+  "timestamp": "2026-02-14T12:00:00Z",
+  "app_version": "1.0.0",
+  "build_number": "1",
+  "android_version": "14",
+  "device_model": "Pixel 8 Pro",
+
+  "connection_status": {
+    "is_connected": true,
+    "current_transport": "USB",
+    "connection_duration_seconds": 3600,
+    "reconnect_attempts": 0
+  },
+
+  "performance_metrics": {
+    "rtt_ms": {
+      "current": 12.5,
+      "min": 8.2,
+      "max": 45.1,
+      "avg": 15.3
+    },
+    "streaming_fps": 58.7,
+    "frames_sent": 210480,
+    "frames_received": 210472,
+    "frames_dropped": 8,
+    "bytes_sent_mb": 1250.5,
+    "bytes_received_mb": 45.2
+  },
+
+  "transport_health": {
+    "usb_available": true,
+    "bluetooth_available": true,
+    "wifi_direct_available": true,
+    "watchdog_timeouts": 0,
+    "buffer_overruns": 0,
+    "protocol_errors": 0
+  },
+
+  "system_resources": {
+    "memory_usage_mb": 95.2,
+    "cpu_usage_percent": 12.5,
+    "battery_impact_percent": 8.3,
+    "network_bytes_total": 1295.7
+  },
+
+  "alerts": [
+    {
+      "level": "WARNING",
+      "message": "Frame drops detected (8 total)",
+      "timestamp": "2026-02-14T11:45:00Z"
+    }
+  ],
+
+  "recent_events": [
+    {
+      "timestamp": "2026-02-14T11:59:45Z",
+      "subsystem": "transport",
+      "event": "frame_sent",
+      "details": "size=15360"
+    },
+    {
+      "timestamp": "2026-02-14T11:59:44Z",
+      "subsystem": "protocol",
+      "event": "command_processed",
+      "details": "type=clipboard_sync"
+    }
+  ]
+}

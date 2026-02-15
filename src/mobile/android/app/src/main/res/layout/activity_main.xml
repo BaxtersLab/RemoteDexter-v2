@@ -5,6 +5,13 @@
     android:orientation="vertical"
     android:padding="16dp">
 
+    <com.rd.remotedexter.mobile.ConnectionStatusView
+        android:id="@+id/connectionStatusView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_gravity="center_horizontal" />
+
     <LinearLayout
         android:id="@+id/controller_toolbar"
         android:layout_width="match_parent"
