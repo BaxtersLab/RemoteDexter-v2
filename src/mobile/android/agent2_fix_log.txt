@@ -1,0 +1,701 @@
+﻿ACTION:GRADLE_EDIT FILE: app/build.gradle DETAIL: added exclude '**/*agent2_copy*'
+ACTION:COPY_CANONICAL_DUP SOURCE:C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\mobile\BluetoothReceiver.kt TARGET:c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\BluetoothReceiver.agent2_canonical.kt
+ACTION:COPY_CANONICAL_DUP SOURCE:C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\mobile\InputInjector.kt TARGET:c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\InputInjector.agent2_canonical.kt
+ACTION:COPY_CANONICAL_DUP SOURCE:C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\mobile\protocol\Messages.kt TARGET:c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\protocol\Messages.agent2_canonical.kt
+ACTION:COPY_CANONICAL_DUP SOURCE:C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\mobile\protocol\ProtocolFraming.kt TARGET:c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\protocol\ProtocolFraming.agent2_canonical.kt
+ACTION:COPY_CANONICAL_DUP SOURCE:C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\mobile\render\FramePipeline.kt TARGET:c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\render\FramePipeline.agent2_canonical.kt
+ACTION:COPY_CANONICAL_DUP SOURCE:C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\mobile\ScreenCaptureService.kt TARGET:c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScreenCaptureService.agent2_canonical.kt
+ACTION:COPY_CANONICAL_DUP SOURCE:C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\mobile\session\AndroidSessionManager.kt TARGET:c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\session\AndroidSessionManager.agent2_canonical.kt
+ACTION:COPY_CANONICAL_DUP SOURCE:C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\mobile\VideoEncoder.kt TARGET:c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\VideoEncoder.agent2_canonical.kt
+ACTION:NOTE_PARALLEL_ROOT ROOT:com/rd/mobile
+ACTION:NOTE_PARALLEL_ROOT ROOT:com/rd/remotedexter/mobile
+ACTION:NOTE_PARALLEL_ROOT ROOT:com/remotedexter/*
+ACTION:GRADLE_EDIT FILE: app/build.gradle DETAIL: added excludes for '**/*agent2_copy*' and '**/*agent2_canonical*'
+ACTION:MISMATCH_LIST COUNT:8
+ACTION:COPY_CANONICAL_DUP SOURCE:C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\mobile\BluetoothReceiver.kt TARGET:C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\BluetoothReceiver.agent2_canonical2.kt
+ACTION:GRADLE_EXCLUDE_LEGACY FILE: app/build.gradle LEGACY_PATH:src/main/java/com/rd/mobile/BluetoothReceiver.kt
+ACTION:COMPILE_INSTRUCTION COMMAND: .\gradlew.bat :app:compileReleaseKotlin --no-daemon --stacktrace NOTE: Run this manually after reviewing changes; track unresolved-reference line count trend externally.
+ACTION:COPY_CANONICAL_DUP SOURCE:C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\mobile\InputInjector.kt TARGET:C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\InputInjector.agent2_canonical2.kt
+ACTION:GRADLE_EXCLUDE_LEGACY FILE: app/build.gradle LEGACY_PATH:src/main/java/com/rd/mobile/InputInjector.kt
+ACTION:COMPILE_INSTRUCTION COMMAND: .\gradlew.bat :app:compileReleaseKotlin --no-daemon --stacktrace NOTE: Operator will run this manually after reviewing changes.
+ACTION:MISMATCH_TARGET FILE:Messages LEGACY_PATH:C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\mobile\protocol\Messages.kt
+ACTION:COPY_CANONICAL_DUP SOURCE:C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\mobile\protocol\Messages.kt TARGET:C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\protocol\Messages.agent2_canonical2.kt
+ACTION:GRADLE_EXCLUDE_LEGACY FILE: app/build.gradle LEGACY_PATH:src/main/java/com/rd/mobile/protocol/Messages.kt
+ACTION:COMPILE_INSTRUCTION COMMAND: .\gradlew.bat :app:compileReleaseKotlin --no-daemon --stacktrace NOTE: Operator should run this manually and record unresolved-reference count.
+ACTION:BACKUP_INSTRUCTION NOTE: If compile error count decreases or stabilizes acceptably after this step, create a backup (e.g., zip C:\RemoteDexter\src\mobile\android\) and mark this as ANCHOR_CHECKPOINT in your own notes.
+ACTION:MISMATCH_TARGET FILE:ProtocolFraming LEGACY_PATH:C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\mobile\protocol\ProtocolFraming.kt
+ACTION:COPY_CANONICAL_DUP SOURCE:C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\mobile\protocol\ProtocolFraming.kt TARGET:C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\protocol\ProtocolFraming.agent2_canonical2.kt
+ACTION:GRADLE_EXCLUDE_LEGACY FILE: app/build.gradle LEGACY_PATH:src/main/java/com/rd/mobile/protocol/ProtocolFraming.kt
+ACTION:COMPILE_INSTRUCTION COMMAND: .\gradlew.bat :app:compileReleaseKotlin --no-daemon --stacktrace NOTE: Operator will run this manually and track unresolved-reference count.
+ACTION:BACKUP_INSTRUCTION NOTE: If unresolved-reference count decreases or stabilizes after this step, operator may create a backup of C:\RemoteDexter\src\mobile\android\ as ANCHOR_CHECKPOINT.
+ACTION:MISMATCH_TARGET FILE:FramePipeline LEGACY_PATH:C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\mobile\render\FramePipeline.kt
+ACTION:COPY_CANONICAL_DUP SOURCE:C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\mobile\render\FramePipeline.kt TARGET:C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\render\FramePipeline.agent2_canonical2.kt
+ACTION:GRADLE_EXCLUDE_LEGACY FILE: app/build.gradle LEGACY_PATH:src/main/java/com/rd/mobile/render/FramePipeline.kt
+ACTION:COMPILE_INSTRUCTION COMMAND: .\gradlew.bat :app:compileReleaseKotlin --no-daemon --stacktrace NOTE: Operator will run this manually and track unresolved-reference count.
+ACTION:BACKUP_INSTRUCTION NOTE: If unresolved-reference count decreases or stabilizes after this step, operator may create a backup of C:\RemoteDexter\src\mobile\android\ as ANCHOR_CHECKPOINT.
+ACTION:MISMATCH_TARGET FILE:ScreenCaptureService LEGACY_PATH:C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\mobile\ScreenCaptureService.kt
+ACTION:COPY_CANONICAL_DUP SOURCE:C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\mobile\ScreenCaptureService.kt TARGET:C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScreenCaptureService.agent2_canonical2.kt
+ACTION:GRADLE_EXCLUDE_LEGACY FILE: app/build.gradle LEGACY_PATH:src/main/java/com/rd/mobile/ScreenCaptureService.kt
+ACTION:COMPILE_INSTRUCTION COMMAND: .\gradlew.bat :app:compileReleaseKotlin --no-daemon --stacktrace NOTE: Operator will run this manually and track unresolved-reference count.
+ACTION:BACKUP_INSTRUCTION NOTE: If unresolved-reference count decreases or stabilizes after this step, operator may create a backup of C:\RemoteDexter\src\mobile\android\ as ANCHOR_CHECKPOINT.
+ACTION:MISMATCH_TARGET FILE:AndroidSessionManager LEGACY_PATH:C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\mobile\session\AndroidSessionManager.kt
+ACTION:COPY_CANONICAL_DUP SOURCE:C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\mobile\session\AndroidSessionManager.kt TARGET:C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\session\AndroidSessionManager.agent2_canonical2.kt
+ACTION:GRADLE_EXCLUDE_LEGACY FILE: app/build.gradle LEGACY_PATH:src/main/java/com/rd/mobile/session/AndroidSessionManager.kt
+ACTION:COMPILE_INSTRUCTION COMMAND: .\gradlew.bat :app:compileReleaseKotlin --no-daemon --stacktrace NOTE: Operator will run this manually and track unresolved-reference count.
+ACTION:BACKUP_INSTRUCTION NOTE: If unresolved-reference count decreases or stabilizes after this step, operator may create a backup of C:\RemoteDexter\src\mobile\android\ as ANCHOR_CHECKPOINT.
+ACTION:MISMATCH_TARGET_FINAL FILE:VideoEncoder LEGACY_PATH:C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\mobile\VideoEncoder.kt
+ACTION:COPY_CANONICAL_DUP_FINAL SOURCE:C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\mobile\VideoEncoder.kt TARGET:C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\VideoEncoder.agent2_canonical2.kt
+ACTION:GRADLE_EXCLUDE_LEGACY_FINAL FILE: app/build.gradle LEGACY_PATH:src/main/java/com/rd/mobile/VideoEncoder.kt
+ACTION:COMPILE_INSTRUCTION_FINAL COMMAND: .\gradlew.bat :app:compileReleaseKotlin --no-daemon --stacktrace NOTE: Operator will run this manually and record unresolved-reference count.
+ACTION:BACKUP_INSTRUCTION_FINAL NOTE: If unresolved-reference count decreases or stabilizes after this step, operator may create a backup of C:\RemoteDexter\src\mobile\android\ and mark this as ANCHOR_CHECKPOINT.
+ACTION:VERIFY_QUARANTINE_STATE RESULT:ALL_EXCLUDES_PRESENT
+ACTION:VERIFY_CANONICAL_DUPLICATES RESULT:ALL_CANONICAL2_PRESENT
+ACTION:VERIFY_COMPILE_SCOPE RESULT:LEGACY_EXCLUDED_CANONICAL_ONLY
+ACTION:PRE_PROBE_READY NOTE: Structural drift class fully neutralized; project ready for manual compile probe.
+ACTION:COMPILE_INSTRUCTION_ANCHOR_PROBE COMMAND: .\gradlew.bat :app:compileReleaseKotlin --no-daemon --stacktrace NOTE: Operator will run this manually to obtain the first clean unresolved-reference count.
+ACTION:ANCHOR_INSTRUCTION NOTE: If compile output shows reduced or stable unresolved-reference count, operator may create a backup of C:\RemoteDexter\src\mobile\android\ and mark it as ANCHOR_CHECKPOINT.
+ACTION:READ_COMPILE_OUTPUT RESULT:RECEIVED
+ACTION:READ_COMPILE_OUTPUT SOURCE:KOTLIN_COMPILER TASK::app:compileReleaseKotlin NOTE: Post-mismatch anchor probe.
+ACTION:CLASSIFY_ERROR SYMBOL:BluetoothReceiver CATEGORY:A
+ACTION:CLASSIFY_ERROR SYMBOL:InputInjector CATEGORY:A
+ACTION:CLASSIFY_ERROR SYMBOL:ScreenCaptureService CATEGORY:A
+ACTION:CLASSIFY_ERROR SYMBOL:VideoEncoder CATEGORY:A
+ACTION:CLASSIFY_ERROR SYMBOL:CommandRequest CATEGORY:A
+ACTION:CLASSIFY_ERROR SYMBOL:CommandResponse CATEGORY:A
+ACTION:CLASSIFY_ERROR SYMBOL:CommandValidatorShim CATEGORY:A
+ACTION:CLASSIFY_ERROR SYMBOL:NoiseInit CATEGORY:A
+ACTION:CLASSIFY_ERROR SYMBOL:NoiseResponse CATEGORY:A
+ACTION:CLASSIFY_ERROR SYMBOL:MessageType CATEGORY:A
+ACTION:CLASSIFY_ERROR SYMBOL:ProtocolFraming CATEGORY:A
+ACTION:CLASSIFY_ERROR SYMBOL:DecodedFrame CATEGORY:A
+ACTION:CLASSIFY_ERROR SYMBOL:SurfaceFramePipeline CATEGORY:A
+ACTION:CLASSIFY_ERROR SYMBOL:RustDeskFrameBridge CATEGORY:A
+ACTION:CLASSIFY_ERROR SYMBOL:ConnectionStatusView CATEGORY:A
+ACTION:CLASSIFY_ERROR SYMBOL:DeveloperModeActivity CATEGORY:A
+ACTION:CLASSIFY_ERROR SYMBOL:DiagnosticsActivity CATEGORY:A
+ACTION:CLASSIFY_ERROR SYMBOL:MainActivity CATEGORY:A
+ACTION:CLASSIFY_ERROR SYMBOL:Activity CATEGORY:B
+ACTION:CLASSIFY_ERROR SYMBOL:AppCompatActivity CATEGORY:B
+ACTION:CLASSIFY_ERROR SYMBOL:TextView CATEGORY:B
+ACTION:CLASSIFY_ERROR SYMBOL:View CATEGORY:B
+ACTION:CLASSIFY_ERROR SYMBOL:Intent CATEGORY:B
+ACTION:CLASSIFY_ERROR SYMBOL:Context CATEGORY:B
+ACTION:CLASSIFY_ERROR SYMBOL:MEDIA_PROJECTION_SERVICE CATEGORY:B
+ACTION:CLASSIFY_ERROR SYMBOL:GestureDetector CATEGORY:B
+ACTION:CLASSIFY_ERROR SYMBOL:Handler CATEGORY:B
+ACTION:CLASSIFY_ERROR SYMBOL:runOnUiThread CATEGORY:B
+ACTION:CLASSIFY_ERROR SYMBOL:startActivity CATEGORY:B
+ACTION:CLASSIFY_ERROR SYMBOL:startActivityForResult CATEGORY:B
+ACTION:CLASSIFY_ERROR SYMBOL:finish CATEGORY:B
+ACTION:CLASSIFY_ERROR SYMBOL:setContentView CATEGORY:B
+ACTION:CLASSIFY_ERROR SYMBOL:requestedOrientation CATEGORY:B
+ACTION:CLASSIFY_ERROR SYMBOL:getSharedPreferences CATEGORY:B
+ACTION:CLASSIFY_ERROR SYMBOL:MODE_PRIVATE CATEGORY:B
+ACTION:CLASSIFY_ERROR SYMBOL:getSystemService CATEGORY:B
+ACTION:CLASSIFY_ERROR SYMBOL:findViewById CATEGORY:B
+ACTION:CLASSIFY_ERROR SYMBOL:onCreate CATEGORY:B
+ACTION:CLASSIFY_ERROR SYMBOL:onActivityResult CATEGORY:B
+ACTION:CLASSIFY_ERROR SYMBOL:onDestroy CATEGORY:B
+ACTION:CLASSIFY_ERROR SYMBOL:dispatchKeyEvent CATEGORY:B
+ACTION:CLASSIFY_ERROR SYMBOL:NoiseHandshake CATEGORY:C
+ACTION:CLASSIFY_ERROR SYMBOL:ChaosTransportTester CATEGORY:C
+ACTION:CLASSIFY_ERROR SYMBOL:AlertLevel CATEGORY:C
+ACTION:CLASSIFY_ERROR SYMBOL:AndroidSessionManager CATEGORY:C
+ACTION:CLASSIFY_ERROR SYMBOL:chaos PACKAGE_SEGMENT CATEGORY:C
+ACTION:CLASSIFY_ERROR SYMBOL:setOnClickListener CATEGORY:D
+ACTION:CLASSIFY_ERROR SYMBOL:startsWith CATEGORY:D
+ACTION:CLASSIFY_ERROR SYMBOL:CONTEXT_MISMATCH_MAINACTIVITY CATEGORY:D
+ACTION:CLASSIFY_ERROR SYMBOL:OVERRIDE_CHAIN_BREAK_MAINACTIVITY CATEGORY:D
+ACTION:CLASSIFY_ERROR SYMBOL:INTENT_CONSTRUCTOR_CALLS CATEGORY:D
+ACTION:CLASSIFY_ERROR SYMBOL:GESTUREDETECTOR_CONSTRUCTOR CATEGORY:D
+ACTION:CLASSIFY_ERROR SYMBOL:mobile PACKAGE_SEGMENT CATEGORY:E
+ACTION:CLASSIFY_ERROR SYMBOL:ENUM_COMPARISON_ALERTLEVEL CATEGORY:F
+ACTION:CLASSIFY_ERROR SYMBOL:VARIABLE_EXPECTED CATEGORY:F
+ACTION:CLASSIFY_ERROR SYMBOL:TYPE_MISMATCH_FALLOUT CATEGORY:F
+ACTION:CLASSIFY_ERROR SYMBOL:CONFLICTING_OVERLOADS_ONDESTROY CATEGORY:F
+ACTION:CLASSIFICATION_SUMMARY A:18 B:24 C:5 D:6 E:1 F:4 NOTE: Counts based on visible probe output.
+ACTION:POST_PROBE_READY NOTE: Classification complete; ready for targeted remediation blocks.
+ACTION:POST_PROBE_READY RESULT:COMPILE_OUTPUT_CLASSIFIED NOTE: No code or Gradle changes performed; ready for next remediation phase.
+ACTION:REDECLARATION_PURGE_BLOCK START MODE:GRADLE_EXCLUDE_ONLY
+ACTION:GRADLE_EXCLUDE FILE: app/build.gradle PATTERN:com/rd/mobile/** REASON:legacy_root_quarantine
+ACTION:GRADLE_EXCLUDE FILE: app/build.gradle PATTERN:com/remotedexter/** REASON:parallel_root_quarantine
+ACTION:REDECLARATION_PURGE_BLOCK COMPLETE NOTE:No file moves/deletes/renames; canonical root remains com.rd.remotedexter.mobile.
+ACTION:ANALYSIS_ENTRY BLOCK:AGENT2_PACKAGE_ROOT_NORMALIZATION_READINESS STATUS:START FILE_COUNT:112
+ACTION:ANALYSIS_ENTRY SECTION_B_LEGACY_PACKAGE_DECLARATIONS COUNT:9
+ACTION:ANALYSIS_ENTRY SECTION_C_LEGACY_IMPORTS COUNT:61
+ACTION:ANALYSIS_ENTRY SECTION_D_INTERNAL_LEGACY_REFERENCES COUNT:19
+ACTION:ANALYSIS_ENTRY SECTION_E_AMBIGUITIES COUNT:16
+ACTION:ANALYSIS_ENTRY READY_FOR_NORMALIZATION:FALSE
+ACTION:ANALYSIS_ENTRY BLOCK:PACKAGE_ROOT_NORMALIZATION_READINESS FILES_SCANNED:112
+ACTION:ANALYSIS_ENTRY LEGACY_PACKAGE_DECLARATIONS:9
+ACTION:ANALYSIS_ENTRY LEGACY_IMPORT_LINES:61
+ACTION:ANALYSIS_ENTRY LEGACY_FQ_REFERENCES:17
+ACTION:ANALYSIS_ENTRY AMBIGUITIES:16
+ACTION:ANALYSIS_ENTRY READY_FOR_NORMALIZATION:FALSE
+ACTION:AMBIGUITY_ANALYSIS TARGET:MainActivity canonical_candidate:com/rd/remotedexter/mobile/MainActivity.kt legacy_candidate:none agent2_copy_candidate:com/rd/remotedexter/mobile/MainActivity.agent2_copy.kt recommended_authoritative_file:com/rd/remotedexter/mobile/MainActivity.kt reason:hash_identical_to_agent2_copy_prefer_non_generated_filename
+ACTION:AMBIGUITY_ANALYSIS TARGET:ScanActivity canonical_candidate:com/rd/remotedexter/mobile/ScanActivity.kt legacy_candidate:none agent2_copy_candidate:com/rd/remotedexter/mobile/ScanActivity.agent2_copy.kt recommended_authoritative_file:com/rd/remotedexter/mobile/ScanActivity.kt reason:hash_identical_to_agent2_copy_prefer_non_generated_filename
+ACTION:AMBIGUITY_ANALYSIS TARGET:ScanViewModel canonical_candidate:com/rd/remotedexter/mobile/viewmodel/ScanViewModel.kt legacy_candidate:none agent2_copy_candidate:com/rd/remotedexter/mobile/viewmodel/ScanViewModel.agent2_copy.kt recommended_authoritative_file:com/rd/remotedexter/mobile/viewmodel/ScanViewModel.kt reason:hash_identical_to_agent2_copy_prefer_non_generated_filename
+ACTION:AMBIGUITY_ANALYSIS TARGET:AndroidSessionManager canonical_candidate:com/rd/remotedexter/mobile/session/AndroidSessionManager.kt legacy_candidate:com/rd/mobile/session/AndroidSessionManager.kt agent2_copy_candidate:com/rd/remotedexter/mobile/session/AndroidSessionManager.agent2_canonical.kt|com/rd/remotedexter/mobile/session/AndroidSessionManager.agent2_canonical2.kt recommended_authoritative_file:com/rd/remotedexter/mobile/session/AndroidSessionManager.kt reason:all_variants_hash_identical_choose_canonical_root_non_generated_filename
+ACTION:AMBIGUITY_ANALYSIS TARGET:NoiseHandshake canonical_candidate:com/rd/remotedexter/mobile/crypto/noise/NoiseHandshake.kt legacy_candidate:none agent2_copy_candidate:com/rd/remotedexter/mobile/crypto/noise/NoiseHandshake.agent2_copy.kt recommended_authoritative_file:com/rd/remotedexter/mobile/crypto/noise/NoiseHandshake.kt reason:hash_identical_to_agent2_copy_prefer_non_generated_filename
+ACTION:AMBIGUITY_ANALYSIS TARGET:DeveloperModeActivity canonical_candidate:com/rd/remotedexter/mobile/DeveloperModeActivity.kt legacy_candidate:none agent2_copy_candidate:com/rd/remotedexter/mobile/DeveloperModeActivity.agent2_copy.kt recommended_authoritative_file:com/rd/remotedexter/mobile/DeveloperModeActivity.kt reason:hash_identical_to_agent2_copy_prefer_non_generated_filename
+ACTION:AMBIGUITY_ANALYSIS SUMMARY unresolved_operator_questions:0 ready_for_normalization_after_resolution:TRUE
+ACTION:PACKAGE_NORMALIZATION_COPY C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\FileTransferActivity.kt -> c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\FileTransferActivity.kt
+ACTION:PACKAGE_NORMALIZATION_REWRITE_PACKAGE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\FileTransferActivity.kt
+ACTION:PACKAGE_NORMALIZATION_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\FileTransferActivity.kt com.remotedexter.protocol.CommandRequest
+ACTION:PACKAGE_NORMALIZATION_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\FileTransferActivity.kt com.remotedexter.protocol.CommandResponse
+ACTION:PACKAGE_NORMALIZATION_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\FileTransferActivity.kt com.remotedexter.transfer.TransferManager
+ACTION:PACKAGE_NORMALIZATION_COPY C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\FirstRunActivity.kt -> c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\FirstRunActivity.kt
+ACTION:PACKAGE_NORMALIZATION_REWRITE_PACKAGE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\FirstRunActivity.kt
+ACTION:PACKAGE_NORMALIZATION_COPY C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\RDService.kt -> c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\RDService.kt
+ACTION:PACKAGE_NORMALIZATION_REWRITE_PACKAGE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\RDService.kt
+ACTION:PACKAGE_NORMALIZATION_COPY C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\FileReceiver.kt -> c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\FileReceiver.kt
+ACTION:PACKAGE_NORMALIZATION_REWRITE_PACKAGE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\FileReceiver.kt
+ACTION:PACKAGE_NORMALIZATION_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\FileReceiver.kt com.remotedexter.protocol.FileOffer
+ACTION:PACKAGE_NORMALIZATION_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\FileReceiver.kt com.remotedexter.protocol.FileAccept
+ACTION:PACKAGE_NORMALIZATION_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\FileReceiver.kt com.remotedexter.protocol.FileReject
+ACTION:PACKAGE_NORMALIZATION_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\FileReceiver.kt com.remotedexter.protocol.FileChunk
+ACTION:PACKAGE_NORMALIZATION_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\FileReceiver.kt com.remotedexter.protocol.CommandRequest
+ACTION:PACKAGE_NORMALIZATION_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\FileReceiver.kt com.remotedexter.protocol.CommandResponse
+ACTION:PACKAGE_NORMALIZATION_COPY C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\FileSender.kt -> c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\FileSender.kt
+ACTION:PACKAGE_NORMALIZATION_REWRITE_PACKAGE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\FileSender.kt
+ACTION:PACKAGE_NORMALIZATION_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\FileSender.kt com.remotedexter.protocol.FileOffer
+ACTION:PACKAGE_NORMALIZATION_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\FileSender.kt com.remotedexter.protocol.FileAccept
+ACTION:PACKAGE_NORMALIZATION_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\FileSender.kt com.remotedexter.protocol.FileReject
+ACTION:PACKAGE_NORMALIZATION_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\FileSender.kt com.remotedexter.protocol.FileChunk
+ACTION:PACKAGE_NORMALIZATION_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\FileSender.kt com.remotedexter.protocol.CommandRequest
+ACTION:PACKAGE_NORMALIZATION_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\FileSender.kt com.remotedexter.protocol.CommandResponse
+ACTION:PACKAGE_NORMALIZATION_COPY C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\TransferManager.kt -> c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\TransferManager.kt
+ACTION:PACKAGE_NORMALIZATION_REWRITE_PACKAGE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\TransferManager.kt
+ACTION:PACKAGE_NORMALIZATION_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\TransferManager.kt com.remotedexter.protocol.CommandRequest
+ACTION:PACKAGE_NORMALIZATION_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\TransferManager.kt com.remotedexter.protocol.CommandResponse
+ACTION:PACKAGE_NORMALIZATION_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\TransferManager.kt com.remotedexter.protocol.FileOffer
+ACTION:PACKAGE_NORMALIZATION_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\TransferManager.kt com.remotedexter.protocol.FileAccept
+ACTION:PACKAGE_NORMALIZATION_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\TransferManager.kt com.remotedexter.protocol.FileReject
+ACTION:PACKAGE_NORMALIZATION_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\TransferManager.kt com.remotedexter.protocol.FileChunk
+ACTION:PACKAGE_NORMALIZATION_COPY C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\TrustSettingsFragment.agent2_copy.kt -> c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\TrustSettingsFragment.agent2_copy.kt
+ACTION:PACKAGE_NORMALIZATION_REWRITE_PACKAGE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\TrustSettingsFragment.agent2_copy.kt
+ACTION:PACKAGE_NORMALIZATION_COPY C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\TrustSettingsFragment.kt -> c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\TrustSettingsFragment.kt
+ACTION:PACKAGE_NORMALIZATION_REWRITE_PACKAGE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\TrustSettingsFragment.kt
+ACTION:PACKAGE_NORMALIZATION_COPY C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\UpdateChecker.kt -> c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\UpdateChecker.kt
+ACTION:PACKAGE_NORMALIZATION_REWRITE_PACKAGE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\UpdateChecker.kt
+ACTION:GRADLE_EXCLUDE com/rd/mobile/**
+ACTION:GRADLE_EXCLUDE com/remotedexter/**
+ACTION:PACKAGE_ROOT_NORMALIZATION COMPLETE
+ACTION:POST_NORMALIZATION_ANALYSIS START FILES_SCANNED:121
+ACTION:POST_NORMALIZATION_ANALYSIS SECTION_A_COUNT:9
+ACTION:POST_NORMALIZATION_ANALYSIS A C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\FileTransferActivity.kt:1 | package com.remotedexter
+ACTION:POST_NORMALIZATION_ANALYSIS A C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\FirstRunActivity.kt:1 | package com.remotedexter
+ACTION:POST_NORMALIZATION_ANALYSIS A C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\RDService.kt:1 | package com.remotedexter
+ACTION:POST_NORMALIZATION_ANALYSIS A C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\FileReceiver.kt:1 | package com.remotedexter.transfer
+ACTION:POST_NORMALIZATION_ANALYSIS A C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\FileSender.kt:1 | package com.remotedexter.transfer
+ACTION:POST_NORMALIZATION_ANALYSIS A C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\TransferManager.kt:1 | package com.remotedexter.transfer
+ACTION:POST_NORMALIZATION_ANALYSIS A C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\TrustSettingsFragment.agent2_copy.kt:1 | package com.remotedexter
+ACTION:POST_NORMALIZATION_ANALYSIS A C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\TrustSettingsFragment.kt:1 | package com.remotedexter
+ACTION:POST_NORMALIZATION_ANALYSIS A C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\UpdateChecker.kt:1 | package com.remotedexter
+ACTION:POST_NORMALIZATION_ANALYSIS SECTION_B_COUNT:61
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\mobile\session\AndroidSessionManager.kt:6 | com.rd.mobile.crypto.noise.NoiseHandshake
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\crypto\noise\NoiseHandshake.agent2_copy.kt:3 | com.rd.mobile.protocol.NoiseResponse
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\crypto\noise\NoiseHandshake.agent2_copy.kt:4 | com.rd.mobile.protocol.ProtocolFraming
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\crypto\noise\NoiseHandshake.kt:3 | com.rd.mobile.protocol.NoiseResponse
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\crypto\noise\NoiseHandshake.kt:4 | com.rd.mobile.protocol.ProtocolFraming
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\MainActivity.agent2_copy.kt:25 | com.rd.mobile.render.RustDeskFrameBridge
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\MainActivity.agent2_copy.kt:26 | com.rd.mobile.render.SurfaceFramePipeline
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\MainActivity.agent2_copy.kt:27 | com.rd.mobile.session.AndroidSessionManager
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\MainActivity.kt:25 | com.rd.mobile.render.RustDeskFrameBridge
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\MainActivity.kt:26 | com.rd.mobile.render.SurfaceFramePipeline
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\MainActivity.kt:27 | com.rd.mobile.session.AndroidSessionManager
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.agent2_copy.kt:13 | com.remotedexter.mobile.nfc.NfcController
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.agent2_copy.kt:14 | com.remotedexter.mobile.nfc.NfcUtils
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.agent2_copy.kt:15 | com.remotedexter.mobile.transport.TransportSelector
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.agent2_copy.kt:16 | com.remotedexter.mobile.transport.TransportType
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.agent2_copy.kt:17 | com.remotedexter.mobile.util.PairingStore
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.agent2_copy.kt:18 | com.remotedexter.mobile.viewmodel.ScanViewModel
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.kt:13 | com.remotedexter.mobile.nfc.NfcController
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.kt:14 | com.remotedexter.mobile.nfc.NfcUtils
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.kt:15 | com.remotedexter.mobile.transport.TransportSelector
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.kt:16 | com.remotedexter.mobile.transport.TransportType
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.kt:17 | com.remotedexter.mobile.util.PairingStore
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.kt:18 | com.remotedexter.mobile.viewmodel.ScanViewModel
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\session\AndroidSessionManager.agent2_canonical.kt:6 | com.rd.mobile.crypto.noise.NoiseHandshake
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\session\AndroidSessionManager.agent2_canonical2.kt:6 | com.rd.mobile.crypto.noise.NoiseHandshake
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\session\AndroidSessionManager.kt:6 | com.rd.mobile.crypto.noise.NoiseHandshake
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.agent2_copy.kt:10 | com.remotedexter.mobile.network.RelayClient
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.agent2_copy.kt:11 | com.remotedexter.mobile.util.PairingStore
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.agent2_copy.kt:12 | com.remotedexter.mobile.util.TimeUtils
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.agent2_copy.kt:6 | com.remotedexter.mobile.BuildConfig
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.agent2_copy.kt:7 | com.remotedexter.mobile.crypto.KeystoreManager
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.agent2_copy.kt:8 | com.remotedexter.mobile.crypto.KnockSigner
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.agent2_copy.kt:9 | com.remotedexter.mobile.network.KnockRequest
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.kt:10 | com.remotedexter.mobile.network.RelayClient
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.kt:11 | com.remotedexter.mobile.util.PairingStore
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.kt:12 | com.remotedexter.mobile.util.TimeUtils
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.kt:6 | com.remotedexter.mobile.BuildConfig
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.kt:7 | com.remotedexter.mobile.crypto.KeystoreManager
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.kt:8 | com.remotedexter.mobile.crypto.KnockSigner
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.kt:9 | com.remotedexter.mobile.network.KnockRequest
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\FileTransferActivity.kt:12 | com.remotedexter.protocol.CommandRequest
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\FileTransferActivity.kt:13 | com.remotedexter.protocol.CommandResponse
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\FileTransferActivity.kt:14 | com.remotedexter.transfer.TransferManager
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\FileReceiver.kt:10 | com.remotedexter.protocol.FileReject
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\FileReceiver.kt:11 | com.remotedexter.protocol.FileChunk
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\FileReceiver.kt:12 | com.remotedexter.protocol.CommandRequest
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\FileReceiver.kt:13 | com.remotedexter.protocol.CommandResponse
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\FileReceiver.kt:8 | com.remotedexter.protocol.FileOffer
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\FileReceiver.kt:9 | com.remotedexter.protocol.FileAccept
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\FileSender.kt:10 | com.remotedexter.protocol.FileReject
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\FileSender.kt:11 | com.remotedexter.protocol.FileChunk
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\FileSender.kt:12 | com.remotedexter.protocol.CommandRequest
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\FileSender.kt:13 | com.remotedexter.protocol.CommandResponse
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\FileSender.kt:8 | com.remotedexter.protocol.FileOffer
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\FileSender.kt:9 | com.remotedexter.protocol.FileAccept
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\TransferManager.kt:10 | com.remotedexter.protocol.FileReject
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\TransferManager.kt:11 | com.remotedexter.protocol.FileChunk
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\TransferManager.kt:6 | com.remotedexter.protocol.CommandRequest
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\TransferManager.kt:7 | com.remotedexter.protocol.CommandResponse
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\TransferManager.kt:8 | com.remotedexter.protocol.FileOffer
+ACTION:POST_NORMALIZATION_ANALYSIS B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\TransferManager.kt:9 | com.remotedexter.protocol.FileAccept
+ACTION:POST_NORMALIZATION_ANALYSIS SECTION_C_COUNT:19
+ACTION:POST_NORMALIZATION_ANALYSIS C C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\DeveloperModeActivity.agent2_copy.kt:42 | com.remotedexter.mobile.BuildConfig.VERSION_CODE
+ACTION:POST_NORMALIZATION_ANALYSIS C C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\DeveloperModeActivity.agent2_copy.kt:42 | com.remotedexter.mobile.BuildConfig.VERSION_NAME
+ACTION:POST_NORMALIZATION_ANALYSIS C C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\DeveloperModeActivity.kt:42 | com.remotedexter.mobile.BuildConfig.VERSION_CODE
+ACTION:POST_NORMALIZATION_ANALYSIS C C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\DeveloperModeActivity.kt:42 | com.remotedexter.mobile.BuildConfig.VERSION_NAME
+ACTION:POST_NORMALIZATION_ANALYSIS C C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\FileTransferActivity.kt:67 | com.remotedexter.transfer.FileSender.FileTransfer
+ACTION:POST_NORMALIZATION_ANALYSIS C C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\FileTransferActivity.kt:70 | com.remotedexter.transfer.FileReceiver.FileTransfer
+ACTION:POST_NORMALIZATION_ANALYSIS C C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\RDService.kt:18 | com.remotedexter.transfer.TransferManager
+ACTION:POST_NORMALIZATION_ANALYSIS C C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\RDService.kt:29 | com.remotedexter.transfer.TransferManager
+ACTION:POST_NORMALIZATION_ANALYSIS C C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\RDService.kt:34 | com.remotedexter.protocol.CommandResponse
+ACTION:POST_NORMALIZATION_ANALYSIS C C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\FileReceiver.kt:106 | com.remotedexter.protocol.serialize
+ACTION:POST_NORMALIZATION_ANALYSIS C C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\FileReceiver.kt:122 | com.remotedexter.protocol.serialize
+ACTION:POST_NORMALIZATION_ANALYSIS C C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\FileSender.kt:168 | com.remotedexter.protocol.serialize
+ACTION:POST_NORMALIZATION_ANALYSIS C C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\FileSender.kt:201 | com.remotedexter.protocol.serialize
+ACTION:POST_NORMALIZATION_ANALYSIS C C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\FileSender.kt:91 | com.remotedexter.protocol.serialize
+ACTION:POST_NORMALIZATION_ANALYSIS C C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\TransferManager.kt:51 | com.remotedexter.protocol.deserialize
+ACTION:POST_NORMALIZATION_ANALYSIS C C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\TransferManager.kt:55 | com.remotedexter.protocol.deserialize
+ACTION:POST_NORMALIZATION_ANALYSIS C C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\TransferManager.kt:59 | com.remotedexter.protocol.deserialize
+ACTION:POST_NORMALIZATION_ANALYSIS C C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\TransferManager.kt:63 | com.remotedexter.protocol.deserialize
+ACTION:POST_NORMALIZATION_ANALYSIS C C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\TransferManager.kt:68 | com.remotedexter.protocol.deserialize
+ACTION:POST_NORMALIZATION_ANALYSIS SECTION_D_COUNT:14
+ACTION:POST_NORMALIZATION_ANALYSIS D C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\mobile\session\AndroidSessionManager.kt
+ACTION:POST_NORMALIZATION_ANALYSIS D C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\crypto\noise\NoiseHandshake.agent2_copy.kt
+ACTION:POST_NORMALIZATION_ANALYSIS D C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\crypto\noise\NoiseHandshake.kt
+ACTION:POST_NORMALIZATION_ANALYSIS D C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\DeveloperModeActivity.agent2_copy.kt
+ACTION:POST_NORMALIZATION_ANALYSIS D C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\DeveloperModeActivity.kt
+ACTION:POST_NORMALIZATION_ANALYSIS D C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\MainActivity.agent2_copy.kt
+ACTION:POST_NORMALIZATION_ANALYSIS D C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\MainActivity.kt
+ACTION:POST_NORMALIZATION_ANALYSIS D C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.agent2_copy.kt
+ACTION:POST_NORMALIZATION_ANALYSIS D C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.kt
+ACTION:POST_NORMALIZATION_ANALYSIS D C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\session\AndroidSessionManager.agent2_canonical.kt
+ACTION:POST_NORMALIZATION_ANALYSIS D C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\session\AndroidSessionManager.agent2_canonical2.kt
+ACTION:POST_NORMALIZATION_ANALYSIS D C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\session\AndroidSessionManager.kt
+ACTION:POST_NORMALIZATION_ANALYSIS D C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.agent2_copy.kt
+ACTION:POST_NORMALIZATION_ANALYSIS D C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.kt
+ACTION:POST_NORMALIZATION_ANALYSIS SECTION_E_COUNT:8
+ACTION:POST_NORMALIZATION_ANALYSIS E C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\FileTransferActivity.kt | package=com.remotedexter
+ACTION:POST_NORMALIZATION_ANALYSIS E C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\FirstRunActivity.kt | package=com.remotedexter
+ACTION:POST_NORMALIZATION_ANALYSIS E C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\RDService.kt | package=com.remotedexter
+ACTION:POST_NORMALIZATION_ANALYSIS E C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\FileReceiver.kt | package=com.remotedexter.transfer
+ACTION:POST_NORMALIZATION_ANALYSIS E C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\FileSender.kt | package=com.remotedexter.transfer
+ACTION:POST_NORMALIZATION_ANALYSIS E C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\TransferManager.kt | package=com.remotedexter.transfer
+ACTION:POST_NORMALIZATION_ANALYSIS E C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\TrustSettingsFragment.kt | package=com.remotedexter
+ACTION:POST_NORMALIZATION_ANALYSIS E C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\UpdateChecker.kt | package=com.remotedexter
+ACTION:POST_NORMALIZATION_ANALYSIS READY_FOR_POST_NORMALIZATION_PROBE:FALSE
+ACTION:POST_NORMALIZATION_ANALYSIS COMPLETE
+ACTION:PACKAGE_NORMALIZATION_GAP_COPY c:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\FileTransferActivity.kt → c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\FileTransferActivity.agent2_gap.kt
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_PACKAGE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\FileTransferActivity.agent2_gap.kt
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\FileTransferActivity.agent2_gap.kt com.remotedexter.protocol.CommandRequest
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\FileTransferActivity.agent2_gap.kt com.remotedexter.protocol.CommandResponse
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\FileTransferActivity.agent2_gap.kt com.remotedexter.transfer.TransferManager
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_REFERENCE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\FileTransferActivity.agent2_gap.kt com.remotedexter.protocol.CommandRequest
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_REFERENCE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\FileTransferActivity.agent2_gap.kt com.remotedexter.protocol.CommandResponse
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_REFERENCE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\FileTransferActivity.agent2_gap.kt com.remotedexter.transfer.TransferManager
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_REFERENCE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\FileTransferActivity.agent2_gap.kt com.remotedexter.transfer.FileSender.FileTransfer
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_REFERENCE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\FileTransferActivity.agent2_gap.kt com.remotedexter.transfer.FileReceiver.FileTransfer
+ACTION:PACKAGE_NORMALIZATION_GAP_COPY c:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\FirstRunActivity.kt → c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\FirstRunActivity.agent2_gap.kt
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_PACKAGE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\FirstRunActivity.agent2_gap.kt
+ACTION:PACKAGE_NORMALIZATION_GAP_COPY c:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\RDService.kt → c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\RDService.agent2_gap.kt
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_PACKAGE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\RDService.agent2_gap.kt
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_REFERENCE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\RDService.agent2_gap.kt com.remotedexter.transfer.TransferManager
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_REFERENCE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\RDService.agent2_gap.kt com.remotedexter.protocol.CommandResponse
+ACTION:PACKAGE_NORMALIZATION_GAP_COPY c:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\FileReceiver.kt → c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\FileReceiver.agent2_gap.kt
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_PACKAGE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\FileReceiver.agent2_gap.kt
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\FileReceiver.agent2_gap.kt com.remotedexter.protocol.FileOffer
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\FileReceiver.agent2_gap.kt com.remotedexter.protocol.FileAccept
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\FileReceiver.agent2_gap.kt com.remotedexter.protocol.FileReject
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\FileReceiver.agent2_gap.kt com.remotedexter.protocol.FileChunk
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\FileReceiver.agent2_gap.kt com.remotedexter.protocol.CommandRequest
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\FileReceiver.agent2_gap.kt com.remotedexter.protocol.CommandResponse
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_REFERENCE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\FileReceiver.agent2_gap.kt com.remotedexter.protocol.FileOffer
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_REFERENCE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\FileReceiver.agent2_gap.kt com.remotedexter.protocol.FileAccept
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_REFERENCE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\FileReceiver.agent2_gap.kt com.remotedexter.protocol.FileReject
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_REFERENCE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\FileReceiver.agent2_gap.kt com.remotedexter.protocol.FileChunk
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_REFERENCE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\FileReceiver.agent2_gap.kt com.remotedexter.protocol.CommandRequest
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_REFERENCE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\FileReceiver.agent2_gap.kt com.remotedexter.protocol.CommandResponse
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_REFERENCE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\FileReceiver.agent2_gap.kt com.remotedexter.protocol.serialize
+ACTION:PACKAGE_NORMALIZATION_GAP_COPY c:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\FileSender.kt → c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\FileSender.agent2_gap.kt
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_PACKAGE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\FileSender.agent2_gap.kt
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\FileSender.agent2_gap.kt com.remotedexter.protocol.FileOffer
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\FileSender.agent2_gap.kt com.remotedexter.protocol.FileAccept
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\FileSender.agent2_gap.kt com.remotedexter.protocol.FileReject
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\FileSender.agent2_gap.kt com.remotedexter.protocol.FileChunk
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\FileSender.agent2_gap.kt com.remotedexter.protocol.CommandRequest
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\FileSender.agent2_gap.kt com.remotedexter.protocol.CommandResponse
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_REFERENCE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\FileSender.agent2_gap.kt com.remotedexter.protocol.FileOffer
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_REFERENCE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\FileSender.agent2_gap.kt com.remotedexter.protocol.FileAccept
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_REFERENCE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\FileSender.agent2_gap.kt com.remotedexter.protocol.FileReject
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_REFERENCE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\FileSender.agent2_gap.kt com.remotedexter.protocol.FileChunk
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_REFERENCE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\FileSender.agent2_gap.kt com.remotedexter.protocol.CommandRequest
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_REFERENCE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\FileSender.agent2_gap.kt com.remotedexter.protocol.CommandResponse
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_REFERENCE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\FileSender.agent2_gap.kt com.remotedexter.protocol.serialize
+ACTION:PACKAGE_NORMALIZATION_GAP_COPY c:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\TransferManager.kt → c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\TransferManager.agent2_gap.kt
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_PACKAGE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\TransferManager.agent2_gap.kt
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\TransferManager.agent2_gap.kt com.remotedexter.protocol.CommandRequest
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\TransferManager.agent2_gap.kt com.remotedexter.protocol.CommandResponse
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\TransferManager.agent2_gap.kt com.remotedexter.protocol.FileOffer
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\TransferManager.agent2_gap.kt com.remotedexter.protocol.FileAccept
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\TransferManager.agent2_gap.kt com.remotedexter.protocol.FileReject
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\TransferManager.agent2_gap.kt com.remotedexter.protocol.FileChunk
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_REFERENCE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\TransferManager.agent2_gap.kt com.remotedexter.protocol.CommandRequest
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_REFERENCE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\TransferManager.agent2_gap.kt com.remotedexter.protocol.CommandResponse
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_REFERENCE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\TransferManager.agent2_gap.kt com.remotedexter.protocol.FileOffer
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_REFERENCE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\TransferManager.agent2_gap.kt com.remotedexter.protocol.FileAccept
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_REFERENCE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\TransferManager.agent2_gap.kt com.remotedexter.protocol.FileReject
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_REFERENCE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\TransferManager.agent2_gap.kt com.remotedexter.protocol.FileChunk
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_REFERENCE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\TransferManager.agent2_gap.kt com.remotedexter.protocol.deserialize
+ACTION:PACKAGE_NORMALIZATION_GAP_COPY c:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\TrustSettingsFragment.kt → c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\TrustSettingsFragment.agent2_gap.kt
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_PACKAGE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\TrustSettingsFragment.agent2_gap.kt
+ACTION:PACKAGE_NORMALIZATION_GAP_COPY c:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\UpdateChecker.kt → c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\UpdateChecker.agent2_gap.kt
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_PACKAGE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\UpdateChecker.agent2_gap.kt
+ACTION:PACKAGE_ROOT_NORMALIZATION_GAP COMPLETE
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_PACKAGE C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\FileTransferActivity.agent2_gap.kt
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_PACKAGE C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\FirstRunActivity.agent2_gap.kt
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_PACKAGE C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\RDService.agent2_gap.kt
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_PACKAGE C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\TrustSettingsFragment.agent2_gap.kt
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_PACKAGE C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\UpdateChecker.agent2_gap.kt
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_PACKAGE C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\FileReceiver.agent2_gap.kt
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_PACKAGE C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\FileSender.agent2_gap.kt
+ACTION:PACKAGE_NORMALIZATION_GAP_REWRITE_PACKAGE C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\transfer\TransferManager.agent2_gap.kt
+ACTION:PACKAGE_ROOT_NORMALIZATION_GAP COMPLETE
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 START
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 SECTION_A_COUNT:9
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 A C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\FileTransferActivity.kt:1 | package com.remotedexter
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 A C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\FirstRunActivity.kt:1 | package com.remotedexter
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 A C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\RDService.kt:1 | package com.remotedexter
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 A C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\FileReceiver.kt:1 | package com.remotedexter.transfer
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 A C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\FileSender.kt:1 | package com.remotedexter.transfer
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 A C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\TransferManager.kt:1 | package com.remotedexter.transfer
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 A C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\TrustSettingsFragment.agent2_copy.kt:1 | package com.remotedexter
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 A C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\TrustSettingsFragment.kt:1 | package com.remotedexter
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 A C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\UpdateChecker.kt:1 | package com.remotedexter
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 SECTION_B_COUNT:61
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\mobile\session\AndroidSessionManager.kt:6 | com.rd.mobile.crypto.noise.NoiseHandshake
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\crypto\noise\NoiseHandshake.agent2_copy.kt:3 | com.rd.mobile.protocol.NoiseResponse
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\crypto\noise\NoiseHandshake.agent2_copy.kt:4 | com.rd.mobile.protocol.ProtocolFraming
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\crypto\noise\NoiseHandshake.kt:3 | com.rd.mobile.protocol.NoiseResponse
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\crypto\noise\NoiseHandshake.kt:4 | com.rd.mobile.protocol.ProtocolFraming
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\MainActivity.agent2_copy.kt:25 | com.rd.mobile.render.RustDeskFrameBridge
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\MainActivity.agent2_copy.kt:26 | com.rd.mobile.render.SurfaceFramePipeline
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\MainActivity.agent2_copy.kt:27 | com.rd.mobile.session.AndroidSessionManager
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\MainActivity.kt:25 | com.rd.mobile.render.RustDeskFrameBridge
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\MainActivity.kt:26 | com.rd.mobile.render.SurfaceFramePipeline
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\MainActivity.kt:27 | com.rd.mobile.session.AndroidSessionManager
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.agent2_copy.kt:13 | com.remotedexter.mobile.nfc.NfcController
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.agent2_copy.kt:14 | com.remotedexter.mobile.nfc.NfcUtils
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.agent2_copy.kt:15 | com.remotedexter.mobile.transport.TransportSelector
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.agent2_copy.kt:16 | com.remotedexter.mobile.transport.TransportType
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.agent2_copy.kt:17 | com.remotedexter.mobile.util.PairingStore
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.agent2_copy.kt:18 | com.remotedexter.mobile.viewmodel.ScanViewModel
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.kt:13 | com.remotedexter.mobile.nfc.NfcController
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.kt:14 | com.remotedexter.mobile.nfc.NfcUtils
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.kt:15 | com.remotedexter.mobile.transport.TransportSelector
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.kt:16 | com.remotedexter.mobile.transport.TransportType
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.kt:17 | com.remotedexter.mobile.util.PairingStore
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.kt:18 | com.remotedexter.mobile.viewmodel.ScanViewModel
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\session\AndroidSessionManager.agent2_canonical.kt:6 | com.rd.mobile.crypto.noise.NoiseHandshake
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\session\AndroidSessionManager.agent2_canonical2.kt:6 | com.rd.mobile.crypto.noise.NoiseHandshake
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\session\AndroidSessionManager.kt:6 | com.rd.mobile.crypto.noise.NoiseHandshake
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.agent2_copy.kt:10 | com.remotedexter.mobile.network.RelayClient
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.agent2_copy.kt:11 | com.remotedexter.mobile.util.PairingStore
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.agent2_copy.kt:12 | com.remotedexter.mobile.util.TimeUtils
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.agent2_copy.kt:6 | com.remotedexter.mobile.BuildConfig
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.agent2_copy.kt:7 | com.remotedexter.mobile.crypto.KeystoreManager
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.agent2_copy.kt:8 | com.remotedexter.mobile.crypto.KnockSigner
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.agent2_copy.kt:9 | com.remotedexter.mobile.network.KnockRequest
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.kt:10 | com.remotedexter.mobile.network.RelayClient
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.kt:11 | com.remotedexter.mobile.util.PairingStore
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.kt:12 | com.remotedexter.mobile.util.TimeUtils
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.kt:6 | com.remotedexter.mobile.BuildConfig
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.kt:7 | com.remotedexter.mobile.crypto.KeystoreManager
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.kt:8 | com.remotedexter.mobile.crypto.KnockSigner
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.kt:9 | com.remotedexter.mobile.network.KnockRequest
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\FileTransferActivity.kt:12 | com.remotedexter.protocol.CommandRequest
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\FileTransferActivity.kt:13 | com.remotedexter.protocol.CommandResponse
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\FileTransferActivity.kt:14 | com.remotedexter.transfer.TransferManager
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\FileReceiver.kt:10 | com.remotedexter.protocol.FileReject
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\FileReceiver.kt:11 | com.remotedexter.protocol.FileChunk
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\FileReceiver.kt:12 | com.remotedexter.protocol.CommandRequest
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\FileReceiver.kt:13 | com.remotedexter.protocol.CommandResponse
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\FileReceiver.kt:8 | com.remotedexter.protocol.FileOffer
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\FileReceiver.kt:9 | com.remotedexter.protocol.FileAccept
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\FileSender.kt:10 | com.remotedexter.protocol.FileReject
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\FileSender.kt:11 | com.remotedexter.protocol.FileChunk
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\FileSender.kt:12 | com.remotedexter.protocol.CommandRequest
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\FileSender.kt:13 | com.remotedexter.protocol.CommandResponse
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\FileSender.kt:8 | com.remotedexter.protocol.FileOffer
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\FileSender.kt:9 | com.remotedexter.protocol.FileAccept
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\TransferManager.kt:10 | com.remotedexter.protocol.FileReject
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\TransferManager.kt:11 | com.remotedexter.protocol.FileChunk
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\TransferManager.kt:6 | com.remotedexter.protocol.CommandRequest
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\TransferManager.kt:7 | com.remotedexter.protocol.CommandResponse
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\TransferManager.kt:8 | com.remotedexter.protocol.FileOffer
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\TransferManager.kt:9 | com.remotedexter.protocol.FileAccept
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 SECTION_C_COUNT:19
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 C C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\DeveloperModeActivity.agent2_copy.kt:42 | com.remotedexter.mobile.BuildConfig.VERSION_CODE
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 C C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\DeveloperModeActivity.agent2_copy.kt:42 | com.remotedexter.mobile.BuildConfig.VERSION_NAME
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 C C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\DeveloperModeActivity.kt:42 | com.remotedexter.mobile.BuildConfig.VERSION_CODE
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 C C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\DeveloperModeActivity.kt:42 | com.remotedexter.mobile.BuildConfig.VERSION_NAME
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 C C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\FileTransferActivity.kt:67 | com.remotedexter.transfer.FileSender.FileTransfer
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 C C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\FileTransferActivity.kt:70 | com.remotedexter.transfer.FileReceiver.FileTransfer
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 C C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\RDService.kt:18 | com.remotedexter.transfer.TransferManager
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 C C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\RDService.kt:29 | com.remotedexter.transfer.TransferManager
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 C C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\RDService.kt:34 | com.remotedexter.protocol.CommandResponse
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 C C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\FileReceiver.kt:106 | com.remotedexter.protocol.serialize
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 C C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\FileReceiver.kt:122 | com.remotedexter.protocol.serialize
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 C C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\FileSender.kt:168 | com.remotedexter.protocol.serialize
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 C C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\FileSender.kt:201 | com.remotedexter.protocol.serialize
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 C C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\FileSender.kt:91 | com.remotedexter.protocol.serialize
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 C C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\TransferManager.kt:51 | com.remotedexter.protocol.deserialize
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 C C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\TransferManager.kt:55 | com.remotedexter.protocol.deserialize
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 C C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\TransferManager.kt:59 | com.remotedexter.protocol.deserialize
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 C C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\TransferManager.kt:63 | com.remotedexter.protocol.deserialize
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 C C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\TransferManager.kt:68 | com.remotedexter.protocol.deserialize
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 SECTION_D_COUNT:13
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 D C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\crypto\noise\NoiseHandshake.agent2_copy.kt
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 D C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\crypto\noise\NoiseHandshake.kt
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 D C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\DeveloperModeActivity.agent2_copy.kt
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 D C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\DeveloperModeActivity.kt
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 D C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\MainActivity.agent2_copy.kt
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 D C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\MainActivity.kt
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 D C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.agent2_copy.kt
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 D C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.kt
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 D C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\session\AndroidSessionManager.agent2_canonical.kt
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 D C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\session\AndroidSessionManager.agent2_canonical2.kt
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 D C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\session\AndroidSessionManager.kt
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 D C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.agent2_copy.kt
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 D C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.kt
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 SECTION_E_COUNT:8
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 E C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\FileTransferActivity.kt | package com.remotedexter
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 E C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\FirstRunActivity.kt | package com.remotedexter
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 E C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\RDService.kt | package com.remotedexter
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 E C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\FileReceiver.kt | package com.remotedexter.transfer
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 E C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\FileSender.kt | package com.remotedexter.transfer
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 E C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\transfer\TransferManager.kt | package com.remotedexter.transfer
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 E C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\TrustSettingsFragment.kt | package com.remotedexter
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 E C:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter\UpdateChecker.kt | package com.remotedexter
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 READY_FOR_POST_NORMALIZATION_PROBE:FALSE
+ACTION:POST_NORMALIZATION_ANALYSIS_V2 COMPLETE
+ACTION:POST_NORMALIZATION_ANALYSIS_V3 START
+ACTION:POST_NORMALIZATION_ANALYSIS_V3 AUTH_FILE_COUNT:52
+ACTION:POST_NORMALIZATION_ANALYSIS_V3 SECTION_A_COUNT:0
+ACTION:POST_NORMALIZATION_ANALYSIS_V3 SECTION_B_COUNT:19
+ACTION:POST_NORMALIZATION_ANALYSIS_V3 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\crypto\noise\NoiseHandshake.kt:3 | com.rd.mobile.protocol.NoiseResponse
+ACTION:POST_NORMALIZATION_ANALYSIS_V3 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\crypto\noise\NoiseHandshake.kt:4 | com.rd.mobile.protocol.ProtocolFraming
+ACTION:POST_NORMALIZATION_ANALYSIS_V3 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\MainActivity.kt:25 | com.rd.mobile.render.RustDeskFrameBridge
+ACTION:POST_NORMALIZATION_ANALYSIS_V3 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\MainActivity.kt:26 | com.rd.mobile.render.SurfaceFramePipeline
+ACTION:POST_NORMALIZATION_ANALYSIS_V3 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\MainActivity.kt:27 | com.rd.mobile.session.AndroidSessionManager
+ACTION:POST_NORMALIZATION_ANALYSIS_V3 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.kt:13 | com.remotedexter.mobile.nfc.NfcController
+ACTION:POST_NORMALIZATION_ANALYSIS_V3 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.kt:14 | com.remotedexter.mobile.nfc.NfcUtils
+ACTION:POST_NORMALIZATION_ANALYSIS_V3 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.kt:15 | com.remotedexter.mobile.transport.TransportSelector
+ACTION:POST_NORMALIZATION_ANALYSIS_V3 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.kt:16 | com.remotedexter.mobile.transport.TransportType
+ACTION:POST_NORMALIZATION_ANALYSIS_V3 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.kt:17 | com.remotedexter.mobile.util.PairingStore
+ACTION:POST_NORMALIZATION_ANALYSIS_V3 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.kt:18 | com.remotedexter.mobile.viewmodel.ScanViewModel
+ACTION:POST_NORMALIZATION_ANALYSIS_V3 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\session\AndroidSessionManager.kt:6 | com.rd.mobile.crypto.noise.NoiseHandshake
+ACTION:POST_NORMALIZATION_ANALYSIS_V3 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.kt:10 | com.remotedexter.mobile.network.RelayClient
+ACTION:POST_NORMALIZATION_ANALYSIS_V3 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.kt:11 | com.remotedexter.mobile.util.PairingStore
+ACTION:POST_NORMALIZATION_ANALYSIS_V3 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.kt:12 | com.remotedexter.mobile.util.TimeUtils
+ACTION:POST_NORMALIZATION_ANALYSIS_V3 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.kt:6 | com.remotedexter.mobile.BuildConfig
+ACTION:POST_NORMALIZATION_ANALYSIS_V3 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.kt:7 | com.remotedexter.mobile.crypto.KeystoreManager
+ACTION:POST_NORMALIZATION_ANALYSIS_V3 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.kt:8 | com.remotedexter.mobile.crypto.KnockSigner
+ACTION:POST_NORMALIZATION_ANALYSIS_V3 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.kt:9 | com.remotedexter.mobile.network.KnockRequest
+ACTION:POST_NORMALIZATION_ANALYSIS_V3 SECTION_C_COUNT:2
+ACTION:POST_NORMALIZATION_ANALYSIS_V3 C C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\DeveloperModeActivity.kt:42 | com.remotedexter.mobile.BuildConfig.VERSION_CODE
+ACTION:POST_NORMALIZATION_ANALYSIS_V3 C C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\DeveloperModeActivity.kt:42 | com.remotedexter.mobile.BuildConfig.VERSION_NAME
+ACTION:POST_NORMALIZATION_ANALYSIS_V3 SECTION_D_COUNT:6
+ACTION:POST_NORMALIZATION_ANALYSIS_V3 D C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\crypto\noise\NoiseHandshake.kt
+ACTION:POST_NORMALIZATION_ANALYSIS_V3 D C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\DeveloperModeActivity.kt
+ACTION:POST_NORMALIZATION_ANALYSIS_V3 D C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\MainActivity.kt
+ACTION:POST_NORMALIZATION_ANALYSIS_V3 D C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.kt
+ACTION:POST_NORMALIZATION_ANALYSIS_V3 D C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\session\AndroidSessionManager.kt
+ACTION:POST_NORMALIZATION_ANALYSIS_V3 D C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.kt
+ACTION:POST_NORMALIZATION_ANALYSIS_V3 SECTION_E_COUNT:0
+ACTION:POST_NORMALIZATION_ANALYSIS_V3 READY_FOR_POST_NORMALIZATION_PROBE:FALSE
+ACTION:POST_NORMALIZATION_ANALYSIS_V3 COMPLETE
+ACTION:AUTHORITY_NORMALIZATION_COPY c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\crypto\noise\NoiseHandshake.kt → c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\crypto\noise\NoiseHandshake.authority_norm.kt
+ACTION:AUTHORITY_NORMALIZATION_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\crypto\noise\NoiseHandshake.authority_norm.kt com.rd.mobile.protocol.NoiseResponse
+ACTION:AUTHORITY_NORMALIZATION_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\crypto\noise\NoiseHandshake.authority_norm.kt com.rd.mobile.protocol.ProtocolFraming
+ACTION:AUTHORITY_NORMALIZATION_REWRITE_REFERENCE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\crypto\noise\NoiseHandshake.authority_norm.kt com.rd.mobile.protocol.NoiseResponse
+ACTION:AUTHORITY_NORMALIZATION_REWRITE_REFERENCE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\crypto\noise\NoiseHandshake.authority_norm.kt com.rd.mobile.protocol.ProtocolFraming
+ACTION:AUTHORITY_NORMALIZATION_COPY c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\MainActivity.kt → c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\MainActivity.authority_norm.kt
+ACTION:AUTHORITY_NORMALIZATION_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\MainActivity.authority_norm.kt com.rd.mobile.render.RustDeskFrameBridge
+ACTION:AUTHORITY_NORMALIZATION_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\MainActivity.authority_norm.kt com.rd.mobile.render.SurfaceFramePipeline
+ACTION:AUTHORITY_NORMALIZATION_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\MainActivity.authority_norm.kt com.rd.mobile.session.AndroidSessionManager
+ACTION:AUTHORITY_NORMALIZATION_REWRITE_REFERENCE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\MainActivity.authority_norm.kt com.rd.mobile.render.RustDeskFrameBridge
+ACTION:AUTHORITY_NORMALIZATION_REWRITE_REFERENCE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\MainActivity.authority_norm.kt com.rd.mobile.render.SurfaceFramePipeline
+ACTION:AUTHORITY_NORMALIZATION_REWRITE_REFERENCE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\MainActivity.authority_norm.kt com.rd.mobile.session.AndroidSessionManager
+ACTION:AUTHORITY_NORMALIZATION_COPY c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.kt → c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.authority_norm.kt
+ACTION:AUTHORITY_NORMALIZATION_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.authority_norm.kt com.remotedexter.mobile.nfc.NfcController
+ACTION:AUTHORITY_NORMALIZATION_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.authority_norm.kt com.remotedexter.mobile.nfc.NfcUtils
+ACTION:AUTHORITY_NORMALIZATION_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.authority_norm.kt com.remotedexter.mobile.transport.TransportSelector
+ACTION:AUTHORITY_NORMALIZATION_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.authority_norm.kt com.remotedexter.mobile.transport.TransportType
+ACTION:AUTHORITY_NORMALIZATION_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.authority_norm.kt com.remotedexter.mobile.util.PairingStore
+ACTION:AUTHORITY_NORMALIZATION_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.authority_norm.kt com.remotedexter.mobile.viewmodel.ScanViewModel
+ACTION:AUTHORITY_NORMALIZATION_REWRITE_REFERENCE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.authority_norm.kt com.remotedexter.mobile.nfc.NfcController
+ACTION:AUTHORITY_NORMALIZATION_REWRITE_REFERENCE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.authority_norm.kt com.remotedexter.mobile.nfc.NfcUtils
+ACTION:AUTHORITY_NORMALIZATION_REWRITE_REFERENCE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.authority_norm.kt com.remotedexter.mobile.transport.TransportSelector
+ACTION:AUTHORITY_NORMALIZATION_REWRITE_REFERENCE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.authority_norm.kt com.remotedexter.mobile.transport.TransportType
+ACTION:AUTHORITY_NORMALIZATION_REWRITE_REFERENCE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.authority_norm.kt com.remotedexter.mobile.util.PairingStore
+ACTION:AUTHORITY_NORMALIZATION_REWRITE_REFERENCE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.authority_norm.kt com.remotedexter.mobile.viewmodel.ScanViewModel
+ACTION:AUTHORITY_NORMALIZATION_COPY c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\session\AndroidSessionManager.kt → c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\session\AndroidSessionManager.authority_norm.kt
+ACTION:AUTHORITY_NORMALIZATION_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\session\AndroidSessionManager.authority_norm.kt com.rd.mobile.crypto.noise.NoiseHandshake
+ACTION:AUTHORITY_NORMALIZATION_REWRITE_REFERENCE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\session\AndroidSessionManager.authority_norm.kt com.rd.mobile.crypto.noise.NoiseHandshake
+ACTION:AUTHORITY_NORMALIZATION_COPY c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.kt → c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.authority_norm.kt
+ACTION:AUTHORITY_NORMALIZATION_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.authority_norm.kt com.remotedexter.mobile.BuildConfig
+ACTION:AUTHORITY_NORMALIZATION_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.authority_norm.kt com.remotedexter.mobile.crypto.KeystoreManager
+ACTION:AUTHORITY_NORMALIZATION_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.authority_norm.kt com.remotedexter.mobile.crypto.KnockSigner
+ACTION:AUTHORITY_NORMALIZATION_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.authority_norm.kt com.remotedexter.mobile.network.KnockRequest
+ACTION:AUTHORITY_NORMALIZATION_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.authority_norm.kt com.remotedexter.mobile.network.RelayClient
+ACTION:AUTHORITY_NORMALIZATION_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.authority_norm.kt com.remotedexter.mobile.util.PairingStore
+ACTION:AUTHORITY_NORMALIZATION_REWRITE_IMPORT c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.authority_norm.kt com.remotedexter.mobile.util.TimeUtils
+ACTION:AUTHORITY_NORMALIZATION_REWRITE_REFERENCE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.authority_norm.kt com.remotedexter.mobile.BuildConfig
+ACTION:AUTHORITY_NORMALIZATION_REWRITE_REFERENCE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.authority_norm.kt com.remotedexter.mobile.crypto.KeystoreManager
+ACTION:AUTHORITY_NORMALIZATION_REWRITE_REFERENCE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.authority_norm.kt com.remotedexter.mobile.crypto.KnockSigner
+ACTION:AUTHORITY_NORMALIZATION_REWRITE_REFERENCE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.authority_norm.kt com.remotedexter.mobile.network.KnockRequest
+ACTION:AUTHORITY_NORMALIZATION_REWRITE_REFERENCE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.authority_norm.kt com.remotedexter.mobile.network.RelayClient
+ACTION:AUTHORITY_NORMALIZATION_REWRITE_REFERENCE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.authority_norm.kt com.remotedexter.mobile.util.PairingStore
+ACTION:AUTHORITY_NORMALIZATION_REWRITE_REFERENCE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.authority_norm.kt com.remotedexter.mobile.util.TimeUtils
+ACTION:AUTHORITY_NORMALIZATION_COPY c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\DeveloperModeActivity.kt → c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\DeveloperModeActivity.authority_norm.kt
+ACTION:AUTHORITY_NORMALIZATION_REWRITE_REFERENCE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\DeveloperModeActivity.authority_norm.kt com.remotedexter.mobile.BuildConfig.VERSION_CODE
+ACTION:AUTHORITY_NORMALIZATION_REWRITE_REFERENCE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\DeveloperModeActivity.authority_norm.kt com.remotedexter.mobile.BuildConfig.VERSION_NAME
+ACTION:AUTHORITY_NORMALIZATION COMPLETE
+ACTION:POST_NORMALIZATION_ANALYSIS_V4 START
+ACTION:POST_NORMALIZATION_ANALYSIS_V4 AUTH_FILE_COUNT:52
+ACTION:POST_NORMALIZATION_ANALYSIS_V4 SECTION_A_COUNT:0
+ACTION:POST_NORMALIZATION_ANALYSIS_V4 SECTION_B_COUNT:19
+ACTION:POST_NORMALIZATION_ANALYSIS_V4 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\crypto\noise\NoiseHandshake.kt:3 | com.rd.mobile.protocol.NoiseResponse
+ACTION:POST_NORMALIZATION_ANALYSIS_V4 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\crypto\noise\NoiseHandshake.kt:4 | com.rd.mobile.protocol.ProtocolFraming
+ACTION:POST_NORMALIZATION_ANALYSIS_V4 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\MainActivity.kt:25 | com.rd.mobile.render.RustDeskFrameBridge
+ACTION:POST_NORMALIZATION_ANALYSIS_V4 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\MainActivity.kt:26 | com.rd.mobile.render.SurfaceFramePipeline
+ACTION:POST_NORMALIZATION_ANALYSIS_V4 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\MainActivity.kt:27 | com.rd.mobile.session.AndroidSessionManager
+ACTION:POST_NORMALIZATION_ANALYSIS_V4 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.kt:13 | com.remotedexter.mobile.nfc.NfcController
+ACTION:POST_NORMALIZATION_ANALYSIS_V4 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.kt:14 | com.remotedexter.mobile.nfc.NfcUtils
+ACTION:POST_NORMALIZATION_ANALYSIS_V4 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.kt:15 | com.remotedexter.mobile.transport.TransportSelector
+ACTION:POST_NORMALIZATION_ANALYSIS_V4 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.kt:16 | com.remotedexter.mobile.transport.TransportType
+ACTION:POST_NORMALIZATION_ANALYSIS_V4 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.kt:17 | com.remotedexter.mobile.util.PairingStore
+ACTION:POST_NORMALIZATION_ANALYSIS_V4 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.kt:18 | com.remotedexter.mobile.viewmodel.ScanViewModel
+ACTION:POST_NORMALIZATION_ANALYSIS_V4 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\session\AndroidSessionManager.kt:6 | com.rd.mobile.crypto.noise.NoiseHandshake
+ACTION:POST_NORMALIZATION_ANALYSIS_V4 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.kt:10 | com.remotedexter.mobile.network.RelayClient
+ACTION:POST_NORMALIZATION_ANALYSIS_V4 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.kt:11 | com.remotedexter.mobile.util.PairingStore
+ACTION:POST_NORMALIZATION_ANALYSIS_V4 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.kt:12 | com.remotedexter.mobile.util.TimeUtils
+ACTION:POST_NORMALIZATION_ANALYSIS_V4 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.kt:6 | com.remotedexter.mobile.BuildConfig
+ACTION:POST_NORMALIZATION_ANALYSIS_V4 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.kt:7 | com.remotedexter.mobile.crypto.KeystoreManager
+ACTION:POST_NORMALIZATION_ANALYSIS_V4 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.kt:8 | com.remotedexter.mobile.crypto.KnockSigner
+ACTION:POST_NORMALIZATION_ANALYSIS_V4 B C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.kt:9 | com.remotedexter.mobile.network.KnockRequest
+ACTION:POST_NORMALIZATION_ANALYSIS_V4 SECTION_C_COUNT:2
+ACTION:POST_NORMALIZATION_ANALYSIS_V4 C C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\DeveloperModeActivity.kt:42 | com.remotedexter.mobile.BuildConfig.VERSION_CODE
+ACTION:POST_NORMALIZATION_ANALYSIS_V4 C C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\DeveloperModeActivity.kt:42 | com.remotedexter.mobile.BuildConfig.VERSION_NAME
+ACTION:POST_NORMALIZATION_ANALYSIS_V4 SECTION_D_COUNT:6
+ACTION:POST_NORMALIZATION_ANALYSIS_V4 D C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\crypto\noise\NoiseHandshake.kt
+ACTION:POST_NORMALIZATION_ANALYSIS_V4 D C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\DeveloperModeActivity.kt
+ACTION:POST_NORMALIZATION_ANALYSIS_V4 D C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\MainActivity.kt
+ACTION:POST_NORMALIZATION_ANALYSIS_V4 D C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.kt
+ACTION:POST_NORMALIZATION_ANALYSIS_V4 D C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\session\AndroidSessionManager.kt
+ACTION:POST_NORMALIZATION_ANALYSIS_V4 D C:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.kt
+ACTION:POST_NORMALIZATION_ANALYSIS_V4 SECTION_E_COUNT:0
+ACTION:POST_NORMALIZATION_ANALYSIS_V4 READY_FOR_POST_NORMALIZATION_PROBE:FALSE
+ACTION:POST_NORMALIZATION_ANALYSIS_V4 COMPLETE
+ACTION:AUTHORITY_PROMOTION_COPY c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\crypto\noise\NoiseHandshake.authority_norm.kt → c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\crypto\noise\NoiseHandshake.authority_norm.authority_promoted.kt
+ACTION:AUTHORITY_PROMOTION_COPY c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\MainActivity.authority_norm.kt → c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\MainActivity.authority_norm.authority_promoted.kt
+ACTION:AUTHORITY_PROMOTION_COPY c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.authority_norm.kt → c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ScanActivity.authority_norm.authority_promoted.kt
+ACTION:AUTHORITY_PROMOTION_COPY c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\session\AndroidSessionManager.authority_norm.kt → c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\session\AndroidSessionManager.authority_norm.authority_promoted.kt
+ACTION:AUTHORITY_PROMOTION_COPY c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.authority_norm.kt → c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\viewmodel\ScanViewModel.authority_norm.authority_promoted.kt
+ACTION:AUTHORITY_PROMOTION_COPY c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\DeveloperModeActivity.authority_norm.kt → c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\DeveloperModeActivity.authority_norm.authority_promoted.kt
+ACTION:AUTHORITY_PROMOTION COMPLETE
+ACTION:POST_NORMALIZATION_ANALYSIS_V5 START
+ACTION:POST_NORMALIZATION_ANALYSIS_V5 AUTH_FILE_COUNT:6
+ACTION:POST_NORMALIZATION_ANALYSIS_V5 SECTION_A_COUNT:0
+ACTION:POST_NORMALIZATION_ANALYSIS_V5 SECTION_B_COUNT:0
+ACTION:POST_NORMALIZATION_ANALYSIS_V5 SECTION_C_COUNT:0
+ACTION:POST_NORMALIZATION_ANALYSIS_V5 SECTION_D_COUNT:0
+ACTION:POST_NORMALIZATION_ANALYSIS_V5 READY_FOR_POST_NORMALIZATION_PROBE:TRUE
+ACTION:POST_NORMALIZATION_ANALYSIS_V5 COMPLETE
+ACTION:POST_NORMALIZATION_COMPILE_PROBE_START
+ACTION:POST_NORMALIZATION_COMPILE_PROBE_START
+ACTION:POST_NORMALIZATION_COMPILE_PROBE_OUTPUT_CAPTURED
+ACTION:POST_NORMALIZATION_COMPILE_PROBE_COMPLETE
+ACTION:POST_NORMALIZATION_COMPILE_PROBE_RELEASE_START
+ACTION:POST_NORMALIZATION_COMPILE_PROBE_RELEASE_START
+ACTION:POST_NORMALIZATION_COMPILE_PROBE_RELEASE_OUTPUT_CAPTURED
+ACTION:POST_NORMALIZATION_COMPILE_PROBE_RELEASE_COMPLETE
+ACTION:POST_NORMALIZATION_COMPILE_PROBE_RELEASE_KOTLIN_ONLY_START
+ACTION:POST_NORMALIZATION_COMPILE_PROBE_RELEASE_KOTLIN_ONLY_SKIP_VALIDATION_OUTPUT_CAPTURED
+ACTION:POST_NORMALIZATION_COMPILE_PROBE_RELEASE_KOTLIN_ONLY_SKIP_VALIDATION_COMPLETE
+ACTION:POST_NORMALIZATION_COMPILE_PROBE_RELEASE_KOTLIN_ONLY_OUTPUT_CAPTURED
+ACTION:POST_NORMALIZATION_COMPILE_PROBE_RELEASE_KOTLIN_ONLY_COMPLETE
+ACTION:POST_NORMALIZATION_COMPILE_PROBE_RELEASE_KOTLIN_ONLY_SKIP_VALIDATION_START
+ACTION:POST_NORMALIZATION_COMPILE_PROBE_RELEASE_KOTLIN_ONLY_SKIP_VALIDATION_OUTPUT_CAPTURED
+ACTION:POST_NORMALIZATION_COMPILE_PROBE_RELEASE_KOTLIN_ONLY_SKIP_VALIDATION_COMPLETE
+ACTION:KOTLIN_COMPILE_PROBE_AUTHORITATIVE_ONLY_START
+ACTION:KOTLIN_COMPILE_PROBE_AUTHORITATIVE_ONLY_OUTPUT_CAPTURED
+ACTION:KOTLIN_COMPILE_PROBE_AUTHORITATIVE_ONLY_COMPLETE
+ACTION:LEGACY_TREE_QUARANTINE_MOVE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\mobile → c:\RemoteDexter\src\mobile\android\app\src\legacy_quarantine\com\rd\mobile
+ACTION:LEGACY_TREE_QUARANTINE_MOVE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\remotedexter → c:\RemoteDexter\src\mobile\android\app\src\legacy_quarantine\com\remotedexter
+ACTION:LEGACY_TREE_QUARANTINE_COMPLETE
+ACTION:POST_QUARANTINE_COMPILE_PROBE_START
+ACTION:POST_QUARANTINE_COMPILE_PROBE_OUTPUT_CAPTURED
+ACTION:POST_QUARANTINE_COMPILE_PROBE_COMPLETE
+ACTION:VARIANT_COLLAPSE_MOVE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\BluetoothReceiver.agent2_canonical2.kt → c:\RemoteDexter\src\mobile\android\app\src\legacy_quarantine\variants\com\rd\remotedexter\mobile\BluetoothReceiver.agent2_canonical2.kt
+ACTION:VARIANT_COLLAPSE_MOVE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\BluetoothReceiver.kt → c:\RemoteDexter\src\mobile\android\app\src\legacy_quarantine\variants\com\rd\remotedexter\mobile\BluetoothReceiver.kt
+ACTION:VARIANT_COLLAPSE_MOVE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\ConnectionStatusView.agent2_copy.kt → c:\RemoteDexter\src\mobile\android\app\src\legacy_quarantine\variants\com\rd\remotedexter\mobile\ConnectionStatusView.agent2_copy.kt
+ACTION:VARIANT_COLLAPSE_COMPLETE
+ACTION:POST_COLLAPSE_COMPILE_PROBE_START
+ACTION:POST_COLLAPSE_COMPILE_PROBE_OUTPUT_CAPTURED
+ACTION:POST_COLLAPSE_COMPILE_PROBE_COMPLETE
+ACTION:DEVELOPER_MODE_VARIANT_QUARANTINE_MOVE c:\RemoteDexter\src\mobile\android\app\src\main\java\com\rd\remotedexter\mobile\DeveloperModeActivity.agent2_copy.kt → c:\RemoteDexter\src\mobile\android\app\src\legacy_quarantine\variants\DeveloperModeActivity.agent2_copy.kt
+ACTION:DEVELOPER_MODE_VARIANT_QUARANTINE_COMPLETE
+ACTION:POST_DEVELOPER_MODE_QUARANTINE_COMPILE_PROBE_START
+ACTION:POST_DEVELOPER_MODE_QUARANTINE_COMPILE_PROBE_OUTPUT_CAPTURED
+ACTION:POST_DEVELOPER_MODE_QUARANTINE_COMPILE_PROBE_COMPLETE
+ACTION:HEALTH_AND_DEVELOPER_INSPECTION_START
+ACTION:HEALTH_AND_DEVELOPER_INSPECTION_COMPLETE
+ACTION:CONNECTION_STATUS_ALERTLEVEL_REPAIR_APPLIED
+ACTION:CONNECTION_STATUS_ALERTLEVEL_REPAIR_COMPLETE
+ACTION:PROBE_REALIGNMENT_AND_TASK_GATE_CORRECTION_START
+ACTION:SESSION_HANDOFF_WRITE_START
+ACTION:SESSION_HANDOFF_WRITE_COMPLETE
+ACTION:DEVELOPERMODE_ACTIVITY_STUB_REPAIR_APPLIED
+ACTION:DEVELOPERMODE_ACTIVITY_STUB_REPAIR_COMPLETE
+ACTION:NEXT_PHASE_COMPILE_SURFACE_REDUCTION_START
+ACTION:GRADLE_TASK_GATE_CORRECTION_AND_KOTLIN_PROBE_START
+ACTION:CORRECTED_GRADLE_GATE_AND_KOTLIN_PROBE_START
+ACTION:CORRECTED_GRADLE_GATE_PROBE_OUTPUT_CAPTURED
+ACTION:CORRECTED_GRADLE_GATE_SURFACE_EXTRACT_COMPLETE
+ACTION:CORRECTED_GRADLE_GATE_AND_KOTLIN_PROBE_COMPLETE
+ACTION:DYNAMIC_TASK_DISCOVERY_START
+ACTION:DYNAMIC_TASK_DISCOVERY_COMPLETE
+ACTION:PROBE_READY_CHECKLIST_VERIFIED
+ACTION:NEXT_DYNAMIC_DISCOVERY_PROBE_PREP_START
+ACTION:DYNAMIC_DISCOVERY_PROBE_EXECUTION_START
+ACTION:DYNAMIC_DISCOVERY_TASK_LIST_CAPTURED
+ACTION:DYNAMIC_DISCOVERY_VALID_SKIPLIST_WRITTEN
+ACTION:POST_SENTINEL_NUDGE_START
+ACTION:POST_SENTINEL_TASK_LIST_CAPTURED
+ACTION:POST_SENTINEL_VALID_SKIPLIST_WRITTEN
+ACTION:FALLBACK_FAILURE_SURFACE_REPAIR_BLOCK_START
+ACTION:FALLBACK_FAILURE_SURFACE_EXTRACT_WRITTEN
+ACTION:FALLBACK_FAILURE_REPAIR_SPEC_WRITTEN
+ACTION:FALLBACK_FAILURE_SURFACE_REPAIR_BLOCK_COMPLETE
+ACTION:APPLY_FALLBACK_FAILURE_REPAIR_SPEC_START
+ACTION:APPLY_FALLBACK_FAILURE_REPAIR_SPEC_EDITS_APPLIED
+ACTION:APPLY_FALLBACK_FAILURE_REPAIR_SPEC_COMPLETE
+ACTION:GIT_PUSH_HANDOFF_START
+ACTION:GIT_PUSH_HANDOFF_COMMIT_CREATED
+ACTION:GIT_PUSH_HANDOFF_PUSH_COMPLETE
