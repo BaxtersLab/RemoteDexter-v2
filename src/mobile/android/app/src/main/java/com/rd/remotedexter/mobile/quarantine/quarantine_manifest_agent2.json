@@ -1,0 +1,68 @@
+[
+  {
+    "original_path": "src/main/java/com/rd/remotedexter/mobile/DiagnosticsActivity.agent2_copy.kt",
+    "new_path": "src/main/java/com/rd/remotedexter/mobile/quarantine/variants/agent2/DiagnosticsActivity.agent2_copy.kt",
+    "timestamp": "2026-02-16T00:00:00Z",
+    "original_head": "e09088a8d344dad784d17b5c0a4187a9563950be"
+  },
+  {
+    "original_path": "src/main/java/com/rd/remotedexter/mobile/FileTransferActivity.agent2_gap.kt",
+    "new_path": "src/main/java/com/rd/remotedexter/mobile/quarantine/variants/agent2/FileTransferActivity.agent2_gap.kt",
+    "timestamp": "2026-02-16T00:00:00Z",
+    "original_head": "e09088a8d344dad784d17b5c0a4187a9563950be"
+  },
+  {
+    "original_path": "src/main/java/com/rd/remotedexter/mobile/MainActivity.agent2_copy.kt",
+    "new_path": "src/main/java/com/rd/remotedexter/mobile/quarantine/variants/agent2/MainActivity.agent2_copy.kt",
+    "timestamp": "2026-02-16T00:00:00Z",
+    "original_head": "e09088a8d344dad784d17b5c0a4187a9563950be"
+  },
+  {
+    "original_path": "src/main/java/com/rd/remotedexter/mobile/viewmodel/ScanViewModel.agent2_copy.kt",
+    "new_path": "src/main/java/com/rd/remotedexter/mobile/quarantine/variants/agent2/viewmodel/ScanViewModel.agent2_copy.kt",
+    "timestamp": "2026-02-16T00:00:00Z",
+    "original_head": "e09088a8d344dad784d17b5c0a4187a9563950be"
+  },
+  {
+    "original_path": "src/main/java/com/rd/remotedexter/mobile/UpdateChecker.agent2_gap.kt",
+    "new_path": "src/main/java/com/rd/remotedexter/mobile/quarantine/variants/agent2/UpdateChecker.agent2_gap.kt",
+    "timestamp": "2026-02-16T00:00:00Z",
+    "original_head": "e09088a8d344dad784d17b5c0a4187a9563950be"
+  },
+  {
+    "original_path": "src/main/java/com/rd/remotedexter/mobile/VideoEncoder.agent2_canonical.kt",
+    "new_path": "src/main/java/com/rd/remotedexter/mobile/quarantine/variants/agent2/VideoEncoder.agent2_canonical.kt",
+    "timestamp": "2026-02-16T00:00:00Z",
+    "original_head": "e09088a8d344dad784d17b5c0a4187a9563950be"
+  },
+  {
+    "original_path": "src/main/java/com/rd/remotedexter/mobile/TrustSettingsFragment.agent2_copy.kt",
+    "new_path": "src/main/java/com/rd/remotedexter/mobile/quarantine/variants/agent2/TrustSettingsFragment.agent2_copy.kt",
+    "timestamp": "2026-02-16T00:00:00Z",
+    "original_head": "e09088a8d344dad784d17b5c0a4187a9563950be"
+  },
+  {
+    "original_path": "src/main/java/com/rd/remotedexter/mobile/transport/NfcBootstrap.agent2_copy.kt",
+    "new_path": "src/main/java/com/rd/remotedexter/mobile/quarantine/variants/agent2/transport/NfcBootstrap.agent2_copy.kt",
+    "timestamp": "2026-02-16T00:00:00Z",
+    "original_head": "e09088a8d344dad784d17b5c0a4187a9563950be"
+  },
+  {
+    "original_path": "src/main/java/com/rd/remotedexter/mobile/transfer/TransferManager.agent2_gap.kt",
+    "new_path": "src/main/java/com/rd/remotedexter/mobile/quarantine/variants/agent2/transfer/TransferManager.agent2_gap.kt",
+    "timestamp": "2026-02-16T00:00:00Z",
+    "original_head": "e09088a8d344dad784d17b5c0a4187a9563950be"
+  },
+  {
+    "original_path": "src/main/java/com/rd/remotedexter/mobile/BluetoothReceiver.agent2_canonical.kt",
+    "new_path": "src/main/java/com/rd/remotedexter/mobile/quarantine/variants/agent2/BluetoothReceiver.agent2_canonical.kt",
+    "timestamp": "2026-02-16T00:00:00Z",
+    "original_head": "e09088a8d344dad784d17b5c0a4187a9563950be"
+  },
+  {
+    "original_path": "src/main/java/com/rd/remotedexter/mobile/RDService.agent2_gap.kt",
+    "new_path": "src/main/java/com/rd/remotedexter/mobile/quarantine/variants/agent2/RDService.agent2_gap.kt",
+    "timestamp": "2026-02-16T00:00:00Z",
+    "original_head": "e09088a8d344dad784d17b5c0a4187a9563950be"
+  }
+]

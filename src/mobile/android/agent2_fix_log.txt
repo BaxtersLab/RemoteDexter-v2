@@ -699,3 +699,34 @@ ACTION:APPLY_FALLBACK_FAILURE_REPAIR_SPEC_COMPLETE
 ACTION:GIT_PUSH_HANDOFF_START
 ACTION:GIT_PUSH_HANDOFF_COMMIT_CREATED
 ACTION:GIT_PUSH_HANDOFF_PUSH_COMPLETE
+ACTION:QUARANTINE_COPY_START AGENT:agent2
+ACTION:QUARANTINE_COPY SOURCE:src/main/java/com/rd/remotedexter/mobile/DiagnosticsActivity.agent2_copy.kt TARGET:src/main/java/com/rd/remotedexter/mobile/quarantine/variants/agent2/DiagnosticsActivity.agent2_copy.kt
+ACTION:QUARANTINE_COPY SOURCE:src/main/java/com/rd/remotedexter/mobile/FileTransferActivity.agent2_gap.kt TARGET:src/main/java/com/rd/remotedexter/mobile/quarantine/variants/agent2/FileTransferActivity.agent2_gap.kt
+ACTION:QUARANTINE_COPY SOURCE:src/main/java/com/rd/remotedexter/mobile/MainActivity.agent2_copy.kt TARGET:src/main/java/com/rd/remotedexter/mobile/quarantine/variants/agent2/MainActivity.agent2_copy.kt
+ACTION:QUARANTINE_COPY SOURCE:src/main/java/com/rd/remotedexter/mobile/viewmodel/ScanViewModel.agent2_copy.kt TARGET:src/main/java/com/rd/remotedexter/mobile/quarantine/variants/agent2/viewmodel/ScanViewModel.agent2_copy.kt
+ACTION:QUARANTINE_COPY SOURCE:src/main/java/com/rd/remotedexter/mobile/UpdateChecker.agent2_gap.kt TARGET:src/main/java/com/rd/remotedexter/mobile/quarantine/variants/agent2/UpdateChecker.agent2_gap.kt
+ACTION:QUARANTINE_COPY SOURCE:src/main/java/com/rd/remotedexter/mobile/VideoEncoder.agent2_canonical.kt TARGET:src/main/java/com/rd/remotedexter/mobile/quarantine/variants/agent2/VideoEncoder.agent2_canonical.kt
+ACTION:QUARANTINE_COPY SOURCE:src/main/java/com/rd/remotedexter/mobile/TrustSettingsFragment.agent2_copy.kt TARGET:src/main/java/com/rd/remotedexter/mobile/quarantine/variants/agent2/TrustSettingsFragment.agent2_copy.kt
+ACTION:QUARANTINE_COPY SOURCE:src/main/java/com/rd/remotedexter/mobile/transport/NfcBootstrap.agent2_copy.kt TARGET:src/main/java/com/rd/remotedexter/mobile/quarantine/variants/agent2/transport/NfcBootstrap.agent2_copy.kt
+ACTION:QUARANTINE_COPY SOURCE:src/main/java/com/rd/remotedexter/mobile/transfer/TransferManager.agent2_gap.kt TARGET:src/main/java/com/rd/remotedexter/mobile/quarantine/variants/agent2/transfer/TransferManager.agent2_gap.kt
+ACTION:QUARANTINE_COPY SOURCE:src/main/java/com/rd/remotedexter/mobile/BluetoothReceiver.agent2_canonical.kt TARGET:src/main/java/com/rd/remotedexter/mobile/quarantine/variants/agent2/BluetoothReceiver.agent2_canonical.kt
+ACTION:QUARANTINE_COPY SOURCE:src/main/java/com/rd/remotedexter/mobile/RDService.agent2_gap.kt TARGET:src/main/java/com/rd/remotedexter/mobile/quarantine/variants/agent2/RDService.agent2_gap.kt
+ACTION:QUARANTINE_COPY_COMPLETE COUNT:11
+ACTION:QUARANTINE_DELETE_START AGENT:agent2
+ACTION:QUARANTINE_DELETE PATH:src/main/java/com/rd/remotedexter/mobile/DiagnosticsActivity.agent2_copy.kt
+ACTION:QUARANTINE_DELETE PATH:src/main/java/com/rd/remotedexter/mobile/FileTransferActivity.agent2_gap.kt
+ACTION:QUARANTINE_DELETE PATH:src/main/java/com/rd/remotedexter/mobile/MainActivity.agent2_copy.kt
+ACTION:QUARANTINE_DELETE PATH:src/main/java/com/rd/remotedexter/mobile/viewmodel/ScanViewModel.agent2_copy.kt
+ACTION:QUARANTINE_DELETE PATH:src/main/java/com/rd/remotedexter/mobile/UpdateChecker.agent2_gap.kt
+ACTION:QUARANTINE_DELETE PATH:src/main/java/com/rd/remotedexter/mobile/VideoEncoder.agent2_canonical.kt
+ACTION:QUARANTINE_DELETE PATH:src/main/java/com/rd/remotedexter/mobile/TrustSettingsFragment.agent2_copy.kt
+ACTION:QUARANTINE_DELETE PATH:src/main/java/com/rd/remotedexter/mobile/transport/NfcBootstrap.agent2_copy.kt
+ACTION:QUARANTINE_DELETE PATH:src/main/java/com/rd/remotedexter/mobile/transfer/TransferManager.agent2_gap.kt
+ACTION:QUARANTINE_DELETE PATH:src/main/java/com/rd/remotedexter/mobile/BluetoothReceiver.agent2_canonical.kt
+ACTION:QUARANTINE_DELETE PATH:src/main/java/com/rd/remotedexter/mobile/RDService.agent2_gap.kt
+ACTION:QUARANTINE_DELETE_COMPLETE COUNT:11
+ACTION:QUARANTINE_MANIFEST_CREATED PATH:src/main/java/com/rd/remotedexter/mobile/quarantine/quarantine_manifest_agent2.json
+ACTION:QUARANTINE_PHASE_COMPLETE AGENT:agent2
+ACTION:GIT_RETRY_PUSH_START
+ACTION:GIT_RETRY_PUSH_COMMIT_CREATED
+ACTION:GIT_RETRY_PUSH_COMPLETE
