@@ -1,0 +1,47 @@
+name: Regenerate Gradle wrapper and open PR
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main, master ]
+
+permissions:
+  contents: write
+
+jobs:
+  create-wrapper-pr:
+    name: Regenerate wrapper and create PR
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Ensure Gradle is available
+        uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: '8.2.1'
+
+      - name: Regenerate Gradle wrapper (pinned)
+        run: |
+          gradle wrapper --gradle-version 8.2.1
+
+      - name: Create branch and open PR
+        uses: peter-evans/create-pull-request@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore(wrapper): regenerate Gradle wrapper @gradle-8.2.1"
+          branch: "ci/wrapper-update-${{ github.run_id }}"
+          title: "chore(ci): regenerate Gradle wrapper @gradle-8.2.1"
+          body: |
+            This automated PR regenerates the Gradle wrapper pinned to Gradle 8.2.1.
+            The PR will run the bootstrap verification workflow which must pass before merging.
+          labels: automated, infra
+          base: main

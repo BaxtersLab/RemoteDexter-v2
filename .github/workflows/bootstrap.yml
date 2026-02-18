@@ -1,0 +1,28 @@
+name: Bootstrap verification (PR)
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-bootstrap:
+    name: Verify pinned toolchain (bootstrap)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Run bootstrap script (PowerShell)
+        run: |
+          pwsh -NoProfile -ExecutionPolicy Bypass -File ./scripts/bootstrap-dev.ps1
+        shell: bash
