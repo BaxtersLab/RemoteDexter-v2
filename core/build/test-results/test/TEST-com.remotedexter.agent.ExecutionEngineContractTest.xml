@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.remotedexter.agent.ExecutionEngineContractTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-02-19T03:53:20" hostname="DESKTOP-I78CQDN" time="0.053">
+  <properties/>
+  <testcase name="recoveryPathIsTakenWhenAllowed()" classname="com.remotedexter.agent.ExecutionEngineContractTest" time="0.045"/>
+  <testcase name="deadEndRecoveryIsForbiddenAndEscalates()" classname="com.remotedexter.agent.ExecutionEngineContractTest" time="0.001"/>
+  <testcase name="illegalTransitionIsRejectedByConstitution()" classname="com.remotedexter.agent.ExecutionEngineContractTest" time="0.002"/>
+  <testcase name="endBlockTerminatesDeterministically()" classname="com.remotedexter.agent.ExecutionEngineContractTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
