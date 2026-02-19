@@ -89,7 +89,7 @@ class ExecutionEngine(
 
             // Dead end
             if (result.status == Status.deadEnd) {
-                state.lifelineStatus = "deadEnd"
+                state.lifelineStatus = LifelineStatus.DEADEND
                 val decision = lifeline.decideRecovery(state)
                 val rec = result.recoveryHint ?: transitionTable.get(state.executionPointer ?: "")?.recovery
                 if (rec != null) {

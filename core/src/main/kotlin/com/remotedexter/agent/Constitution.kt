@@ -8,7 +8,7 @@ class Constitution(private val transitionTable: TransitionTable, private val loo
             for (k in result.outputData.keys) {
                 if (!block.outputs.contains(k)) {
                     // violation
-                    state.lifelineStatus = "deadEnd"
+                        state.lifelineStatus = LifelineStatus.DEADEND
                     val br = BlockResult(Status.deadEnd, emptyMap(), null, ErrorCodes.E900, "Constitution:noSlop")
                     state.lastBlockResult = br
                     return br
@@ -35,7 +35,7 @@ class Constitution(private val transitionTable: TransitionTable, private val loo
             }
             val next = result.nextPointer ?: trans.fallback ?: trans.allowedNextBlocks.firstOrNull()
             if (next != null && !trans.allowedNextBlocks.contains(next)) {
-                state.lifelineStatus = "deadEnd"
+                state.lifelineStatus = LifelineStatus.DEADEND
                 val br = BlockResult(Status.deadEnd, emptyMap(), null, ErrorCodes.E300, "Constitution:invalidTransition")
                 state.lastBlockResult = br
                 return br
@@ -46,7 +46,7 @@ class Constitution(private val transitionTable: TransitionTable, private val loo
         if (state.constitutionalFlags["boundedLoops"] == true) {
             val cnt = state.loopCounters.getOrDefault(block.name, 0)
             if (cnt > loopThreshold) {
-                state.lifelineStatus = "deadEnd"
+                state.lifelineStatus = LifelineStatus.DEADEND
                 val br = BlockResult(Status.deadEnd, emptyMap(), null, ErrorCodes.E200, "Constitution:loopExceeded")
                 state.lastBlockResult = br
                 return br
