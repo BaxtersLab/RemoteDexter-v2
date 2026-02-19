@@ -6,6 +6,15 @@ Brief: short, actionable handoff for the next engineer to pick up where this ses
 
 Status summary
 - Local work done: added an `agent` runtime prototype under `core` (AgentState, Block, ExecutionEngine, Constitution, LifelineProtocol) and unit tests.
+ - Telemetry and tests: added a `Telemetry` interface and a comprehensive telemetry test suite.
+    - Tests cover idempotence, strict event ordering, concurrency separation (thread-safe collectors), non-blocking telemetry behavior (slow telemetry handlers), and escalation/error-path visibility.
+    - Tests live in `core/src/test/kotlin/com/remotedexter/agent/TelemetryTest.kt` and can be run with:
+
+```bash
+./gradlew :core:test --tests "*TelemetryTest*"
+```
+
+These tests are intentionally test-only (no production behavior change) and are intended to lock the telemetry contract so future runtime changes preserve determinism and lifeline semantics.
 - Replaced placeholder `gradlew.bat` with a local-first wrapper that uses an installed `gradle` or downloads Gradle 8.2.1 to `%TEMP%`.
 - CI workflows and bootstrap scripts are present in the repo (`.github/workflows/*`, `scripts/bootstrap-dev.ps1`).
 - Current blocker: running `:core:test` via the wrapper failed earlier due to network/download restrictions; wrapper now returns exit code 0 when Gradle is available.

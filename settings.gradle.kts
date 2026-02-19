@@ -2,7 +2,7 @@ rootProject.name = "RemoteDexter-v2"
 include("core", "cli")
 
 // Centralized plugin version pins per Master Constitution
-pluginManagement {
+// Centralized plugin version pins per Master Constitution
 pluginManagement {
     repositories {
         gradlePluginPortal()
