@@ -43,6 +43,7 @@ jobs:
       - name: Post structured bootstrap diagnostics as PR comment
         uses: actions/github-script@v6
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const fs = require('fs');
             const path = 'bootstrap_result.json';
