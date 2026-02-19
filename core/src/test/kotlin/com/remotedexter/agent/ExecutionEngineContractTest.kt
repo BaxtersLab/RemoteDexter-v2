@@ -35,6 +35,8 @@ class ExecutionEngineContractTest {
         val engine = ExecutionEngine(mapOf("A" to a, "END" to end), table, constitution, lifeline, NoopTelemetry())
 
         val state = AgentState("A")
+        // allow test to inject keys not strictly declared in outputs for interrupt routing
+        state.constitutionalFlags["noSlop"] = false
         engine.run(state)
 
         assertEquals(null, state.executionPointer)
@@ -114,5 +116,71 @@ class ExecutionEngineContractTest {
         assertTrue(state.lifelineStatus.isDeadEnd())
         // When deadEnd -> recovery forbidden
         assertEquals(LifelineStatus.DEADEND_FORBIDDEN, state.lifelineStatus)
+    }
+
+    @Test
+    fun interruptRoutesToHandler() {
+        val a = SimpleBlock("A", outputs = listOf("alert"), allowedTransitions = listOf("END")) { _ ->
+            // explicitly route to HANDLER when interrupting to ensure handler executes
+            BlockResult(Status.interrupt, mapOf("alert" to "ok"), "HANDLER", null, null, "alert")
+        }
+
+        val handler = SimpleBlock("HANDLER", outputs = listOf("handled"), allowedTransitions = listOf("END")) { _ ->
+            BlockResult(Status.success, mapOf("handled" to true), "END")
+        }
+
+        val end = EndBlock("END")
+
+        val table = TransitionTable(mapOf(
+            // allow HANDLER as a legal next block so the interrupt routing is valid under the constitution
+            "A" to TransitionEntry(listOf("HANDLER", "END"), fallback = null, recovery = null, interruptTransitions = mapOf("alert" to "HANDLER")),
+            "HANDLER" to TransitionEntry(listOf("END"), fallback = null, recovery = null),
+            "END" to TransitionEntry(listOf(), fallback = null, recovery = null)
+        ))
+
+        val constitution = Constitution(table, loopThreshold = 10)
+        val lifeline = LifelineProtocol(table, "REC")
+        val engine = ExecutionEngine(mapOf("A" to a, "HANDLER" to handler, "END" to end), table, constitution, lifeline)
+
+        val state = AgentState("A")
+        engine.run(state)
+        // debug info
+        println("LAST_RESULT: ${state.lastBlockResult}")
+        println("RECOVERY_ATTEMPTS: ${state.recoveryAttempts}")
+        println("LIFELINE_STATUS: ${state.lifelineStatus}")
+        println("WORKING_MEMORY: ${state.workingMemory}")
+
+        assertEquals(true, state.workingMemory["handled"])
+        assertEquals(LifelineStatus.TERMINATED, state.lifelineStatus)
+        assertEquals(null, state.executionPointer)
+    }
+
+    @Test
+    fun failRecoveryExceedingAttemptsEscalates() {
+        val a = SimpleBlock("A", allowedTransitions = listOf()) { _ ->
+            BlockResult(Status.fail, emptyMap(), null, ErrorCodes.E400, recoveryHint = "REC")
+        }
+
+        val rec = SimpleBlock("REC", outputs = listOf("ok"), allowedTransitions = listOf("END")) { s ->
+            BlockResult(Status.success, mapOf("ok" to true), "END")
+        }
+        val end = EndBlock("END")
+
+        val table = TransitionTable(mapOf(
+            "A" to TransitionEntry(listOf("REC"), fallback = null, recovery = "REC"),
+            "REC" to TransitionEntry(listOf("END"), fallback = null, recovery = null),
+            "END" to TransitionEntry(listOf(), fallback = null, recovery = null)
+        ))
+
+        val constitution = Constitution(table, loopThreshold = 10)
+        // set maxRecoveryAttempts to 0 so any recovery attempt is considered exceeded
+        val lifeline = LifelineProtocol(table, "REC", maxRecoveryAttempts = 0)
+        val engine = ExecutionEngine(mapOf("A" to a, "REC" to rec, "END" to end), table, constitution, lifeline)
+
+        val state = AgentState("A")
+        engine.run(state)
+
+        assertEquals(LifelineStatus.ESCALATED, state.lifelineStatus)
+        assertEquals(null, state.executionPointer)
     }
 }
