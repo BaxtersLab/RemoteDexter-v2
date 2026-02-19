@@ -22,7 +22,45 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Run bootstrap script (PowerShell)
+      - name: Run bootstrap script and capture results
+        id: bootstrap
+        shell: pwsh
+        continue-on-error: true
         run: |
-          pwsh -NoProfile -ExecutionPolicy Bypass -File ./scripts/bootstrap-dev.ps1
-        shell: bash
+          Write-Host "[ci] executing bootstrap script"
+          $output = & pwsh -NoProfile -ExecutionPolicy Bypass -File ./scripts/bootstrap-dev.ps1 2>&1
+          $code = $LASTEXITCODE
+          $summary = $output -join "`n"
+          if ($null -eq $summary) { $summary = "" }
+          if ($summary.Length -gt 8000) { $summary = $summary.Substring($summary.Length - 8000) }
+          $obj = @{ exitCode = $code; summary = $summary }
+          $json = $obj | ConvertTo-Json -Depth 5
+          Set-Content -Path bootstrap_result.json -Value $json -Encoding UTF8
+          Add-Content -Path $env:GITHUB_OUTPUT -Value "exit_code=$code"
+
+      - name: Post structured bootstrap diagnostics as PR comment
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const path = 'bootstrap_result.json';
+            let body = '';
+            try {
+              const json = fs.readFileSync(path, 'utf8');
+              body = '### Bootstrap verification result\n```json\n' + json + '\n```';
+            } catch (e) {
+              body = 'Bootstrap result file not found or unreadable.';
+            }
+            const issue_number = context.issue.number;
+            await github.rest.issues.createComment({ owner: context.repo.owner, repo: context.repo.repo, issue_number, body });
+
+      - name: Upload bootstrap_result.json artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: bootstrap-result
+          path: bootstrap_result.json
+          retention-days: 7
+
+      - name: Fail if bootstrap failed
+        if: steps.bootstrap.outputs.exit_code != '0'
+        run: exit 1
