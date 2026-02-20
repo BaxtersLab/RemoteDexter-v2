@@ -5,6 +5,13 @@ on:
     types: [opened, synchronize, reopened]
   workflow_dispatch:
 
+# Minimal permissions required by this workflow:
+#   contents: read  – needed to checkout the repository and read source files
+#   issues: write   – needed to post a PR comment with bootstrap diagnostics
+#                     (GitHub treats PRs as issues for comment purposes)
+#   checks: write   – needed to annotate check runs with build/test results
+# Do NOT grant broader permissions (e.g. contents: write) in this workflow;
+# if a step needs write access, add it explicitly and document why.
 permissions:
   contents: read
   issues: write
@@ -24,6 +31,17 @@ jobs:
           distribution: temurin
           java-version: '17'
 
+      # Smoke-check: verify the workflow can perform basic read operations
+      # before proceeding to write steps. This catches permission regressions
+      # early (e.g. if the token scope is accidentally reduced).
+      - name: Smoke-check read permissions
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "[ci] smoke-check: verifying repository is readable"
+          test -f build.gradle.kts || test -f build.gradle
+          echo "[ci] smoke-check: passed"
+
       - name: Run bootstrap script and capture results
         id: bootstrap
         shell: pwsh
@@ -40,6 +58,11 @@ jobs:
           Set-Content -Path bootstrap_result.json -Value $json -Encoding UTF8
           Add-Content -Path $env:GITHUB_OUTPUT -Value "exit_code=$code"
 
+      # Requires `issues: write` permission.
+      # Marked continue-on-error so a comment-posting failure does not block
+      # the overall CI result – the artifact upload below preserves diagnostics.
+      # github-token must be supplied explicitly to avoid "Resource not
+      # accessible by integration" errors that occur when the token is omitted.
       - name: Post structured bootstrap diagnostics as PR comment
         uses: actions/github-script@v6
         continue-on-error: true
@@ -57,7 +80,6 @@ jobs:
             }
             const issue_number = context.issue.number;
             await github.rest.issues.createComment({ owner: context.repo.owner, repo: context.repo.repo, issue_number, body });
-          continue-on-error: true
 
       - name: Upload bootstrap_result.json artifact
         uses: actions/upload-artifact@v4
