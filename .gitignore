@@ -27,3 +27,5 @@ node_modules/
 .tools/
 src/mobile/android/.gradle/
 src/mobile/android/logs/
+# Android app build
+src/mobile/android/app/build/
