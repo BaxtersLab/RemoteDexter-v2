@@ -1,0 +1,72 @@
+name: Repo Governance Enforcement
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  enforce-governance:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Detect forbidden governance keywords
+        run: |
+          echo "Scanning for forbidden governance keywords..."
+          forbidden_keywords=(
+            "constitution"
+            "sovereignty"
+            "agent-law"
+            "anti-slop"
+            "governance"
+          )
+          for keyword in "${forbidden_keywords[@]}"; do
+            if git grep -i "$keyword" -- . ':!*.md' > /dev/null 2>&1; then
+              echo "❌ Forbidden keyword detected: $keyword"
+              exit 1
+            fi
+          done
+          echo "✔ No forbidden governance keywords found."
+
+      - name: Detect forbidden filenames
+        run: |
+          echo "Checking for forbidden filenames..."
+          forbidden_files=(
+            "*Constitution*"
+            "*Sovereignty*"
+            "*AgentLaw*"
+            "*AntiSlop*"
+          )
+          for pattern in "${forbidden_files[@]}"; do
+            matches=$(git ls-files "$pattern" || true)
+            if [ -n "$matches" ]; then
+              echo "❌ Forbidden file detected: $matches"
+              exit 1
+            fi
+          done
+          echo "✔ No forbidden filenames found."
+
+      - name: Enforce two-branch rule
+        run: |
+          echo "Checking branch count..."
+          branch_count=$(git ls-remote --heads origin | wc -l)
+          echo "Branch count: $branch_count"
+          if [ "$branch_count" -gt 2 ]; then
+            echo "❌ More than two branches detected. Only 'main' and 'current-block' allowed."
+            exit 1
+          fi
+          echo "✔ Two-branch rule satisfied."
+
+      - name: Enforce branch age limit
+        run: |
+          echo "Checking for stale branches..."
+          stale_branches=$(git for-each-ref --format='%(refname:short) %(committerdate:unix)' refs/remotes/origin \
+            | awk -v now=$(date +%s) '$2 < now - 604800 {print $1}')
+          if [ -n "$stale_branches" ]; then
+            echo "❌ Stale branches detected:"
+            echo "$stale_branches"
+            exit 1
+          fi
+          echo "✔ No stale branches detected."
