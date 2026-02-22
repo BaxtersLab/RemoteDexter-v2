@@ -42,7 +42,32 @@ function renderPage(){
   const start = (page-1)*ps;
   const end = Math.min(start+ps, total);
   const slice = trace.slice(start,end);
-  const payload = { page, pageSize: ps, total, items: slice };
+  function tryFormatTs(val){
+    try{
+      if(val==null) return null;
+      if(typeof val === 'number') return new Date(val*1000).toISOString();
+      if(typeof val === 'string'){
+        const n = parseFloat(val);
+        if(!isNaN(n) && String(n) === val) return new Date(n*1000).toISOString();
+        const d = new Date(val);
+        if(!isNaN(d)) return d.toISOString();
+        return val;
+      }
+      if(val instanceof Date) return val.toISOString();
+      return String(val);
+    }catch(e){return String(val)}
+  }
+
+  const displayItems = slice.map(it => {
+    try{
+      const copy = Object.assign({}, it);
+      if(copy.ts !== undefined) copy._ts = tryFormatTs(copy.ts);
+      else if(copy.timestamp !== undefined) copy._ts = tryFormatTs(copy.timestamp);
+      return copy;
+    }catch(e){ return it; }
+  });
+
+  const payload = { page, pageSize: ps, total, items: displayItems };
   document.getElementById('out').textContent = JSON.stringify(payload, null, 2);
   document.getElementById('pageInfo').textContent = ` Showing ${total? start+1 : 0}-${end} of ${total} (Page ${page}/${maxPage})`;
   document.getElementById('prev').disabled = page<=1;
