@@ -1,0 +1,94 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Timeline Viewer — Smoke Test</title>
+  <style>
+    body{font-family:system-ui,Segoe UI,Arial,Helvetica,sans-serif;margin:18px}
+    #result{font-weight:700;padding:12px;border-radius:6px;display:inline-block}
+    .pass{background:#e6ffed;color:#0a6b2d}
+    .fail{background:#ffecec;color:#8a1f1f}
+    iframe{width:100%;height:520px;border:1px solid #ccc;margin-bottom:12px}
+    .muted{color:#666;font-size:0.9em}
+  </style>
+</head>
+<body>
+  <h3>Timeline Viewer — Automated Smoke Test</h3>
+  <div class="muted">This test loads the viewer in an iframe and verifies table/filter UI and behavior.</div>
+  <iframe id="viewer" src="../index.html" title="Timeline Viewer"></iframe>
+  <div id="result" class="">Running...</div>
+
+<script>
+(function(){
+  const out = document.getElementById('result');
+  const iframe = document.getElementById('viewer');
+
+  function fail(msg){ out.textContent = 'FAIL — ' + msg; out.className = 'fail'; }
+  function pass(msg){ out.textContent = 'PASS — ' + msg; out.className = 'pass'; }
+
+  const MAX_MS = 900;
+  const start = performance.now();
+  let done = false;
+  function doneFail(msg){ if(done) return; done=true; fail(msg); }
+  function donePass(msg){ if(done) return; done=true; pass(msg); }
+
+  iframe.addEventListener('load', ()=> {
+    try{
+      const win = iframe.contentWindow;
+      const doc = iframe.contentDocument;
+      if(!win || !doc) return doneFail('iframe not accessible');
+
+      // Inject a small sample dataset and render
+      const sample = [
+        { ts: 1708560000, event: { category: 'info', message: 'all good' }, msg: 'ok', payload: {} },
+        { ts: 1708560060, event: { category: 'error', message: 'smoke-test-error' }, msg: 'problem', payload: {code: 42} },
+        { ts: 1708560120, event: { category: 'debug', message: 'other' }, msg: 'note', payload: {} }
+      ];
+
+      try{ win.jsonData = sample; win.page = 1; if(typeof win.renderPage === 'function') win.renderPage(); }catch(e){ return doneFail('failed to inject data/renderPage: '+e.message); }
+
+      const toggle = doc.getElementById('toggleView');
+      if(!toggle) return doneFail('toggleView button missing');
+      try{ toggle.click(); }catch(e){}
+
+      setTimeout(()=>{
+        try{
+          const rows = doc.querySelectorAll('#tableWrap table tbody tr');
+          if(!rows || rows.length < 1) return doneFail('no table rows rendered');
+          const filterEl = doc.getElementById('filterInput');
+          const globalEl = doc.getElementById('globalFilter');
+          if(!filterEl) return doneFail('Filter input missing');
+          if(!globalEl) return doneFail('Global Filter checkbox missing');
+
+          // type test string and trigger keyup
+          const testString = 'smoke-test-error';
+          filterEl.value = testString;
+          filterEl.dispatchEvent(new Event('keyup', { bubbles:true }));
+
+          setTimeout(()=>{
+            try{
+              const highlighted = doc.querySelectorAll('#tableWrap table tbody tr.highlight');
+              if(!highlighted || highlighted.length < 1) return doneFail('no rows highlighted after filter');
+              // clear filter
+              filterEl.value = '';
+              filterEl.dispatchEvent(new Event('keyup', { bubbles:true }));
+              setTimeout(()=>{
+                const highlightedAfter = doc.querySelectorAll('#tableWrap table tbody tr.highlight');
+                if(highlightedAfter && highlightedAfter.length > 0) return doneFail('highlights not cleared after empty filter');
+                return donePass('table/filter smoke test successful');
+              }, 50);
+            }catch(e){ return doneFail('error during highlight check: '+e.message); }
+          }, 50);
+
+        }catch(e){ return doneFail('error after render: '+e.message); }
+      }, 30);
+
+    }catch(err){ return doneFail('iframe load exception: '+err.message); }
+  });
+
+  setTimeout(()=>{ if(done) return; const elapsed = performance.now() - start; doneFail('timeout after '+Math.round(elapsed)+'ms'); }, MAX_MS);
+
+})();
+</script>
+</body>
+</html>
