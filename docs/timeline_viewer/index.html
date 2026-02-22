@@ -1,33 +1,69 @@
 <!doctype html>
 <html>
-<head><meta charset="utf-8"><title>Timeline Viewer</title></head>
+<head>
+  <meta charset="utf-8">
+  <title>Timeline Viewer</title>
+  <style>
+    body{font-family:system-ui,Segoe UI,Arial,Helvetica,sans-serif;margin:18px}
+    .controls{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+    input[type=number]{width:72px}
+    #out{white-space:pre-wrap;border:1px solid #ccc;padding:8px;max-height:520px;overflow:auto;background:#f9f9f9}
+    .muted{color:#666;font-size:0.9em}
+    button:disabled{opacity:0.45}
+  </style>
+</head>
 <body>
-<h3>Timeline Viewer (minimal)</h3>
+<h3>Timeline Viewer</h3>
 <input type="file" id="f" accept="application/json" />
-<div>
-  <label>Page size: <input id="pageSize" type="number" value="10" style="width:60px"/></label>
-  <button id="prev">Prev</button>
-  <button id="next">Next</button>
-  <span id="pageInfo"></span>
+<div class="controls">
+  <label>Page size: <input id="pageSize" type="number" value="10" min="1"/></label>
+  <button id="prev">◀ Prev</button>
+  <button id="next">Next ▶</button>
+  <label>Go to page: <input id="goto" type="number" min="1" style="width:72px"/></label>
+  <button id="go">Go</button>
+  <button id="copy">Copy JSON</button>
+  <button id="download">Download Page</button>
+  <span id="pageInfo" class="muted"></span>
 </div>
-<pre id="out" style="white-space:pre-wrap; border:1px solid #ccc; padding:8px; max-height:400px; overflow:auto;"></pre>
+<pre id="out"></pre>
 <script>
 let jsonData = null;
 let page = 1;
+
+function clamp(v, a, b){ return Math.max(a, Math.min(b, v)); }
+
 function renderPage(){
   if(!jsonData) return;
-  const ps = parseInt(document.getElementById('pageSize').value||10,10);
-  const trace = jsonData.trace || jsonData;
+  const ps = clamp(parseInt(document.getElementById('pageSize').value||10,10), 1, 1000);
+  const trace = Array.isArray(jsonData) ? jsonData : (jsonData.trace || jsonData.items || []);
   const total = trace.length || 0;
+  const maxPage = Math.max(1, Math.ceil(total/ps));
+  page = clamp(page, 1, maxPage);
   const start = (page-1)*ps;
   const end = Math.min(start+ps, total);
   const slice = trace.slice(start,end);
-  document.getElementById('out').textContent = JSON.stringify({page, pageSize:ps, total, items:slice}, null, 2);
-  document.getElementById('pageInfo').textContent = ` Showing ${start+1}-${end} of ${total}`;
+  const payload = { page, pageSize: ps, total, items: slice };
+  document.getElementById('out').textContent = JSON.stringify(payload, null, 2);
+  document.getElementById('pageInfo').textContent = ` Showing ${total? start+1 : 0}-${end} of ${total} (Page ${page}/${maxPage})`;
+  document.getElementById('prev').disabled = page<=1;
+  document.getElementById('next').disabled = page>=maxPage;
+  document.getElementById('goto').value = page;
 }
 
 document.getElementById('prev').addEventListener('click', ()=>{ if(page>1){page--; renderPage();}});
 document.getElementById('next').addEventListener('click', ()=>{ page++; renderPage();});
+document.getElementById('go').addEventListener('click', ()=>{ const v=parseInt(document.getElementById('goto').value||1,10); if(!isNaN(v)){ page=v; renderPage(); }});
+document.addEventListener('keydown', (e)=>{ if(!jsonData) return; if(e.key==='ArrowLeft'){ if(page>1){page--; renderPage();}} else if(e.key==='ArrowRight'){ page++; renderPage(); }});
+
+document.getElementById('copy').addEventListener('click', ()=>{
+  try{ navigator.clipboard.writeText(document.getElementById('out').textContent); }catch(e){ alert('Copy failed'); }
+});
+
+document.getElementById('download').addEventListener('click', ()=>{
+  const blob = new Blob([document.getElementById('out').textContent], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = `timeline-page-${page}.json`; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+});
 
 document.getElementById('f').addEventListener('change', function(e){
   const file = e.target.files[0];
