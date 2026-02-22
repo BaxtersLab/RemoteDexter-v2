@@ -10,6 +10,7 @@
     #out{white-space:pre-wrap;border:1px solid #ccc;padding:8px;max-height:520px;overflow:auto;background:#f9f9f9}
     .muted{color:#666;font-size:0.9em}
     button:disabled{opacity:0.45}
+    .highlight{background:#fff3a0;transition:background 0.2s ease}
   </style>
 </head>
 <body>
@@ -21,6 +22,8 @@
   <button id="next">Next ▶</button>
   <label>Go to page: <input id="goto" type="number" min="1" style="width:72px"/></label>
   <button id="go">Go</button>
+  <label>Filter: <input id="filterInput" type="text" placeholder="type to highlight rows" style="width:220px"/></label>
+  <label><input id="globalFilter" type="checkbox"/> Global Filter</label>
   <button id="copy">Copy JSON</button>
   <button id="download">Download Page</button>
   <button id="toggleView">Table View</button>
@@ -31,6 +34,9 @@
 <script>
 let jsonData = null;
 let page = 1;
+let fullTrace = [];
+let lastRenderedItems = [];
+let lastPageStart = 0;
 
 function clamp(v, a, b){ return Math.max(a, Math.min(b, v)); }
 
@@ -38,6 +44,7 @@ function renderPage(){
   if(!jsonData) return;
   const ps = clamp(parseInt(document.getElementById('pageSize').value||10,10), 1, 1000);
   const trace = Array.isArray(jsonData) ? jsonData : (jsonData.trace || jsonData.items || []);
+  fullTrace = trace;
   const total = trace.length || 0;
   const maxPage = Math.max(1, Math.ceil(total/ps));
   page = clamp(page, 1, maxPage);
@@ -103,6 +110,8 @@ function renderPage(){
   });
 
   const payload = { page, pageSize: ps, total, items: displayItems };
+  lastRenderedItems = displayItems;
+  lastPageStart = start;
   document.getElementById('out').textContent = JSON.stringify(payload, null, 2);
   document.getElementById('pageInfo').textContent = ` Showing ${total? start+1 : 0}-${end} of ${total} (Page ${page}/${maxPage})`;
   document.getElementById('prev').disabled = page<=1;
@@ -153,11 +162,103 @@ function renderTable(items){
   items.forEach((it,i)=>{
     const ev = it.event !== undefined ? it.event : '';
     const msg = it.msg !== undefined ? it.msg : (it.message !== undefined ? it.message : '');
-    html += `<tr><td style="padding:6px;border-bottom:1px solid #f0f0f0">${i+1}</td><td style="padding:6px;border-bottom:1px solid #f0f0f0">${it._local||''}</td><td style="padding:6px;border-bottom:1px solid #f0f0f0">${it._rel||''}</td><td style="padding:6px;border-bottom:1px solid #f0f0f0">${ev}</td><td style="padding:6px;border-bottom:1px solid #f0f0f0">${msg}</td></tr>`;
+    html += `<tr id="row-${i}"><td style="padding:6px;border-bottom:1px solid #f0f0f0">${i+1}</td><td style="padding:6px;border-bottom:1px solid #f0f0f0">${it._local||''}</td><td style="padding:6px;border-bottom:1px solid #f0f0f0">${it._rel||''}</td><td style="padding:6px;border-bottom:1px solid #f0f0f0">${ev}</td><td style="padding:6px;border-bottom:1px solid #f0f0f0">${msg}</td></tr>`;
   });
   html += '</tbody></table>';
   wrap.innerHTML = html;
 }
+
+// Filtering/highlighting implementation (supports global mode)
+function buildHay(it){
+  try{
+    let hay = '';
+    if(it.event && typeof it.event === 'object'){
+      if(it.event.category) hay += ' ' + String(it.event.category);
+      if(it.event.message) hay += ' ' + String(it.event.message);
+      if(it.event.payload) hay += ' ' + JSON.stringify(it.event.payload);
+    } else if(it.event){
+      hay += ' ' + String(it.event);
+    }
+    if(it.message) hay += ' ' + String(it.message);
+    if(it.msg) hay += ' ' + String(it.msg);
+    if(it.payload) hay += ' ' + JSON.stringify(it.payload);
+    if(it._local) hay += ' ' + String(it._local);
+    if(it._rel) hay += ' ' + String(it._rel);
+    return hay.toLowerCase();
+  }catch(e){ return '' }
+}
+
+function applyFilter(){
+  const filter = (document.getElementById('filterInput') && document.getElementById('filterInput').value || '').trim().toLowerCase();
+  const globalMode = document.getElementById('globalFilter') && document.getElementById('globalFilter').checked;
+  if(!tableMode){
+    // highlighting only applies to table view
+    return;
+  }
+  // no items rendered
+  if(!lastRenderedItems || lastRenderedItems.length === 0) return;
+
+  if(!filter){
+    // clear highlights
+    for(let i=0;i<lastRenderedItems.length;i++){
+      const row = document.getElementById(`row-${i}`);
+      if(row) row.classList.remove('highlight');
+    }
+    return;
+  }
+
+  if(globalMode){
+    // scan fullTrace once to build match set of global indices
+    const matchSet = new Set();
+    for(let idx=0; idx<fullTrace.length; idx++){
+      const it = fullTrace[idx];
+      // build hay from original data augmented with computed _local/_rel if possible
+      const copy = Object.assign({}, it);
+      try{
+        // derive _local/_rel if ts/timestamp present
+        const raw = copy.ts !== undefined ? copy.ts : (copy.timestamp !== undefined ? copy.timestamp : null);
+        if(raw != null){
+          const asNumber = (typeof raw === 'number') ? raw : (Number(raw) || NaN);
+          const d = !isNaN(asNumber) ? new Date(asNumber*1000) : new Date(raw);
+          if(!isNaN(d)){
+            copy._local = d.toLocaleString();
+            // lightweight relative string
+            const now = new Date();
+            const diff = Math.round((now - d) / 1000);
+            const abs = Math.abs(diff);
+            if(abs < 60) copy._rel = diff >=0 ? `${abs}s ago` : `in ${abs}s`;
+            else if(Math.round(abs/60) < 60) copy._rel = diff >=0 ? `${Math.round(abs/60)}m ago` : `in ${Math.round(abs/60)}m`;
+            else copy._rel = d.toLocaleString();
+          }
+        }
+      }catch(e){}
+      const hay = buildHay(copy);
+      if(hay.indexOf(filter) !== -1) matchSet.add(idx);
+    }
+    // apply highlights on current page rows where global index matches
+    for(let i=0;i<lastRenderedItems.length;i++){
+      const globalIdx = lastPageStart + i;
+      const row = document.getElementById(`row-${i}`);
+      if(!row) continue;
+      if(matchSet.has(globalIdx)) row.classList.add('highlight'); else row.classList.remove('highlight');
+    }
+  }else{
+    // page-local: build hay from lastRenderedItems
+    for(let i=0;i<lastRenderedItems.length;i++){
+      const it = lastRenderedItems[i];
+      const row = document.getElementById(`row-${i}`);
+      if(!row) continue;
+      const hay = buildHay(it);
+      if(hay.indexOf(filter) !== -1) row.classList.add('highlight'); else row.classList.remove('highlight');
+    }
+  }
+}
+
+// wire up filter input and global checkbox
+const filterEl = document.getElementById('filterInput');
+if(filterEl){ filterEl.addEventListener('keyup', ()=> applyFilter()); }
+const globalEl = document.getElementById('globalFilter');
+if(globalEl){ globalEl.addEventListener('change', ()=> applyFilter()); }
 
 </script>
 </body>
