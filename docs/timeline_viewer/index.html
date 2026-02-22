@@ -58,18 +58,42 @@ function renderPage(){
     }catch(e){return String(val)}
   }
 
+  function formatRelative(val){
+    try{
+      let d = null;
+      if(typeof val === 'number') d = new Date(val*1000);
+      else d = new Date(val);
+      if(isNaN(d)) return '';
+      const now = new Date();
+      const diff = Math.round((now - d) / 1000); // seconds (positive means past)
+      const abs = Math.abs(diff);
+      if(abs < 60) return diff >= 0 ? `${abs}s ago` : `in ${abs}s`;
+      const mins = Math.round(abs/60);
+      if(mins < 60) return diff >= 0 ? `${mins}m ago` : `in ${mins}m`;
+      const hrs = Math.round(mins/60);
+      if(hrs < 24) return diff >= 0 ? `${hrs}h ago` : `in ${hrs}h`;
+      const days = Math.round(hrs/24);
+      if(days < 7) return diff >= 0 ? `${days}d ago` : `in ${days}d`;
+      // fallback to local date for older
+      return d.toLocaleString();
+    }catch(e){ return ''; }
+  }
+
   const displayItems = slice.map(it => {
     try{
       const copy = Object.assign({}, it);
       if(copy.ts !== undefined) copy._ts = tryFormatTs(copy.ts);
       else if(copy.timestamp !== undefined) copy._ts = tryFormatTs(copy.timestamp);
-      // human-friendly local time
+      // human-friendly local time and relative time
       try{
         const raw = copy.ts !== undefined ? copy.ts : (copy.timestamp !== undefined ? copy.timestamp : null);
         if(raw != null){
           const asNumber = (typeof raw === 'number') ? raw : (Number(raw) || NaN);
           const d = !isNaN(asNumber) ? new Date(asNumber*1000) : new Date(raw);
-          if(!isNaN(d)) copy._local = d.toLocaleString();
+          if(!isNaN(d)){
+            copy._local = d.toLocaleString();
+            copy._rel = formatRelative(asNumber && !isNaN(asNumber) ? asNumber : raw);
+          }
         }
       }catch(e){}
       return copy;
