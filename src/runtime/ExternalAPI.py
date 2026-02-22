@@ -68,6 +68,38 @@ def query_trace(runtime, limit: Optional[int] = None, context: Optional[Any] = N
     return Introspection.get_trace(runtime, limit=limit)
 
 
+def query_lifecycle(runtime, subsystem: Optional[str] = None, phase: Optional[str] = None, limit: Optional[int] = None, context: Optional[Any] = None) -> List[Dict[str, Any]]:
+    ctx = _validate_context(context)
+    if ctx == AccessContext.RESTRICTED:
+        raise PermissionError('Restricted context cannot access lifecycle events')
+    return Introspection.get_lifecycle(runtime, subsystem=subsystem, phase=phase, limit=limit)
+
+
+def query_timeline(runtime, limit: Optional[int] = None, context: Optional[Any] = None) -> Dict[str, Any]:
+    ctx = _validate_context(context)
+    if ctx == AccessContext.RESTRICTED:
+        raise PermissionError('Restricted context cannot access timeline')
+    # merged view: trace entries, lifecycle events, diffs, telemetry, invariants
+    trace = Introspection.get_trace(runtime, limit=limit)
+    lifecycle = Introspection.get_lifecycle(runtime, limit=None)
+    diffs = Introspection.get_last_diff(runtime)
+    telemetry = Introspection.get_telemetry(runtime, limit=limit)
+    return {'trace': trace, 'lifecycle': lifecycle, 'last_diff': diffs, 'telemetry': telemetry}
+
+
+def query_timeline_view(runtime, subsystem: Optional[str] = None, phase: Optional[str] = None, tick_min: Optional[int] = None, tick_max: Optional[int] = None, limit: Optional[int] = None, context: Optional[Any] = None) -> Dict[str, Any]:
+    ctx = _validate_context(context)
+    if ctx == AccessContext.RESTRICTED:
+        raise PermissionError('Restricted context cannot access timeline view')
+    # defer to TimelineQuery module
+    try:
+        from .TimelineQuery import filter_timeline
+        return filter_timeline(runtime, subsystem=subsystem, phase=phase, tick_min=tick_min, tick_max=tick_max, limit=limit)
+    except Exception:
+        # fallback to merged timeline
+        return query_timeline(runtime, limit=limit, context=context)
+
+
 def export_trace(runtime, fmt: str = 'json', context: Optional[Any] = None):
     ctx = _validate_context(context)
     if ctx == AccessContext.RESTRICTED:
@@ -118,6 +150,15 @@ class ExternalAPIFacade:
 
     def query_trace(self, limit: Optional[int] = None, context: Optional[Any] = None):
         return query_trace(self._runtime, limit=limit, context=context)
+
+    def query_lifecycle(self, subsystem: Optional[str] = None, phase: Optional[str] = None, limit: Optional[int] = None, context: Optional[Any] = None):
+        return query_lifecycle(self._runtime, subsystem=subsystem, phase=phase, limit=limit, context=context)
+
+    def query_timeline(self, limit: Optional[int] = None, context: Optional[Any] = None):
+        return query_timeline(self._runtime, limit=limit, context=context)
+
+    def query_timeline_view(self, subsystem: Optional[str] = None, phase: Optional[str] = None, tick_min: Optional[int] = None, tick_max: Optional[int] = None, limit: Optional[int] = None, context: Optional[Any] = None):
+        return query_timeline_view(self._runtime, subsystem=subsystem, phase=phase, tick_min=tick_min, tick_max=tick_max, limit=limit, context=context)
 
     def export_trace(self, fmt: str = 'json', context: Optional[Any] = None):
         return export_trace(self._runtime, fmt=fmt, context=context)

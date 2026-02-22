@@ -6,9 +6,13 @@ from .LifecycleHooks import LifecycleHooks
 from .SubsystemManager import SubsystemManager
 from .StateHistory import StateHistory
 from .RuntimeChecks import RuntimeChecker, Invariant, Severity
+from .SnapshotDiff import diff_snapshots, as_pure_data
+from .RuntimeState import serialize
 from .Telemetry import TelemetryBuffer
 from . import Introspection as _introspection
 from .ExternalAPI import ExternalAPIFacade, AccessContext
+from .TemporalTrace import TemporalTrace
+from .LifecycleMap import LifecycleMap
 from typing import Optional
 from src.transport.TransportRegistry import TransportRegistry
 from src.transport.TransportManager import TransportManager
@@ -37,12 +41,23 @@ class Runtime:
         self.hooks.onInit(self)
         # initialize subsystem manager
         self.subsystem_manager = SubsystemManager(self.dispatcher, self.error_boundary)
+        # provide backref for late registrations to record lifecycle events
+        try:
+            self.subsystem_manager._runtime = self
+        except Exception:
+            pass
+        # initialize lifecycle map
+        self.lifecycle_map = LifecycleMap()
         # initialize state history
         self.state_history = StateHistory()
         # initialize runtime checker
         self.runtime_checker = RuntimeChecker(self.error_boundary)
         # initialize telemetry (unbounded by default)
         self.telemetry = TelemetryBuffer()
+        # temporal trace engine
+        self.temporal_trace = TemporalTrace()
+        # tick counter for deterministic trace indexing
+        self._tick_counter = 0
         # initialize event stream
         try:
             from .EventStream import EventStream
@@ -65,6 +80,12 @@ class Runtime:
 
             def get_telemetry(self, limit=None):
                 return _introspection.get_telemetry(self._runtime, limit=limit)
+
+            def get_lifecycle(self, subsystem: Optional[str] = None, phase: Optional[str] = None, limit: Optional[int] = None):
+                return _introspection.get_lifecycle(self._runtime, subsystem=subsystem, phase=phase, limit=limit)
+
+            def get_trace(self, limit: Optional[int] = None):
+                return _introspection.get_trace(self._runtime, limit=limit)
 
         self.introspect = _IntrospectFacade(self)
         # expose external API facade (read-only, JSON-safe)
@@ -104,6 +125,17 @@ class Runtime:
         except Exception:
             pass
 
+        # record lifecycle init events for any subsystems (some subsystems record during init_all)
+        try:
+            if hasattr(self, 'subsystem_manager') and self.subsystem_manager is not None and hasattr(self, 'lifecycle_map'):
+                for _, s in self.subsystem_manager._subsystems:
+                    try:
+                        self.lifecycle_map.record(getattr(s, 'name', s.__class__.__name__), 'init', tick=0)
+                    except Exception:
+                        pass
+        except Exception:
+            pass
+
         self.state = RuntimeState.IDLE
 
     def start(self):
@@ -113,6 +145,12 @@ class Runtime:
         # start subsystems
         try:
             self.subsystem_manager.start_all(self)
+        except Exception:
+            pass
+        # record a runtime-level start event
+        try:
+            if hasattr(self, 'lifecycle_map') and self.lifecycle_map is not None:
+                self.lifecycle_map.record('runtime', 'start', tick=getattr(self, '_tick_counter', 0))
         except Exception:
             pass
         self.state = RuntimeState.ACTIVE
@@ -169,6 +207,13 @@ class Runtime:
             except Exception:
                 self._last_snapshot_before = None
 
+            # increment tick counter for trace
+            try:
+                self._tick_counter = getattr(self, '_tick_counter', 0) + 1
+                tick_no = self._tick_counter
+            except Exception:
+                tick_no = None
+
             # pre-tick phase
             # pre-tick snapshot capture and telemetry/event publish
             try:
@@ -182,6 +227,12 @@ class Runtime:
                 pass
 
             try:
+                # record runtime-level pre_tick event
+                try:
+                    if hasattr(self, 'lifecycle_map') and self.lifecycle_map is not None:
+                        self.lifecycle_map.record('runtime', 'pre_tick', tick=tick_no if tick_no is not None else 0)
+                except Exception:
+                    pass
                 self.hooks.onPreTick(self)
             except Exception as e:
                 # lifecycle hook failures are handled via ErrorBoundary
@@ -219,6 +270,13 @@ class Runtime:
                     ok = self.subsystem_manager.post_tick_all(self)
                     if not ok:
                         return processed
+
+                # record runtime-level post_tick event
+                try:
+                    if hasattr(self, 'lifecycle_map') and self.lifecycle_map is not None:
+                        self.lifecycle_map.record('runtime', 'post_tick', tick=tick_no if tick_no is not None else 0)
+                except Exception:
+                    pass
 
                 self.hooks.onPostTick(self)
             except Exception as e:
@@ -261,6 +319,67 @@ class Runtime:
                                 self.event_stream.publish('invariant.result', {'name': r.name, 'passed': r.passed, 'severity': r.severity.value})
                     except Exception:
                         pass
+            except Exception:
+                pass
+
+            # compute snapshot diff and expose for introspection / API
+            try:
+                if hasattr(self, '_last_snapshot_before') and hasattr(self, '_last_snapshot_after') and self._last_snapshot_before is not None and self._last_snapshot_after is not None:
+                    try:
+                        before_ser = serialize(self._last_snapshot_before)
+                        after_ser = serialize(self._last_snapshot_after)
+                    except Exception:
+                        before_ser = None
+                        after_ser = None
+                    if before_ser is not None and after_ser is not None:
+                        diff = diff_snapshots(before_ser, after_ser)
+                        pure = as_pure_data(diff)
+                        # store for introspection and API
+                        self._last_diff_result = pure
+                        # publish diff event
+                        try:
+                            if hasattr(self, 'event_stream') and self.event_stream is not None:
+                                self.event_stream.publish('diff', pure)
+                        except Exception:
+                            pass
+            except Exception:
+                pass
+
+            # record temporal trace entry for this tick (include lifecycle refs)
+            try:
+                try:
+                    events = self.event_stream.all() if hasattr(self, 'event_stream') and self.event_stream is not None else []
+                except Exception:
+                    events = []
+                try:
+                    telem = self.telemetry.all() if hasattr(self, 'telemetry') and self.telemetry is not None else []
+                except Exception:
+                    telem = []
+                try:
+                    invs = []
+                    for r in getattr(self, '_last_check_results', []) or []:
+                        invs.append({'name': r.name, 'passed': r.passed, 'severity': r.severity.value})
+                except Exception:
+                    invs = []
+                try:
+                    subs = _introspection.get_subsystem_states(self)
+                except Exception:
+                    subs = []
+
+                diff_payload = getattr(self, '_last_diff_result', None)
+                lifecycle_refs = []
+                try:
+                    if hasattr(self, 'lifecycle_map') and self.lifecycle_map is not None:
+                        # gather lifecycle events for this tick deterministically
+                        all_ev = self.lifecycle_map.get_events()
+                        for ev in all_ev:
+                            if ev.get('tick') == (tick_no if tick_no is not None else 0):
+                                lifecycle_refs.append(ev.get('id'))
+                except Exception:
+                    lifecycle_refs = []
+
+                if hasattr(self, 'temporal_trace') and getattr(self, 'temporal_trace', None) is not None:
+                    self.temporal_trace.record_tick(tick_no if tick_no is not None else 0, events, diff_payload, telem, invs, subs, lifecycle_refs=lifecycle_refs)
             except Exception:
                 pass
 
@@ -319,6 +438,12 @@ class Runtime:
         try:
             if hasattr(self, 'subsystem_manager') and self.subsystem_manager:
                 self.subsystem_manager.shutdown_all(self)
+        except Exception:
+            pass
+        # record runtime-level shutdown event and final teardown marker
+        try:
+            if hasattr(self, 'lifecycle_map') and self.lifecycle_map is not None:
+                self.lifecycle_map.record('runtime', 'shutdown.requested', tick=(getattr(self, '_tick_counter', 0) + 1), metadata={'reason': reason})
         except Exception:
             pass
 
