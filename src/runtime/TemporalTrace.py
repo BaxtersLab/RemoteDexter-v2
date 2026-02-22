@@ -12,20 +12,21 @@ class TraceEntry:
     telemetry: List[Dict[str, Any]]
     invariants: List[Dict[str, Any]]
     subsystems: List[Dict[str, Any]]
+    lifecycle_refs: Optional[List[int]] = None
 
 
 class TemporalTrace:
     def __init__(self):
         self._entries: List[TraceEntry] = []
 
-    def record_tick(self, tick: int, events: List[Dict[str, Any]], diff: Optional[Dict[str, Any]], telemetry: List[Dict[str, Any]], invariants: List[Dict[str, Any]], subsystems: List[Dict[str, Any]]):
+    def record_tick(self, tick: int, events: List[Dict[str, Any]], diff: Optional[Dict[str, Any]], telemetry: List[Dict[str, Any]], invariants: List[Dict[str, Any]], subsystems: List[Dict[str, Any]], lifecycle_refs: Optional[List[int]] = None):
         ts = time.time()
         # normalize inputs to pure-data lists/dicts
         evs = list(events) if events is not None else []
         telem = list(telemetry) if telemetry is not None else []
         invs = list(invariants) if invariants is not None else []
         subs = list(subsystems) if subsystems is not None else []
-        entry = TraceEntry(tick=tick, timestamp=ts, events=evs, diff=diff, telemetry=telem, invariants=invs, subsystems=subs)
+        entry = TraceEntry(tick=tick, timestamp=ts, events=evs, diff=diff, telemetry=telem, invariants=invs, subsystems=subs, lifecycle_refs=lifecycle_refs)
         self._entries.append(entry)
 
     def get_trace(self, limit: Optional[int] = None) -> List[Dict[str, Any]]:
@@ -34,7 +35,7 @@ class TemporalTrace:
             items = items[-limit:]
         out = []
         for e in items:
-            out.append({'tick': e.tick, 'timestamp': e.timestamp, 'events': e.events, 'diff': e.diff, 'telemetry': e.telemetry, 'invariants': e.invariants, 'subsystems': e.subsystems})
+            out.append({'tick': e.tick, 'timestamp': e.timestamp, 'events': e.events, 'diff': e.diff, 'telemetry': e.telemetry, 'invariants': e.invariants, 'subsystems': e.subsystems, 'lifecycle_refs': e.lifecycle_refs or []})
         return out
 
     def clear(self):
@@ -70,7 +71,7 @@ class TemporalTrace:
 
             diff = e.diff if isinstance(e.diff, dict) or e.diff is None else None
 
-            out.append({'tick': e.tick, 'timestamp': e.timestamp, 'events': events, 'diff': diff, 'telemetry': telemetry, 'invariants': e.invariants or [], 'subsystems': subs})
+            out.append({'tick': e.tick, 'timestamp': e.timestamp, 'events': events, 'diff': diff, 'telemetry': telemetry, 'invariants': e.invariants or [], 'subsystems': subs, 'lifecycle_refs': e.lifecycle_refs or []})
         return out
 
     def export_csv(self) -> str:
@@ -82,7 +83,7 @@ class TemporalTrace:
 
         out_io = io.StringIO()
         writer = csv.writer(out_io)
-        writer.writerow(['tick', 'timestamp', 'diff_entries', 'events', 'telemetry', 'invariants', 'subsystems'])
+        writer.writerow(['tick', 'timestamp', 'diff_entries', 'events', 'telemetry', 'invariants', 'subsystems', 'lifecycle_refs'])
         for e in list(self._entries):
             diff_count = 0
             if isinstance(e.diff, dict):
@@ -91,7 +92,8 @@ class TemporalTrace:
             telem_count = len(e.telemetry or [])
             inv_count = len(e.invariants or [])
             subs_json = json.dumps(e.subsystems or [], sort_keys=True)
-            writer.writerow([e.tick, e.timestamp, diff_count, events_count, telem_count, inv_count, subs_json])
+            lr_json = json.dumps(e.lifecycle_refs or [], sort_keys=True)
+            writer.writerow([e.tick, e.timestamp, diff_count, events_count, telem_count, inv_count, subs_json, lr_json])
         return out_io.getvalue()
 
 
