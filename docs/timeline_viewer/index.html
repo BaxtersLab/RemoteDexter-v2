@@ -23,8 +23,10 @@
   <button id="go">Go</button>
   <button id="copy">Copy JSON</button>
   <button id="download">Download Page</button>
+  <button id="toggleView">Table View</button>
   <span id="pageInfo" class="muted"></span>
 </div>
+<div id="tableWrap" style="display:none;max-height:520px;overflow:auto;margin-bottom:8px"></div>
 <pre id="out"></pre>
 <script>
 let jsonData = null;
@@ -132,6 +134,31 @@ document.getElementById('f').addEventListener('change', function(e){
   };
   r.readAsText(file);
 });
+
+// Table view support
+let tableMode = false;
+document.getElementById('toggleView').addEventListener('click', ()=>{
+  tableMode = !tableMode;
+  document.getElementById('tableWrap').style.display = tableMode ? 'block' : 'none';
+  document.getElementById('out').style.display = tableMode ? 'none' : 'block';
+  document.getElementById('toggleView').textContent = tableMode ? 'JSON View' : 'Table View';
+  renderPage();
+});
+
+function renderTable(items){
+  const wrap = document.getElementById('tableWrap');
+  if(!items || items.length===0){ wrap.innerHTML = '<div class="muted">No items</div>'; return; }
+  const cols = ['#','_local','_rel','event','msg'];
+  let html = '<table style="border-collapse:collapse;width:100%"><thead><tr>' + cols.map(c=>`<th style="text-align:left;border-bottom:1px solid #ddd;padding:6px">${c}</th>`).join('') + '</tr></thead><tbody>';
+  items.forEach((it,i)=>{
+    const ev = it.event !== undefined ? it.event : '';
+    const msg = it.msg !== undefined ? it.msg : (it.message !== undefined ? it.message : '');
+    html += `<tr><td style="padding:6px;border-bottom:1px solid #f0f0f0">${i+1}</td><td style="padding:6px;border-bottom:1px solid #f0f0f0">${it._local||''}</td><td style="padding:6px;border-bottom:1px solid #f0f0f0">${it._rel||''}</td><td style="padding:6px;border-bottom:1px solid #f0f0f0">${ev}</td><td style="padding:6px;border-bottom:1px solid #f0f0f0">${msg}</td></tr>`;
+  });
+  html += '</tbody></table>';
+  wrap.innerHTML = html;
+}
+
 </script>
 </body>
 </html>
