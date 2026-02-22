@@ -1,6 +1,8 @@
-from dataclasses import dataclass, asdict
-from typing import Any, Dict, List, Optional
+from dataclasses import dataclass
+from collections import deque
 import time
+from threading import Lock
+from typing import List, Dict, Optional
 
 
 @dataclass(frozen=True)
@@ -8,45 +10,91 @@ class TelemetryEvent:
     timestamp: float
     category: str
     message: str
-    payload: Optional[Dict[str, Any]] = None
+    payload: Optional[Dict]
+
+    def __repr__(self) -> str:
+        # concise and stable representation
+        return f"TelemetryEvent({self.timestamp:.6f},{self.category},{self.message})"
 
 
 class TelemetryBuffer:
-    def __init__(self, max_size: Optional[int] = None):
-        # deterministic append order preserved by list
-        self._items: List[TelemetryEvent] = []
-        self.max_size = max_size
+    """Fixed-size ring buffer for TelemetryEvent objects.
 
-    def record(self, category: str, message: str, payload: Optional[Dict[str, Any]] = None) -> TelemetryEvent:
-        # copy payload to avoid side-effects
-        p = None
-        if payload is not None:
-            try:
-                # prefer a shallow copy; assume JSON-safe payloads
-                p = dict(payload)
-            except Exception:
-                p = payload
+    Uses a deque with `maxlen` to provide ring behavior (oldest dropped when full).
+    Thread-safe for simple append/flush operations with a Lock.
+    """
 
-        ev = TelemetryEvent(timestamp=time.time(), category=category, message=message, payload=p)
-        self._append(ev)
+    def __init__(self, max_size: int = 1024):
+        self._max_size = int(max_size)
+        self._buf: deque = deque(maxlen=self._max_size)
+        self._lock = Lock()
+
+    def append(self, event: TelemetryEvent) -> None:
+        with self._lock:
+            self._buf.append(event)
+
+    # Backwards-compatible helpers expected by other runtime code/tests
+    def record(self, category: str, message: str, payload: Optional[Dict] = None) -> TelemetryEvent:
+        ev = TelemetryEvent(timestamp=time.time(), category=category, message=message, payload=payload or {})
+        self.append(ev)
         return ev
 
-    def _append(self, ev: TelemetryEvent):
-        self._items.append(ev)
-        if self.max_size is not None and len(self._items) > self.max_size:
-            # drop oldest deterministically
-            del self._items[0]
-
     def all(self) -> List[TelemetryEvent]:
-        return list(self._items)
+        return self.snapshot()
 
     def latest(self) -> Optional[TelemetryEvent]:
-        if not self._items:
-            return None
-        return self._items[-1]
+        with self._lock:
+            if not self._buf:
+                return None
+            return self._buf[-1]
 
-    def clear(self):
-        self._items.clear()
+    def clear(self) -> None:
+        with self._lock:
+            self._buf.clear()
+
+    def snapshot(self) -> List[TelemetryEvent]:
+        with self._lock:
+            return list(self._buf)
+
+    def flush(self) -> List[TelemetryEvent]:
+        with self._lock:
+            out = list(self._buf)
+            self._buf.clear()
+        return out
+
+    def __len__(self) -> int:
+        with self._lock:
+            return len(self._buf)
 
 
-__all__ = ["TelemetryEvent", "TelemetryBuffer"]
+class TelemetrySink:
+    """Facade used by runtime subsystems to emit telemetry."""
+
+    def __init__(self, buffer: Optional[TelemetryBuffer] = None):
+        self._buffer = buffer if buffer is not None else TelemetryBuffer()
+
+    def emit(self, category: str, message: str, payload: Optional[Dict] = None) -> None:
+        ev = TelemetryEvent(timestamp=time.time(), category=category, message=message, payload=payload or {})
+        self._buffer.append(ev)
+
+    def export_snapshot(self) -> List[TelemetryEvent]:
+        return self._buffer.snapshot()
+
+    def export_flush(self) -> List[TelemetryEvent]:
+        return self._buffer.flush()
+
+
+def to_timeline_events(events: List[TelemetryEvent]) -> List[Dict]:
+    out: List[Dict] = []
+    for e in events:
+        out.append({
+            "ts": e.timestamp,
+            "type": "telemetry",
+            "category": e.category,
+            "message": e.message,
+            "payload": e.payload or {},
+        })
+    return out
+
+
+__all__ = ["TelemetryEvent", "TelemetryBuffer", "TelemetrySink", "to_timeline_events"]

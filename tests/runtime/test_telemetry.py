@@ -1,3 +1,68 @@
+from src.runtime.Telemetry import (
+    TelemetryBuffer,
+    TelemetryEvent,
+    TelemetrySink,
+    to_timeline_events,
+)
+import time
+
+
+def test_append_and_snapshot():
+    tb = TelemetryBuffer(max_size=5)
+    e1 = TelemetryEvent(timestamp=time.time(), category='c1', message='m1', payload=None)
+    e2 = TelemetryEvent(timestamp=time.time(), category='c2', message='m2', payload={'x': 1})
+    tb.append(e1)
+    tb.append(e2)
+    snap = tb.snapshot()
+    assert len(snap) == 2
+    assert snap[0].message == 'm1' and snap[1].message == 'm2'
+
+
+def test_flush_clears_buffer():
+    tb = TelemetryBuffer(max_size=4)
+    tb.append(TelemetryEvent(time.time(), 'c', 'a', None))
+    tb.append(TelemetryEvent(time.time(), 'c', 'b', None))
+    fl = tb.flush()
+    assert len(fl) == 2
+    assert len(tb) == 0
+
+
+def test_ring_buffer_rollover():
+    tb = TelemetryBuffer(max_size=3)
+    for i in range(4):
+        tb.append(TelemetryEvent(time.time(), 'c', f'm{i}', None))
+    snap = tb.snapshot()
+    assert len(snap) == 3
+    # oldest (m0) should be dropped
+    assert [e.message for e in snap] == ['m1', 'm2', 'm3']
+
+
+def test_event_ordering_preserved():
+    tb = TelemetryBuffer(max_size=10)
+    for i in range(5):
+        tb.append(TelemetryEvent(time.time(), 'c', f'm{i}', None))
+    snap = tb.snapshot()
+    assert [e.message for e in snap] == [f'm{i}' for i in range(5)]
+
+
+def test_sink_emit_creates_events():
+    sink = TelemetrySink()
+    sink.emit('cat', 'hello', {'k': 'v'})
+    sink.emit('cat', 'world')
+    snap = sink.export_snapshot()
+    assert len(snap) == 2
+    assert all(isinstance(e, TelemetryEvent) for e in snap)
+
+
+def test_export_helpers_produce_timeline_dicts():
+    sink = TelemetrySink()
+    sink.emit('cat', 'one', {'a': 1})
+    sink.emit('cat', 'two')
+    snap = sink.export_snapshot()
+    tlist = to_timeline_events(snap)
+    assert isinstance(tlist, list)
+    assert all(d['type'] == 'telemetry' for d in tlist)
+    assert tlist[1]['payload'] == {}
 import pytest
 
 from src.runtime.Runtime import Runtime
