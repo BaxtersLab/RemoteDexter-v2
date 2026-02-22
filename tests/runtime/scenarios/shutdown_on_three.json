@@ -1,0 +1,9 @@
+{
+  "name": "shutdown_counter",
+  "steps": [
+    { "action": "tick" },
+    { "action": "tick" },
+    { "action": "tick" },
+    { "action": "expect_shutdown" }
+  ]
+}
