@@ -63,6 +63,15 @@ function renderPage(){
       const copy = Object.assign({}, it);
       if(copy.ts !== undefined) copy._ts = tryFormatTs(copy.ts);
       else if(copy.timestamp !== undefined) copy._ts = tryFormatTs(copy.timestamp);
+      // human-friendly local time
+      try{
+        const raw = copy.ts !== undefined ? copy.ts : (copy.timestamp !== undefined ? copy.timestamp : null);
+        if(raw != null){
+          const asNumber = (typeof raw === 'number') ? raw : (Number(raw) || NaN);
+          const d = !isNaN(asNumber) ? new Date(asNumber*1000) : new Date(raw);
+          if(!isNaN(d)) copy._local = d.toLocaleString();
+        }
+      }catch(e){}
       return copy;
     }catch(e){ return it; }
   });
