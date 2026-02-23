@@ -11,6 +11,11 @@
     .muted{color:#666;font-size:0.9em}
     button:disabled{opacity:0.45}
     .highlight{background:#fff3a0;transition:background 0.2s ease}
+    th.sortable{cursor:pointer;user-select:none}
+    th .sort-ind{margin-left:6px;font-size:0.8em}
+    .kb-focus{box-shadow: inset 4px 0 0 #3478f6;}
+    .detail-row td{background:#fbfbfb;padding:8px;font-size:0.9em;border-bottom:1px solid #eee}
+    input.input-error{background:#ffecec;transition:background 0.3s ease}
   </style>
 </head>
 <body>
@@ -18,25 +23,97 @@
 <input type="file" id="f" accept="application/json" />
 <div class="controls">
   <label>Page size: <input id="pageSize" type="number" value="10" min="1"/></label>
-  <button id="prev">◀ Prev</button>
-  <button id="next">Next ▶</button>
-  <label>Go to page: <input id="goto" type="number" min="1" style="width:72px"/></label>
+  <button id="prev">â Prev</button>
+  <button id="next">Next â¶</button>
+  <label>Page: <input id="goto" type="number" min="1" style="width:64px"/></label>
   <button id="go">Go</button>
+  <button id="exportPage" style="margin-left:6px">Export Page</button>
   <label>Filter: <input id="filterInput" type="text" placeholder="type to highlight rows" style="width:220px"/></label>
   <label><input id="globalFilter" type="checkbox"/> Global Filter</label>
   <button id="copy">Copy JSON</button>
   <button id="download">Download Page</button>
   <button id="toggleView">Table View</button>
+  <button id="helpBtn" style="margin-left:8px">Help</button>
+  <label style="margin-left:8px"><input id="autoScroll" type="checkbox"/> Auto-Scroll Focus</label>
+  <button id="expandAll" style="margin-left:8px">Expand All</button>
+  <button id="collapseAll">Collapse All</button>
   <span id="pageInfo" class="muted"></span>
 </div>
-<div id="tableWrap" style="display:none;max-height:520px;overflow:auto;margin-bottom:8px"></div>
-<pre id="out"></pre>
+<div id="viewerMain" style="display:flex;gap:12px;align-items:flex-start">
+  <div id="viewerContent" style="flex:1;min-width:0">
+    <div id="tableWrap" style="display:none;max-height:520px;overflow:auto;margin-bottom:8px"></div>
+    <pre id="out"></pre>
+  </div>
+  <aside id="helpPanel" aria-hidden="true" style="width:320px;flex:0 0 320px;box-sizing:border-box;padding:12px;border-left:1px solid #eee;background:#fafafa;max-height:80vh;overflow:auto;transition:transform 0.2s ease;transform:translateX(100%);">
+    <button id="helpClose" style="position:sticky;top:8px;float:right;margin-left:auto">Close</button>
+    <h4>Help &amp; Legend</h4>
+    <div style="font-size:0.95em;line-height:1.4">
+      <p><strong>_local</strong>: local timestamp â the event time shown in your browser's locale.</p>
+      <p><strong>_rel</strong>: relative time â human-friendly delta (e.g. "5m ago").</p>
+      <p><strong>_ts</strong>: ISO timestamp for the event (UTC).</p>
+      <p><strong>category</strong>: event classification or category field.</p>
+      <p><strong>message</strong>: short human-readable event description.</p>
+      <p><strong>payload</strong>: the JSON payload attached to the event (view in JSON mode).</p>
+      <h5>Filtering</h5>
+      <p>Type in the <em>Filter</em> box to highlight matching rows on the current page.</p>
+      <p><strong>Global Filter</strong>: when enabled, the filter scans the entire dataset and highlights rows on the current page that match anywhere in the full trace.</p>
+      <h5>Pagination</h5>
+      <p>Use Page Size, Prev/Next and Go controls to navigate. Sorting preserves page offsets (no reshuffle of page boundaries).</p>
+      <h5>Behavior Notes</h5>
+      <ul>
+        <li>The panel is non-blocking: it does not re-render the table or mutate data.</li>
+        <li>Sorting operates on a separate ordered index view; the original dataset is unchanged.</li>
+      </ul>
+    </div>
+  </aside>
+</div>
 <script>
 let jsonData = null;
 let page = 1;
 let fullTrace = [];
+let orderedIndices = null; // if set, maps page positions -> fullTrace indices
+let sortState = { col: null, dir: 0 }; // dir: 0=unsorted, 1=asc, -1=desc
 let lastRenderedItems = [];
 let lastPageStart = 0;
+
+// Default column metadata and visibility state (keeps viewer robust when not customized)
+const columnsMeta = [
+  { k: '_ts', label: 'Timestamp' },
+  { k: '_local', label: 'Local Time' },
+  { k: '_rel', label: 'Relative' },
+  { k: 'category', label: 'Category' },
+  { k: 'message', label: 'Message' },
+  { k: 'duration', label: 'Duration' }
+];
+let columnOrder = columnsMeta.map(c=>c.k);
+const originalColumnOrder = columnOrder.slice();
+const columnVisibility = {};
+columnsMeta.forEach(c => columnVisibility[c.k] = true);
+
+// Grouping state defaults
+let groupBy = ['category'];
+let previousGroupBy = null;
+const collapsedGroups = new Set();
+
+// Small helpers and state used by header interactions
+let lastInteractedColumn = '_ts';
+let activePreset = null;
+
+function deriveGroupId(item, key){
+  try{
+    if(!key) return '—';
+    // support nested keys like 'event.category'
+    if(typeof key === 'string' && key.indexOf('.') !== -1){
+      const parts = key.split('.'); let cur = item; for(const p of parts){ if(cur == null) return '—'; cur = cur[p]; } return String(cur == null ? '—' : cur);
+    }
+    if(Array.isArray(key)){
+      // join multi-keys
+      return key.map(k=> deriveGroupId(item, k)).join('|');
+    }
+    const val = (item && item[key] !== undefined) ? item[key] : (item && item.event && item.event[key] !== undefined ? item.event[key] : '—');
+    return String(val == null ? '—' : val);
+  }catch(e){ return '—'; }
+}
 
 function clamp(v, a, b){ return Math.max(a, Math.min(b, v)); }
 
@@ -50,7 +127,9 @@ function renderPage(){
   page = clamp(page, 1, maxPage);
   const start = (page-1)*ps;
   const end = Math.min(start+ps, total);
-  const slice = trace.slice(start,end);
+  // determine which global indices belong to this page (respecting ordering if any)
+  const pageIndices = orderedIndices ? orderedIndices.slice(start, end) : Array.from({length: Math.max(0, end-start)}, (_,i)=>start+i);
+  const slice = pageIndices.map(idx => trace[idx]);
   function tryFormatTs(val){
     try{
       if(val==null) return null;
@@ -111,8 +190,14 @@ function renderPage(){
 
   const payload = { page, pageSize: ps, total, items: displayItems };
   lastRenderedItems = displayItems;
+  // lastPageStart is the start offset within the ordered view (or raw index when unordered)
   lastPageStart = start;
-  document.getElementById('out').textContent = JSON.stringify(payload, null, 2);
+  // If table mode is active, render the table DOM for current items; otherwise, show JSON
+  if(tableMode){
+    try{ renderTable(displayItems); }catch(e){ /* renderTable may not be defined yet */ }
+  } else {
+    document.getElementById('out').textContent = JSON.stringify(payload, null, 2);
+  }
   document.getElementById('pageInfo').textContent = ` Showing ${total? start+1 : 0}-${end} of ${total} (Page ${page}/${maxPage})`;
   document.getElementById('prev').disabled = page<=1;
   document.getElementById('next').disabled = page>=maxPage;
@@ -121,8 +206,129 @@ function renderPage(){
 
 document.getElementById('prev').addEventListener('click', ()=>{ if(page>1){page--; renderPage();}});
 document.getElementById('next').addEventListener('click', ()=>{ page++; renderPage();});
-document.getElementById('go').addEventListener('click', ()=>{ const v=parseInt(document.getElementById('goto').value||1,10); if(!isNaN(v)){ page=v; renderPage(); }});
+
+// Jump to page helper: validates and navigates, flashes input on invalid
+function flashInputError(el){ if(!el) return; el.classList.add('input-error'); setTimeout(()=>{ el.classList.remove('input-error'); }, 300); }
+function jumpToPageFromInput(){ const el = document.getElementById('goto'); if(!el) return; const v = parseInt(el.value||'',10); const ps = clamp(parseInt(document.getElementById('pageSize').value||10,10),1,1000); const total = (fullTrace && fullTrace.length) || 0; const maxPage = Math.max(1, Math.ceil(total/ps)); if(isNaN(v) || v < 1 || v > maxPage){ flashInputError(el); return; } page = v; renderPage(); }
+document.getElementById('go').addEventListener('click', ()=> jumpToPageFromInput());
+// Enter on the goto input triggers jump
+const gotoEl = document.getElementById('goto');
+if(gotoEl){ gotoEl.addEventListener('keydown', (e)=>{ if(e.key === 'Enter'){ e.preventDefault(); jumpToPageFromInput(); } });
+  // clear error state when user edits
+  gotoEl.addEventListener('input', ()=>{ if(gotoEl.classList.contains('input-error')) gotoEl.classList.remove('input-error'); });
+}
+
 document.addEventListener('keydown', (e)=>{ if(!jsonData) return; if(e.key==='ArrowLeft'){ if(page>1){page--; renderPage();}} else if(e.key==='ArrowRight'){ page++; renderPage(); }});
+
+// Navigation between expanded items (Alt+ArrowDown / Alt+ArrowUp)
+document.addEventListener('keydown', (e)=>{
+  try{
+    if(!(e.altKey && (e.key === 'ArrowDown' || e.key === 'ArrowUp'))) return;
+    const tgt = e.target;
+    const tag = tgt && tgt.tagName && tgt.tagName.toUpperCase();
+    const isInput = tag === 'INPUT' || tag === 'TEXTAREA' || (tgt && tgt.isContentEditable);
+    // Ignore inputs unless Alt is held (we already require Alt)
+    if(isInput && !e.altKey) return;
+
+    const expanded = Array.from(expandedSet).sort((a,b)=>a-b);
+    if(expanded.length === 0) return;
+    const current = (typeof focusedRowIndex === 'number') ? focusedRowIndex : -1;
+    let targetIndex = null;
+    if(e.key === 'ArrowDown'){
+      targetIndex = expanded.find(idx => idx > current);
+      if(typeof targetIndex === 'undefined' || targetIndex === null) return;
+      console.log('Jump Next Expanded →', targetIndex);
+    } else {
+      for(let i = expanded.length - 1; i >= 0; i--){ if(expanded[i] < current){ targetIndex = expanded[i]; break; } }
+      if(targetIndex === null) return;
+      console.log('Jump Prev Expanded →', targetIndex);
+    }
+
+    // Move focus to the target row (setKeyboardFocus will handle collapsed groups and nearest visible)
+    e.preventDefault();
+    focusedRowIndex = targetIndex;
+    setKeyboardFocus(focusedRowIndex);
+  }catch(err){ /* swallow errors to avoid breaking host page */ }
+});
+
+// Helper: return array of primary row indices (0-based) that match current filter, respecting global mode
+function getFilterMatchingRowIndices(){
+  try{
+    const filter = (document.getElementById('filterInput') && document.getElementById('filterInput').value || '').trim().toLowerCase();
+    const globalMode = document.getElementById('globalFilter') && document.getElementById('globalFilter').checked;
+    const matches = [];
+    if(!filter){ return matches; }
+    if(globalMode){
+      // build global matchSet
+      const matchSet = new Set();
+      for(let idx=0; idx<fullTrace.length; idx++){
+        const it = fullTrace[idx];
+        const copy = Object.assign({}, it);
+        try{
+          const raw = copy.ts !== undefined ? copy.ts : (copy.timestamp !== undefined ? copy.timestamp : null);
+          if(raw != null){
+            const asNumber = (typeof raw === 'number') ? raw : (Number(raw) || NaN);
+            const d = !isNaN(asNumber) ? new Date(asNumber*1000) : new Date(raw);
+            if(!isNaN(d)){
+              copy._local = d.toLocaleString();
+              const now = new Date();
+              const diff = Math.round((now - d) / 1000);
+              const abs = Math.abs(diff);
+              if(abs < 60) copy._rel = diff >=0 ? `${abs}s ago` : `in ${abs}s`;
+              else if(Math.round(abs/60) < 60) copy._rel = diff >=0 ? `${Math.round(abs/60)}m ago` : `in ${Math.round(abs/60)}m`;
+              else copy._rel = d.toLocaleString();
+            }
+          }
+        }catch(e){}
+        const hay = buildHay(copy);
+        if(hay.indexOf(filter) !== -1) matchSet.add(idx);
+      }
+      // map page-local positions to global indices and test membership
+      for(let pos=0; pos<lastRenderedItems.length; pos++){
+        const globalIdx = orderedIndices ? orderedIndices[lastPageStart + pos] : (lastPageStart + pos);
+        if(matchSet.has(globalIdx)) matches.push(pos);
+      }
+      return matches;
+    }
+    // page-local: build hay from lastRenderedItems
+    for(let i=0;i<lastRenderedItems.length;i++){
+      const it = lastRenderedItems[i];
+      const hay = buildHay(it);
+      if(hay.indexOf(filter) !== -1) matches.push(i);
+    }
+    return matches;
+  }catch(e){ return []; }
+}
+
+// Navigation between filter matches (Ctrl+ArrowDown / Ctrl+ArrowUp)
+document.addEventListener('keydown', (e)=>{
+  try{
+    if(!(e.ctrlKey && (e.key === 'ArrowDown' || e.key === 'ArrowUp'))) return;
+    const tgt = e.target;
+    const tag = tgt && tgt.tagName && tgt.tagName.toUpperCase();
+    const isInput = tag === 'INPUT' || tag === 'TEXTAREA' || (tgt && tgt.isContentEditable);
+    if(isInput && !e.ctrlKey) return;
+
+    const matches = getFilterMatchingRowIndices();
+    if(!matches || matches.length === 0) return;
+    const current = (typeof focusedRowIndex === 'number') ? focusedRowIndex : -1;
+    let target = null;
+    if(e.key === 'ArrowDown'){
+      target = matches.find(idx => idx > current);
+      if(typeof target === 'undefined' || target === null) return;
+      console.log('Jump Next Match →', target);
+    } else {
+      for(let i=matches.length-1;i>=0;i--){ if(matches[i] < current){ target = matches[i]; break; } }
+      if(target === null) return;
+      console.log('Jump Prev Match →', target);
+    }
+
+    // Move focus to the target row (setKeyboardFocus will handle collapsed groups and nearest visible)
+    e.preventDefault();
+    focusedRowIndex = target;
+    setKeyboardFocus(focusedRowIndex);
+  }catch(err){ }
+});
 
 document.getElementById('copy').addEventListener('click', ()=>{
   try{ navigator.clipboard.writeText(document.getElementById('out').textContent); }catch(e){ alert('Copy failed'); }
@@ -133,6 +339,68 @@ document.getElementById('download').addEventListener('click', ()=>{
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a'); a.href = url; a.download = `timeline-page-${page}.json`; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
 });
+
+// Export current page as JSON respecting sort and filter (no mutation)
+function exportPage(){
+  if(!fullTrace || !Array.isArray(fullTrace)) return;
+  const ps = clamp(parseInt(document.getElementById('pageSize').value||10,10), 1, 1000);
+  const total = fullTrace.length || 0;
+  const maxPage = Math.max(1, Math.ceil(total/ps));
+  const currentPage = clamp(page, 1, maxPage);
+  const start = (currentPage-1)*ps;
+  const end = Math.min(start+ps, total);
+  const pageIndices = orderedIndices ? orderedIndices.slice(start,end) : Array.from({length: Math.max(0, end-start)}, (_,i)=>start+i);
+
+  // Determine filter mode and which indices match
+  const filter = (document.getElementById('filterInput') && document.getElementById('filterInput').value || '').trim().toLowerCase();
+  const globalMode = document.getElementById('globalFilter') && document.getElementById('globalFilter').checked;
+
+  let exportIndices = pageIndices.slice();
+  if(filter){
+    if(globalMode){
+      const matchSet = new Set();
+      for(let idx=0; idx<fullTrace.length; idx++){
+        const it = fullTrace[idx];
+        const copy = Object.assign({}, it);
+        try{
+          const raw = copy.ts !== undefined ? copy.ts : (copy.timestamp !== undefined ? copy.timestamp : null);
+          if(raw != null){
+            const asNumber = (typeof raw === 'number') ? raw : (Number(raw) || NaN);
+            const d = !isNaN(asNumber) ? new Date(asNumber*1000) : new Date(raw);
+            if(!isNaN(d)){
+              copy._local = d.toLocaleString();
+              const now = new Date();
+              const diff = Math.round((now - d) / 1000);
+              const abs = Math.abs(diff);
+              if(abs < 60) copy._rel = diff >=0 ? `${abs}s ago` : `in ${abs}s`;
+              else if(Math.round(abs/60) < 60) copy._rel = diff >=0 ? `${Math.round(abs/60)}m ago` : `in ${Math.round(abs/60)}m`;
+              else copy._rel = d.toLocaleString();
+            }
+          }
+        }catch(e){}
+        const hay = buildHay(copy);
+        if(hay.indexOf(filter) !== -1) matchSet.add(idx);
+      }
+      exportIndices = exportIndices.filter(i => matchSet.has(i));
+    } else {
+      // page-local: use lastRenderedItems to test
+      exportIndices = exportIndices.filter((globalIdx, pos)=>{
+        const it = lastRenderedItems[pos];
+        if(!it) return false;
+        const hay = buildHay(it);
+        return hay.indexOf(filter) !== -1;
+      });
+    }
+  }
+
+  // Collect original objects (preserve exact structure)
+  const outItems = exportIndices.map(i => fullTrace[i]).filter(Boolean);
+  const blob = new Blob([JSON.stringify(outItems, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = `timeline_page_${currentPage}.json`; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+}
+
+document.getElementById('exportPage').addEventListener('click', ()=> exportPage());
 
 document.getElementById('f').addEventListener('change', function(e){
   const file = e.target.files[0];
@@ -157,15 +425,528 @@ document.getElementById('toggleView').addEventListener('click', ()=>{
 function renderTable(items){
   const wrap = document.getElementById('tableWrap');
   if(!items || items.length===0){ wrap.innerHTML = '<div class="muted">No items</div>'; return; }
-  const cols = ['#','_local','_rel','event','msg'];
-  let html = '<table style="border-collapse:collapse;width:100%"><thead><tr>' + cols.map(c=>`<th style="text-align:left;border-bottom:1px solid #ddd;padding:6px">${c}</th>`).join('') + '</tr></thead><tbody>';
-  items.forEach((it,i)=>{
-    const ev = it.event !== undefined ? it.event : '';
-    const msg = it.msg !== undefined ? it.msg : (it.message !== undefined ? it.message : '');
-    html += `<tr id="row-${i}"><td style="padding:6px;border-bottom:1px solid #f0f0f0">${i+1}</td><td style="padding:6px;border-bottom:1px solid #f0f0f0">${it._local||''}</td><td style="padding:6px;border-bottom:1px solid #f0f0f0">${it._rel||''}</td><td style="padding:6px;border-bottom:1px solid #f0f0f0">${ev}</td><td style="padding:6px;border-bottom:1px solid #f0f0f0">${msg}</td></tr>`;
+  // Determine visible columns from columnsMeta and columnVisibility (preserve order)
+  const visibleKeys = columnOrder.filter(k => columnVisibility[k]);
+  const cols = visibleKeys.map(k => columnsMeta.find(m=>m.k===k)).filter(Boolean);
+  // Build table HTML and include multi-level group headers + detail rows
+  let html = '<table style="border-collapse:collapse;width:100%"><thead><tr>' + cols.map(c=>`<th data-col="${c.k}" class="sortable" style="text-align:left;border-bottom:1px solid #ddd;padding:6px">${c.label}<span id="hdr-${c.k}-ind" class="sort-ind"></span></th>`).join('') + '</tr></thead><tbody>';
+
+  const primaryKey = (Array.isArray(groupBy) && groupBy.length>0) ? groupBy[0] : null;
+  const secondaryKey = (Array.isArray(groupBy) && groupBy.length>1) ? groupBy[1] : null;
+
+  // filter matching positions (page-local)
+  const rawMatches = getFilterMatchingRowIndices() || [];
+  const matchSet = new Set(rawMatches);
+  const hasFilter = (document.getElementById('filterInput') && document.getElementById('filterInput').value || '').trim() !== '';
+
+  // Build primary grouping map and compute metrics in one pass
+  const primaryMap = new Map();
+  items.forEach((it, pos) => {
+    const pId = deriveGroupId(it, primaryKey);
+    if(!primaryMap.has(pId)){
+      primaryMap.set(pId, { entries: [], metrics: { count:0, totalDuration:0, minTs: null, maxTs: null }, secondaryMap: new Map() });
+    }
+    const primaryObj = primaryMap.get(pId);
+    primaryObj.entries.push({ it, pos });
+    // update primary metrics based on visibility (filter)
+    const visible = !hasFilter || matchSet.has(pos);
+    if(visible){
+      primaryObj.metrics.count += 1;
+      const dur = (it.duration !== undefined) ? Number(it.duration) : (it.timing !== undefined ? Number(it.timing) : NaN);
+      if(!isNaN(dur)) primaryObj.metrics.totalDuration += dur;
+      // _ts may be an ISO string on the item
+      const tsVal = it._ts ? Date.parse(it._ts) : (it.ts ? (typeof it.ts==='number' ? it.ts*1000 : Date.parse(it.ts)) : NaN);
+      if(!isNaN(tsVal)){
+        if(primaryObj.metrics.minTs === null || tsVal < primaryObj.metrics.minTs) primaryObj.metrics.minTs = tsVal;
+        if(primaryObj.metrics.maxTs === null || tsVal > primaryObj.metrics.maxTs) primaryObj.metrics.maxTs = tsVal;
+      }
+    }
+    // build secondary map on-the-fly if configured and update its metrics
+    if(secondaryKey){
+      const sId = deriveGroupId(it, secondaryKey);
+      if(!primaryObj.secondaryMap.has(sId)) primaryObj.secondaryMap.set(sId, { entries: [], metrics: { count:0, totalDuration:0, minTs:null, maxTs:null } });
+      const sObj = primaryObj.secondaryMap.get(sId);
+      sObj.entries.push({ it, pos });
+      if(visible){
+        sObj.metrics.count += 1;
+        if(!isNaN(dur)) sObj.metrics.totalDuration += (!isNaN(dur) ? dur : 0);
+        if(!isNaN(tsVal)){
+          if(sObj.metrics.minTs === null || tsVal < sObj.metrics.minTs) sObj.metrics.minTs = tsVal;
+          if(sObj.metrics.maxTs === null || tsVal > sObj.metrics.maxTs) sObj.metrics.maxTs = tsVal;
+        }
+      }
+    }
   });
+
+  const cmp = (A, B) => {
+    try{
+      if(!sortState || !sortState.length) return (A.pos - B.pos);
+      const valFor = (item, col) => {
+        try{
+          if(col === '_local' || col === '_rel' || col === '_ts'){
+            const raw = item.ts !== undefined ? item.ts : (item.timestamp !== undefined ? item.timestamp : null);
+            if(typeof raw === 'number') return raw;
+            const num = Number(raw);
+            if(!isNaN(num)) return num;
+            return String(raw || '');
+          }
+          if(col === 'category'){
+            if(item.event && typeof item.event === 'object') return String(item.event.category || '');
+            return String(item.event || '');
+          }
+          if(col === 'message') return String(item.msg !== undefined ? item.msg : (item.message !== undefined ? item.message : ''));
+          if(col === 'duration') return Number(item.duration || 0) || String(item.duration || '');
+          return '';
+        }catch(e){ return ''; }
+      };
+      for(let si=0; si<sortState.length; si++){
+        const key = sortState[si];
+        const dir = key.direction === 'asc' ? 1 : -1;
+        const AVal = valFor(A.it, key.column);
+        const BVal = valFor(B.it, key.column);
+        if(typeof AVal === 'number' && typeof BVal === 'number'){
+          if(AVal < BVal) return -1 * dir;
+          if(AVal > BVal) return 1 * dir;
+        } else {
+          const sa = String(AVal).toLowerCase();
+          const sb = String(BVal).toLowerCase();
+          if(sa < sb) return -1 * dir;
+          if(sa > sb) return 1 * dir;
+        }
+      }
+      return A.pos - B.pos;
+    }catch(e){ return A.pos - B.pos; }
+  };
+
+  // Primary group ordering
+  const primaryNames = Array.from(primaryMap.keys()).sort((a,b)=> String(a).localeCompare(String(b)));
+
+  primaryNames.forEach(pName => {
+    const bucketObj = primaryMap.get(pName) || { entries: [] };
+    const bucket = bucketObj.entries || [];
+    if(secondaryKey){
+      // Build secondary grouping
+      const secondaryMap = new Map();
+      bucket.forEach(entry => {
+        const sId = deriveGroupId(entry.it, secondaryKey);
+        if(!secondaryMap.has(sId)) secondaryMap.set(sId, []);
+        secondaryMap.get(sId).push(entry);
+      });
+      const secondaryNames = Array.from(secondaryMap.keys()).sort((a,b)=> String(a).localeCompare(String(b)));
+
+      // compute visible secondary groups under current filter
+      const visibleSecondaries = secondaryNames.filter(s => {
+        const b = secondaryMap.get(s) || [];
+        if(!hasFilter) return true;
+        const cnt = b.reduce((acc,e)=> acc + (matchSet.has(e.pos) ? 1 : 0), 0);
+        return cnt > 0;
+      });
+      if(hasFilter && visibleSecondaries.length === 0) return; // hide primary entirely
+
+      const primaryPath = JSON.stringify([pName]);
+      const primaryCollapsed = collapsedGroups.has(primaryPath);
+      const visibleCount = secondaryNames.reduce((acc, s) => acc + (secondaryMap.get(s) || []).length, 0);
+      const pIcon = primaryCollapsed ? '▶' : '▼';
+      html += `<tr class="group-header primary" data-group-path='${escapeHtml(primaryPath)}' tabindex="0"><td colspan="${Math.max(1, cols.length)}" style="padding:6px;border-bottom:1px solid #ddd;background:#eef4fb;font-weight:700">${pIcon} ${escapeHtml(pName)} (${visibleCount})</td></tr>`;
+
+      if(!primaryCollapsed){
+        secondaryNames.forEach(sName => {
+          const sb = secondaryMap.get(sName) || [];
+          const matchCount = sb.reduce((acc,e)=> acc + (matchSet.has(e.pos) ? 1 : 0), 0);
+          if(hasFilter && matchCount === 0) return; // hide empty secondary
+          const secondaryPath = JSON.stringify([pName, sName]);
+          const secondaryCollapsed = collapsedGroups.has(secondaryPath);
+          const sIcon = secondaryCollapsed ? '▶' : '▼';
+          html += `<tr class="group-header secondary" data-group-path='${escapeHtml(secondaryPath)}' tabindex="0"><td colspan="${Math.max(1, cols.length)}" style="padding:6px 6px 6px 22px;border-bottom:1px solid #eee;background:#f7fbff;font-weight:600">${sIcon} ${escapeHtml(sName)} (${sb.length})</td></tr>`;
+
+          if(!secondaryCollapsed){
+            // sort within secondary and render rows
+            sb.sort(cmp);
+            sb.forEach(entry => {
+              const it = entry.it; const pos = entry.pos;
+              const cells = cols.map(c=>{
+                if(c.k === '_ts') return `<td style="padding:6px;border-bottom:1px solid #f0f0f0">${it._ts||''}</td>`;
+                if(c.k === '_local') return `<td style="padding:6px;border-bottom:1px solid #f0f0f0">${it._local||''}</td>`;
+                if(c.k === '_rel') return `<td style="padding:6px;border-bottom:1px solid #f0f0f0">${it._rel||''}</td>`;
+                if(c.k === 'category'){ const ev = (it.event && (it.event.category || it.event.message)) ? (it.event.category || it.event.message) : (it.event !== undefined ? it.event : ''); return `<td style="padding:6px;border-bottom:1px solid #f0f0f0">${ev}</td>`; }
+                if(c.k === 'message'){ const msg = it.msg !== undefined ? it.msg : (it.message !== undefined ? it.message : ''); return `<td style="padding:6px;border-bottom:1px solid #f0f0f0">${msg}</td>`; }
+                if(c.k === 'duration'){ const d = it.duration !== undefined ? it.duration : (it.timing !== undefined ? it.timing : ''); return `<td style="padding:6px;border-bottom:1px solid #f0f0f0">${d}</td>`; }
+                return `<td style="padding:6px;border-bottom:1px solid #f0f0f0"></td>`;
+              }).join('');
+              html += `<tr id="row-${pos}" data-pos="${pos}">${cells}</tr>`;
+              if(expandedSet.has(pos)){
+                const colspan = Math.max(1, cols.length);
+                html += `<tr class="detail-row" data-detail-for="${pos}"><td colspan="${colspan}" style="background:#fbfbfb;padding:8px;font-size:0.9em;border-bottom:1px solid #eee"><pre style="white-space:pre-wrap;margin:0">${escapeHtml(JSON.stringify(it, null, 2))}</pre></td></tr>`;
+              }
+            });
+          }
+        });
+      }
+    } else {
+      // single-level (primary only) rendering
+      const matchCount = bucket.reduce((acc,entry)=> acc + (matchSet.has(entry.pos) ? 1 : 0), 0);
+      if(hasFilter && matchCount === 0) return;
+      const primaryPath = JSON.stringify([pName]);
+      const collapsed = collapsedGroups.has(primaryPath);
+      const icon = collapsed ? '▶' : '▼';
+      html += `<tr class="group-header primary" data-group-path='${escapeHtml(primaryPath)}' tabindex="0"><td colspan="${Math.max(1, cols.length)}" style="padding:6px;border-bottom:1px solid #ddd;background:#eef4fb;font-weight:700">${icon} ${escapeHtml(pName)} (${bucket.length})</td></tr>`;
+      if(!collapsed){
+        bucket.sort(cmp);
+        bucket.forEach(entry => {
+          const it = entry.it; const pos = entry.pos;
+          const cells = cols.map(c=>{
+            if(c.k === '_ts') return `<td style="padding:6px;border-bottom:1px solid #f0f0f0">${it._ts||''}</td>`;
+            if(c.k === '_local') return `<td style="padding:6px;border-bottom:1px solid #f0f0f0">${it._local||''}</td>`;
+            if(c.k === '_rel') return `<td style="padding:6px;border-bottom:1px solid #f0f0f0">${it._rel||''}</td>`;
+            if(c.k === 'category'){ const ev = (it.event && (it.event.category || it.event.message)) ? (it.event.category || it.event.message) : (it.event !== undefined ? it.event : ''); return `<td style="padding:6px;border-bottom:1px solid #f0f0f0">${ev}</td>`; }
+            if(c.k === 'message'){ const msg = it.msg !== undefined ? it.msg : (it.message !== undefined ? it.message : ''); return `<td style="padding:6px;border-bottom:1px solid #f0f0f0">${msg}</td>`; }
+            if(c.k === 'duration'){ const d = it.duration !== undefined ? it.duration : (it.timing !== undefined ? it.timing : ''); return `<td style="padding:6px;border-bottom:1px solid #f0f0f0">${d}</td>`; }
+            return `<td style="padding:6px;border-bottom:1px solid #f0f0f0"></td>`;
+          }).join('');
+          html += `<tr id="row-${pos}" data-pos="${pos}">${cells}</tr>`;
+          if(expandedSet.has(pos)){
+            const colspan = Math.max(1, cols.length);
+            html += `<tr class="detail-row" data-detail-for="${pos}"><td colspan="${colspan}" style="background:#fbfbfb;padding:8px;font-size:0.9em;border-bottom:1px solid #eee"><pre style="white-space:pre-wrap;margin:0">${escapeHtml(JSON.stringify(it, null, 2))}</pre></td></tr>`;
+          }
+        });
+      }
+    }
+  });
+
   html += '</tbody></table>';
   wrap.innerHTML = html;
+  // Make the header sticky and ensure table container supports stacking context
+  try{
+    const table = wrap.querySelector('table');
+    if(table){
+      table.style.width = '100%';
+      // ensure there's a colgroup placeholder for deterministic widths (only for visible columns)
+      let cg = table.querySelector('colgroup');
+      if(!cg){ cg = document.createElement('colgroup'); for(let i=0;i<cols.length;i++){ const colEl = document.createElement('col'); cg.appendChild(colEl); } table.insertBefore(cg, table.firstChild); }
+      // style header cells to be sticky
+      const thead = table.querySelector('thead');
+      if(thead){
+        thead.style.position = 'sticky';
+        thead.style.top = '0';
+        thead.style.zIndex = '3';
+        thead.style.background = '#fff';
+      }
+
+      // Auto-size columns once per render using measured scrollWidth of visible cells
+      requestAnimationFrame(()=>{
+        try{
+          const colEls = table.querySelectorAll('colgroup col');
+          const headerCells = table.querySelectorAll('thead th');
+          const primaryRows = Array.from(table.querySelectorAll('tbody tr')).filter(r=>!r.classList.contains('detail-row') && !r.classList.contains('group-header'));
+          const detailRows = Array.from(table.querySelectorAll('tbody tr.detail-row'));
+          const columnCount = headerCells.length;
+          const widths = new Array(columnCount).fill(0);
+          // measure header
+          // measure header and visible primary rows only
+          headerCells.forEach((th,ci)=>{ widths[ci] = Math.max(widths[ci], th.scrollWidth); });
+          // measure primary rows
+          primaryRows.forEach(r=>{
+            const tds = r.querySelectorAll('td');
+            for(let ci=0; ci<Math.min(columnCount, tds.length); ci++){ widths[ci] = Math.max(widths[ci], tds[ci].scrollWidth); }
+          });
+          // measure detail rows content (if any)
+          detailRows.forEach(r=>{
+            const td = r.querySelector('td');
+            if(!td) return;
+            // detail cells span all columns; distribute width proportionally by header widths
+            const total = td.scrollWidth;
+            if(total > 0){
+              // allocate to first column at minimum to avoid collapse — keep simple: ensure first column can fit
+              widths[0] = Math.max(widths[0], Math.min(total, widths[0]));
+            }
+          });
+          // apply widths deterministically (add small padding to avoid clipping)
+          const padding = 16; // account for cell padding
+          const columnWidths = widths.map(w=> Math.max(60, Math.ceil(w + padding)) );
+          columnWidths.forEach((w,ci)=>{ if(colEls[ci]) colEls[ci].style.width = w + 'px'; });
+          console.log('Auto-size columns:', columnWidths);
+        }catch(e){ /* ignore measurement errors */ }
+      });
+    }
+  }catch(e){}
+  // attach row click to focus and toggle expansion for primary data rows
+  const primaryRows = Array.from(wrap.querySelectorAll('tbody tr')).filter(r => !r.classList.contains('detail-row') && !r.classList.contains('group-header'));
+  primaryRows.forEach((r)=>{
+    const pos = parseInt(r.getAttribute('data-pos'), 10);
+    if(isNaN(pos)) return;
+    r.addEventListener('click', (ev)=>{ focusedRowIndex = pos; setKeyboardFocus(pos); });
+    r.addEventListener('dblclick', (ev)=>{ if(expandedSet.has(pos)) expandedSet.delete(pos); else expandedSet.add(pos); renderTable(lastRenderedItems); });
+  });
+  // attach multi-level group header handlers (primary / secondary)
+  const groupHeaders = Array.from(wrap.querySelectorAll('tr.group-header'));
+  groupHeaders.forEach(h=>{
+    const pathAttr = h.getAttribute('data-group-path');
+    let path = [];
+    try{ path = JSON.parse(pathAttr); }catch(e){ path = []; }
+    const isPrimary = h.classList.contains('primary');
+    h.addEventListener('click', ()=>{
+      if(isPrimary){
+        const primaryPath = JSON.stringify([path[0]]);
+        if(collapsedGroups.has(primaryPath)) collapsedGroups.delete(primaryPath); else collapsedGroups.add(primaryPath);
+      } else {
+        const secPath = JSON.stringify([path[0], path[1]]);
+        if(collapsedGroups.has(secPath)) collapsedGroups.delete(secPath); else collapsedGroups.add(secPath);
+      }
+      console.log('Multi-level grouping applied:', groupBy);
+      console.log('Collapsed groups:', [...collapsedGroups]);
+      renderTable(lastRenderedItems);
+    });
+    h.addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter'){ h.click(); e.preventDefault(); }
+      else if(e.key === 'ArrowLeft'){
+        if(isPrimary){ const primaryPath = JSON.stringify([path[0]]); if(!collapsedGroups.has(primaryPath)){ collapsedGroups.add(primaryPath); console.log('Collapsed groups:', [...collapsedGroups]); renderTable(lastRenderedItems); } }
+        else { const secPath = JSON.stringify([path[0], path[1]]); if(!collapsedGroups.has(secPath)){ collapsedGroups.add(secPath); console.log('Collapsed groups:', [...collapsedGroups]); renderTable(lastRenderedItems); } }
+        e.preventDefault();
+      }
+      else if(e.key === 'ArrowRight'){
+        if(isPrimary){ const primaryPath = JSON.stringify([path[0]]); if(collapsedGroups.has(primaryPath)){ collapsedGroups.delete(primaryPath); console.log('Collapsed groups:', [...collapsedGroups]); renderTable(lastRenderedItems); } }
+        else { const secPath = JSON.stringify([path[0], path[1]]); if(collapsedGroups.has(secPath)){ collapsedGroups.delete(secPath); console.log('Collapsed groups:', [...collapsedGroups]); renderTable(lastRenderedItems); } }
+        e.preventDefault();
+      }
+    });
+  });
+  // attach header click handlers for sorting and make headers draggable / focusable
+  const ths = wrap.querySelectorAll('th.sortable');
+  ths.forEach((th, idx) => {
+    const col = th.getAttribute('data-col');
+    th.tabIndex = 0;
+    th.draggable = true;
+    th.style.userSelect = 'none';
+    th.addEventListener('click', (ev)=>{ lastInteractedColumn = col; toggleSort(col, ev.shiftKey === true); });
+    // drag events
+    th.addEventListener('dragstart', (ev)=>{ ev.dataTransfer.setData('text/plain', col); ev.dataTransfer.effectAllowed = 'move'; th.classList.add('dragging'); });
+    th.addEventListener('dragend', ()=>{ th.classList.remove('dragging'); const overlay = wrap.querySelector('.col-drop-overlay'); if(overlay) overlay.remove(); });
+    th.addEventListener('dragover', (ev)=>{
+      ev.preventDefault(); ev.dataTransfer.dropEffect = 'move'; const target = ev.currentTarget;
+      // show an absolute-positioned overlay between columns so we don't change layout
+      const rect = target.getBoundingClientRect(); const tableRect = wrap.getBoundingClientRect(); const before = (ev.clientX - rect.left) < rect.width/2;
+      let overlay = wrap.querySelector('.col-drop-overlay'); if(!overlay){ overlay = document.createElement('div'); overlay.className = 'col-drop-overlay'; wrap.appendChild(overlay); }
+      // compute left relative to wrap
+      const left = before ? (rect.left - tableRect.left) : (rect.left - tableRect.left + rect.width);
+      overlay.style.left = left + 'px'; overlay.style.top = (rect.top - tableRect.top) + 'px'; overlay.style.height = rect.height + 'px'; overlay.dataset.before = before ? '1' : '0';
+    });
+    th.addEventListener('drop', (ev)=>{ ev.preventDefault(); const fromCol = ev.dataTransfer.getData('text/plain'); const toCol = col; // compute new columnOrder positions among visibleKeys
+      const visible = columnOrder.filter(k=>columnVisibility[k]);
+      const fromIdx = visible.indexOf(fromCol); const toIdx = visible.indexOf(toCol);
+      if(fromIdx >=0 && toIdx >=0){
+        // remove from its position and insert at toIdx (before toIdx if dropping on left half)
+        const rect = ev.currentTarget.getBoundingClientRect(); const before = (ev.clientX - rect.left) < rect.width/2;
+        const insertAt = before ? toIdx : (toIdx+1);
+        // update columnOrder while preserving hidden columns positions relative to visible ones: rebuild
+        const newVisible = visible.slice(); const item = newVisible.splice(fromIdx,1)[0]; newVisible.splice(insertAt > newVisible.length ? newVisible.length : insertAt, 0, item);
+        // merge back with hidden columns keeping their relative positions: recreate columnOrder by iterating old order and replacing visible sequence in order encountered
+        const newOrder = [];
+        let vPtr = 0;
+        for(const k of columnOrder){ if(columnVisibility[k]){ newOrder.push(newVisible[vPtr++]); } else { newOrder.push(k); } }
+        columnOrder = newOrder;
+        console.log('Column order:', columnOrder);
+        // render once
+        renderTable(lastRenderedItems);
+      }
+      const overlay = wrap.querySelector('.col-drop-overlay'); if(overlay) overlay.remove();
+    });
+    // keyboard reordering when header focused: handled globally
+  });
+  updateHeaderIndicators();
+  // Preserve focusedRowIndex when re-rendering; clamp to available rows
+  if(primaryRows.length === 0){ focusedRowIndex = -1; }
+  else { focusedRowIndex = Math.max(0, Math.min(focusedRowIndex, lastRenderedItems.length-1)); if(focusedRowIndex >= 0) setKeyboardFocus(focusedRowIndex); }
+}
+
+// keyboard focus state (index within current page rows)
+let focusedRowIndex = -1;
+function setKeyboardFocus(i){
+  const wrap = document.getElementById('tableWrap');
+  if(!wrap) return;
+  // clamp to available item positions
+  i = Math.max(0, Math.min(i, lastRenderedItems.length-1));
+  if(focusedRowIndex === i) return;
+  // remove previous kb-focus if any
+  try{ const prev = wrap.querySelector('tbody tr.kb-focus'); if(prev) prev.classList.remove('kb-focus'); }catch(_){ }
+  focusedRowIndex = i;
+  // find the primary row element for this position; if it's not present (e.g., collapsed group), find nearest visible primary
+  let el = wrap.querySelector(`tbody tr[data-pos="${i}"]`);
+  if(!el){
+    // search outward for nearest visible primary row
+    for(let off=1; off < lastRenderedItems.length; off++){
+      const fwd = wrap.querySelector(`tbody tr[data-pos="${i+off}"]`);
+      if(fwd){ el = fwd; break; }
+      const bwd = wrap.querySelector(`tbody tr[data-pos="${i-off}"]`);
+      if(bwd){ el = bwd; break; }
+    }
+  }
+  if(el) el.classList.add('kb-focus');
+  // Auto-scroll controlled by checkbox: when enabled, smoothly scroll focused row into view using nearest block
+  try{
+    const auto = document.getElementById('autoScroll');
+    const shouldAutoScroll = auto && auto.checked;
+    // If auto-scroll enabled, always scroll to focused row. Otherwise, only scroll if the row is out of view.
+    if(el && typeof el.scrollIntoView === 'function'){
+      if(shouldAutoScroll){ el.scrollIntoView({block:'nearest',inline:'nearest',behavior:'smooth'}); }
+      else {
+        // determine if el is visible within the scroll container
+        const container = wrap;
+        const cTop = container.scrollTop;
+        const cBottom = cTop + container.clientHeight;
+        const rTop = el.offsetTop;
+        const rBottom = rTop + el.offsetHeight;
+        if(rTop < cTop || rBottom > cBottom){ el.scrollIntoView({block:'nearest',inline:'nearest'}); }
+      }
+    }
+  }catch(e){}
+}
+
+// Helpers to find first/last visible primary row index respecting collapsedGroups, filtering, and grouping
+function getFirstVisiblePrimaryIndex(){
+  if(!lastRenderedItems || lastRenderedItems.length === 0) return null;
+  const primaryKey = (Array.isArray(groupBy) && groupBy.length>0) ? groupBy[0] : null;
+  const secondaryKey = (Array.isArray(groupBy) && groupBy.length>1) ? groupBy[1] : null;
+  const rawMatches = getFilterMatchingRowIndices() || [];
+  const matchSet = new Set(rawMatches);
+  const hasFilter = (document.getElementById('filterInput') && document.getElementById('filterInput').value || '').trim() !== '';
+  for(let i=0;i<lastRenderedItems.length;i++){
+    if(hasFilter && !matchSet.has(i)) continue;
+    const it = lastRenderedItems[i];
+    const pId = deriveGroupId(it, primaryKey);
+    const primaryPath = JSON.stringify([pId]);
+    if(collapsedGroups.has(primaryPath)) continue;
+    if(secondaryKey){ const sId = deriveGroupId(it, secondaryKey); const secondaryPath = JSON.stringify([pId,sId]); if(collapsedGroups.has(secondaryPath)) continue; }
+    return i;
+  }
+  return null;
+}
+
+function getLastVisiblePrimaryIndex(){
+  if(!lastRenderedItems || lastRenderedItems.length === 0) return null;
+  const primaryKey = (Array.isArray(groupBy) && groupBy.length>0) ? groupBy[0] : null;
+  const secondaryKey = (Array.isArray(groupBy) && groupBy.length>1) ? groupBy[1] : null;
+  const rawMatches = getFilterMatchingRowIndices() || [];
+  const matchSet = new Set(rawMatches);
+  const hasFilter = (document.getElementById('filterInput') && document.getElementById('filterInput').value || '').trim() !== '';
+  for(let i=lastRenderedItems.length-1;i>=0;i--){
+    if(hasFilter && !matchSet.has(i)) continue;
+    const it = lastRenderedItems[i];
+    const pId = deriveGroupId(it, primaryKey);
+    const primaryPath = JSON.stringify([pId]);
+    if(collapsedGroups.has(primaryPath)) continue;
+    if(secondaryKey){ const sId = deriveGroupId(it, secondaryKey); const secondaryPath = JSON.stringify([pId,sId]); if(collapsedGroups.has(secondaryPath)) continue; }
+    return i;
+  }
+  return null;
+}
+
+// Track expanded rows within the current page by row index (0-based)
+const expandedSet = new Set();
+
+
+function toggleRowExpansion(i){
+  // Toggle expansion state for the given row index and re-render deterministically
+  if(i < 0) return;
+  if(expandedSet.has(i)) expandedSet.delete(i); else expandedSet.add(i);
+  // Re-render using the same lastRenderedItems to avoid duplicate rows
+  if(typeof lastRenderedItems !== 'undefined') renderTable(lastRenderedItems);
+}
+
+function escapeHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function updateHeaderIndicators(){
+  // update indicators for visible and hidden headers; if hidden, hide indicator
+  columnsMeta.forEach(colMeta => {
+    const c = colMeta.k;
+    const el = document.getElementById(`hdr-${c}-ind`);
+    if(!el) return;
+    if(!columnVisibility[c]){ el.textContent = ''; el.style.display = 'none'; return; }
+    el.style.display = '';
+    const primary = (sortState && sortState.length) ? sortState[0] : null;
+    if(primary && primary.column === c){ el.textContent = primary.direction === 'asc' ? '▲' : '▼'; }
+    else {
+      const idx = sortState.findIndex(s=>s.column===c);
+      if(idx > 0) el.textContent = `(${idx+1})`;
+      else el.textContent = '';
+    }
+  });
+}
+
+// Toggle or add sort key. If `add` is true (Shift+Click), add as secondary/tertiary key.
+function toggleSort(col, add){
+  try{
+    if(!add){
+      // primary-only toggle: if current primary is same column, flip direction; otherwise set primary asc
+      if(sortState.length > 0 && sortState[0].column === col){
+        sortState[0].direction = (sortState[0].direction === 'asc') ? 'desc' : 'asc';
+      } else {
+        sortState = [{ column: col, direction: 'asc' }];
+      }
+    } else {
+      // additive: find existing entry
+      const idx = sortState.findIndex(s=>s.column === col);
+      if(idx >= 0){
+        // toggle direction
+        sortState[idx].direction = (sortState[idx].direction === 'asc') ? 'desc' : 'asc';
+      } else {
+        sortState.push({ column: col, direction: 'asc' });
+      }
+    }
+    console.log('Sort applied:', sortState);
+    // Re-render the page which will apply sort to visible items
+    renderPage();
+  }catch(e){ console.log('toggleSort error', e); }
+}
+
+function computeOrderedIndices(){
+  if(!sortState.col || sortState.dir === 0){ orderedIndices = null; return; }
+  const dir = sortState.dir === 1 ? 1 : -1;
+  // produce indices array and stable-sort it using comparator that falls back to original index
+  orderedIndices = Array.from({length: fullTrace.length}, (_,i)=>i);
+  const keyFor = (idx) => {
+    const it = fullTrace[idx];
+    if(!it) return '';
+    if(sortState.col === '_local' || sortState.col === '_rel'){
+      const raw = it.ts !== undefined ? it.ts : (it.timestamp !== undefined ? it.timestamp : null);
+      if(typeof raw === 'number') return raw;
+      const num = Number(raw);
+      if(!isNaN(num)) return num;
+      return String(raw || '');
+    }
+    if(sortState.col === 'category'){
+      if(it.event && typeof it.event === 'object') return String(it.event.category || '');
+      return String(it.event || '');
+    }
+    if(sortState.col === 'message') return String(it.msg !== undefined ? it.msg : (it.message !== undefined ? it.message : ''));
+      if(sortState.col === '_ts') {
+        const raw = it.ts !== undefined ? it.ts : (it.timestamp !== undefined ? it.timestamp : null);
+        if(typeof raw === 'number') return raw;
+        const num = Number(raw);
+        if(!isNaN(num)) return num;
+        return String(raw || '');
+      }
+    // default: try _ts then timestamp
+    const raw = it.ts !== undefined ? it.ts : (it.timestamp !== undefined ? it.timestamp : null);
+    if(typeof raw === 'number') return raw;
+    const num = Number(raw);
+    if(!isNaN(num)) return num;
+    return String(raw || '');
+  };
+  orderedIndices.sort((a,b)=>{
+    const A = keyFor(a);
+    const B = keyFor(b);
+    // numeric compare when both are numbers
+    if(typeof A === 'number' && typeof B === 'number'){
+      if(A < B) return -1*dir;
+      if(A > B) return 1*dir;
+      return a - b; // stable tie-breaker by original index
+    }
+    const sa = String(A).toLowerCase();
+    const sb = String(B).toLowerCase();
+    if(sa < sb) return -1*dir;
+    if(sa > sb) return 1*dir;
+    return a - b;
+  });
 }
 
 // Filtering/highlighting implementation (supports global mode)
@@ -237,7 +1018,7 @@ function applyFilter(){
     }
     // apply highlights on current page rows where global index matches
     for(let i=0;i<lastRenderedItems.length;i++){
-      const globalIdx = lastPageStart + i;
+      const globalIdx = orderedIndices ? orderedIndices[lastPageStart + i] : (lastPageStart + i);
       const row = document.getElementById(`row-${i}`);
       if(!row) continue;
       if(matchSet.has(globalIdx)) row.classList.add('highlight'); else row.classList.remove('highlight');
@@ -259,6 +1040,328 @@ const filterEl = document.getElementById('filterInput');
 if(filterEl){ filterEl.addEventListener('keyup', ()=> applyFilter()); }
 const globalEl = document.getElementById('globalFilter');
 if(globalEl){ globalEl.addEventListener('change', ()=> applyFilter()); }
+
+// wire up Group By select (supports multi-level arrays encoded as JSON in option values)
+try{
+  const groupBySelect = document.getElementById('groupBySelect');
+  if(groupBySelect){
+    groupBySelect.value = (Array.isArray(groupBy) && groupBy.length>0) ? JSON.stringify(groupBy) : '';
+    groupBySelect.addEventListener('change', ()=>{
+      // previousGroupBy is the prior array (or null if none)
+      previousGroupBy = (Array.isArray(groupBy) && groupBy.length>0) ? groupBy.slice() : null;
+      const raw = groupBySelect.value || '';
+      const newGroup = raw ? JSON.parse(raw) : [];
+      groupBy = Array.isArray(newGroup) ? newGroup.slice() : [];
+
+      // Compatibility: compatible if both non-empty and either equal OR share same primary (1↔2)
+      const prev = previousGroupBy;
+      const curr = (Array.isArray(groupBy) && groupBy.length>0) ? groupBy : null;
+      let compatible = false;
+      if(prev && curr){
+        if(prev.length === curr.length && prev.every((v,i)=>v===curr[i])) compatible = true;
+        else if(prev.length === 1 && curr.length === 2 && prev[0] === curr[0]) compatible = true;
+        else if(prev.length === 2 && curr.length === 1 && prev[0] === curr[0]) compatible = true;
+      }
+
+      if(compatible){
+        try{
+          const existing = new Set();
+          if(Array.isArray(lastRenderedItems)){
+            lastRenderedItems.forEach(it => {
+              const p = deriveGroupId(it, groupBy[0]);
+              existing.add(JSON.stringify([p]));
+              if(groupBy.length > 1){ const s = deriveGroupId(it, groupBy[1]); existing.add(JSON.stringify([p,s])); }
+            });
+          }
+          const preserved = new Set();
+          collapsedGroups.forEach(g => { if(existing.has(g)) preserved.add(g); });
+          collapsedGroups.clear(); preserved.forEach(g => collapsedGroups.add(g));
+        }catch(e){ console.log('Error preserving collapsedGroups', e); }
+      } else {
+        collapsedGroups.clear();
+      }
+
+      console.log('Multi-level grouping applied:', groupBy);
+      console.log('Collapsed groups:', [...collapsedGroups]);
+
+      if(tableMode && typeof lastRenderedItems !== 'undefined') renderTable(lastRenderedItems); else renderPage();
+    });
+  }
+}catch(e){ console.log('groupBy wiring error', e); }
+
+// Help panel toggle (no table re-rendering)
+const helpBtn = document.getElementById('helpBtn');
+const helpPanel = document.getElementById('helpPanel');
+const helpClose = document.getElementById('helpClose');
+let helpOpen = false;
+function openHelp(){ if(!helpPanel) return; helpPanel.style.transform = 'translateX(0)'; helpPanel.setAttribute('aria-hidden','false'); helpOpen = true; helpBtn.setAttribute('aria-pressed','true'); }
+function closeHelp(){ if(!helpPanel) return; helpPanel.style.transform = 'translateX(100%)'; helpPanel.setAttribute('aria-hidden','true'); helpOpen = false; helpBtn.setAttribute('aria-pressed','false'); }
+function toggleHelp(){ if(helpOpen) closeHelp(); else openHelp(); }
+if(helpBtn){ helpBtn.addEventListener('click', toggleHelp); }
+if(helpClose){ helpClose.addEventListener('click', closeHelp); }
+// close on Escape
+document.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && helpOpen){ closeHelp(); } });
+
+// wire up Expand/Collapse All buttons
+const expandAllBtn = document.getElementById('expandAll');
+const collapseAllBtn = document.getElementById('collapseAll');
+if(expandAllBtn){ expandAllBtn.addEventListener('click', ()=> expandAll()); }
+if(collapseAllBtn){ collapseAllBtn.addEventListener('click', ()=> collapseAll()); }
+
+// Build Columns panel checkboxes dynamically and wire behavior
+try{
+  const columnsBtn = document.getElementById('columnsBtn');
+  const columnsPanel = document.getElementById('columnsPanel');
+  function renderColumnsPanel(){
+    if(!columnsPanel) return;
+    columnsPanel.innerHTML = '';
+    columnsMeta.forEach(c=>{
+      const id = 'colvis-' + c.k;
+      const wrapper = document.createElement('div');
+      const chk = document.createElement('input'); chk.type = 'checkbox'; chk.id = id; chk.checked = !!columnVisibility[c.k];
+      chk.addEventListener('change', ()=>{ columnVisibility[c.k] = chk.checked; console.log('Column visibility:', columnVisibility); renderTable(lastRenderedItems); });
+      const lbl = document.createElement('label'); lbl.htmlFor = id; lbl.style.marginLeft = '6px'; lbl.textContent = c.label;
+      wrapper.appendChild(chk); wrapper.appendChild(lbl); columnsPanel.appendChild(wrapper);
+    });
+    // Reset button
+    const resetWrapper = document.createElement('div'); resetWrapper.style.marginTop = '8px';
+    const resetBtn = document.createElement('button'); resetBtn.textContent = 'Reset Columns';
+    resetBtn.style.display = 'block'; resetBtn.style.width = '100%'; resetBtn.style.padding = '6px'; resetBtn.style.border = '1px solid #ddd'; resetBtn.style.background = '#f7f7f7'; resetBtn.style.cursor = 'pointer';
+    resetBtn.addEventListener('click', (ev)=>{
+      // Preserve focus and expandedSet implicitly; perform single deterministic re-render
+      columnsMeta.forEach(c=>{ columnVisibility[c.k] = true; });
+      console.log('Columns reset');
+      // update panel checkboxes
+      renderColumnsPanel();
+      // trigger single render: prefer renderTable when in tableMode
+      if(tableMode && typeof lastRenderedItems !== 'undefined'){
+        renderTable(lastRenderedItems);
+      } else {
+        // renderPage will lead to table rendering when toggled
+        renderPage();
+      }
+      ev.stopPropagation();
+    });
+    resetWrapper.appendChild(resetBtn);
+    columnsPanel.appendChild(resetWrapper);
+  }
+  if(columnsBtn){ columnsBtn.addEventListener('click', (e)=>{ if(columnsPanel.style.display === 'none'){ renderColumnsPanel(); columnsPanel.style.display = 'block'; } else columnsPanel.style.display = 'none'; e.stopPropagation(); }); }
+  // wire up Presets panel open/close and actions
+  const presetsBtn = document.getElementById('presetsBtn');
+  const presetsPanel = document.getElementById('presetsPanel');
+  function applyPreset(presetName){
+    try{
+      // set active preset state and update hint immediately (informational only)
+      activePreset = presetName;
+      try{
+        const hint = document.getElementById('presetHint');
+        if(hint){
+          // update visible text and aria-label for screen readers
+          hint.textContent = 'Preset: ' + (activePreset || '—');
+          hint.setAttribute('aria-label', 'Active preset: ' + (activePreset || '—'));
+        }
+      }catch(_){ }
+      console.log('Active preset:', activePreset);
+      // Update visibility deterministically (do not reconstruct expandedSet or focusedRowIndex)
+      const minimal = ['_ts','message'];
+      const timing = ['_ts','_local','_rel','duration','category'];
+      if(presetName === 'Minimal'){
+        // set only minimal visible
+        columnsMeta.forEach(c => columnVisibility[c.k] = false);
+        minimal.forEach(k=>{ if(columnVisibility.hasOwnProperty(k) || columnsMeta.find(m=>m.k===k)) columnVisibility[k] = true; });
+        // reorder: desired first, then remaining original order
+        columnOrder = minimal.concat(originalColumnOrder.filter(k=> !minimal.includes(k)));
+      } else if(presetName === 'Debug'){
+        // show all, restore original ordering
+        columnsMeta.forEach(c => columnVisibility[c.k] = true);
+        columnOrder = originalColumnOrder.slice();
+      } else if(presetName === 'Timing-Focused'){
+        columnsMeta.forEach(c => columnVisibility[c.k] = false);
+        timing.forEach(k=>{ if(columnsMeta.find(m=>m.k===k)) columnVisibility[k] = true; });
+        columnOrder = timing.concat(originalColumnOrder.filter(k=> !timing.includes(k)));
+      }
+      console.log('Preset applied:', presetName);
+      // Single deterministic render: prefer renderTable when tableMode active
+      if(tableMode && typeof lastRenderedItems !== 'undefined') renderTable(lastRenderedItems);
+      else renderPage();
+    }catch(e){ console.log('applyPreset error', e); }
+  }
+
+  if(presetsBtn){ presetsBtn.addEventListener('click', (e)=>{ if(presetsPanel.style.display === 'none'){ presetsPanel.style.display = 'block'; } else presetsPanel.style.display = 'none'; e.stopPropagation(); }); }
+  // wire preset buttons
+  if(presetsPanel){ const presetButtons = presetsPanel.querySelectorAll('button[data-preset]'); presetButtons.forEach(b=> b.addEventListener('click', (ev)=>{ const p = b.getAttribute('data-preset'); applyPreset(p); presetsPanel.style.display='none'; ev.stopPropagation(); })); }
+  // close panels on outside click
+  document.addEventListener('click', ()=>{ if(document.getElementById('columnsPanel')) document.getElementById('columnsPanel').style.display = 'none'; if(document.getElementById('presetsPanel')) document.getElementById('presetsPanel').style.display = 'none'; });
+}catch(e){}
+
+// wire up Group By select control (updates grouping state deterministically)
+try{
+  const groupBySelect = document.getElementById('groupBySelect');
+  if(groupBySelect){
+    // set initial value from state
+    groupBySelect.value = groupBy || '';
+    groupBySelect.addEventListener('change', ()=>{
+      // record previous grouping before applying the new selection
+      previousGroupBy = groupBy === '' ? null : groupBy;
+      const newGroupBy = groupBySelect.value || '';
+      // apply new grouping key
+      groupBy = newGroupBy;
+      // COMPATIBILITY RULE: compatible if previousGroupBy === newGroupBy OR (previousGroupBy === null AND newGroupBy === 'category')
+      const compatible = (previousGroupBy === groupBy) || (previousGroupBy === null && groupBy === 'category');
+
+      if(compatible){
+        // preserve only collapsed group ids that still exist in the newly computed groups
+        try{
+          const existing = new Set();
+          if(Array.isArray(lastRenderedItems)){
+            lastRenderedItems.forEach(it => { existing.add(deriveGroupId(it, groupBy)); });
+          }
+          const preserved = new Set();
+          collapsedGroups.forEach(g => { if(existing.has(g)) preserved.add(g); });
+          collapsedGroups.clear(); preserved.forEach(g => collapsedGroups.add(g));
+        }catch(e){ console.log('Error preserving collapsedGroups', e); }
+      } else {
+        // incompatible transition: reset collapsed groups
+        collapsedGroups.clear();
+      }
+
+      console.log('GroupBy changed:', previousGroupBy, '→', groupBy);
+      console.log('Collapsed groups preserved:', [...collapsedGroups]);
+
+      // single deterministic render after updating grouping state
+      if(tableMode && typeof lastRenderedItems !== 'undefined') renderTable(lastRenderedItems);
+      else renderPage();
+    });
+  }
+}catch(e){ console.log('groupBy wiring error', e); }
+
+// Keyboard navigation: ArrowUp/Down to move focus, Enter to toggle expansion, / to focus filter, Escape to collapse/blur
+document.addEventListener('keydown', (e)=>{
+  // If help panel is open and Escape pressed, handled earlier; keep consistent
+  const key = e.key;
+  const active = document.activeElement;
+  const isTyping = active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA' || active.isContentEditable);
+  // Slash -> focus filter (prevent inserting '/'), unless filter already focused
+  if(key === '/' ){ 
+    if(filterEl && document.activeElement !== filterEl){ e.preventDefault(); filterEl.focus(); filterEl.select(); }
+    return;
+  }
+  // If filter is focused and Escape pressed -> blur
+  if(key === 'Escape'){
+    // collapse expanded row if any
+    if(collapseAnyDetailRow()) { e.preventDefault(); return; }
+    if(helpOpen){ closeHelp(); e.preventDefault(); return; }
+    if(filterEl && document.activeElement === filterEl){ filterEl.blur(); e.preventDefault(); return; }
+    return;
+  }
+  // Navigation keys only when table is visible and not typing in other inputs
+  if(!tableMode) return;
+  if(isTyping && active !== filterEl) return;
+  if(key === 'ArrowDown' || key === 'ArrowUp'){
+    e.preventDefault();
+    const wrap = document.getElementById('tableWrap');
+    if(!wrap) return;
+    const rows = wrap.querySelectorAll('tbody tr');
+    if(!rows || rows.length===0) return;
+    if(focusedRowIndex < 0) focusedRowIndex = 0;
+    if(key === 'ArrowDown'){
+      if(focusedRowIndex < rows.length-1) setKeyboardFocus(focusedRowIndex+1);
+    } else {
+      if(focusedRowIndex > 0) setKeyboardFocus(focusedRowIndex-1);
+    }
+    return;
+  }
+  // Home/End: move to first/last visible primary row
+  if(key === 'Home' || key === 'End'){
+    e.preventDefault();
+    const targetIndex = (key === 'Home') ? getFirstVisiblePrimaryIndex() : getLastVisiblePrimaryIndex();
+    console.log('Home/End navigation:', key, '→', targetIndex);
+    if(targetIndex !== null){
+      focusedRowIndex = targetIndex;
+      setKeyboardFocus(targetIndex);
+      // announce after focus change completes (non-blocking)
+      setTimeout(()=>{
+        try{ const live = document.getElementById('ariaLive'); if(live) live.textContent = (key==='Home') ? 'Moved to first visible row' : 'Moved to last visible row'; }catch(_){ }
+      }, 0);
+    } else {
+      // no visible rows
+      setTimeout(()=>{ try{ const live = document.getElementById('ariaLive'); if(live) live.textContent = 'No visible rows'; }catch(_){ } }, 0);
+    }
+    return;
+  }
+  if(key === 'Enter'){
+    // toggle expansion for focused row
+    if(focusedRowIndex >=0){ e.preventDefault(); toggleRowExpansion(focusedRowIndex); }
+    return;
+  }
+
+});
+
+// Keyboard shortcuts to apply sort on current column (Ctrl+Shift+ArrowUp/ArrowDown)
+document.addEventListener('keydown', (e)=>{
+  try{
+    if(!(e.ctrlKey && e.shiftKey && (e.key === 'ArrowUp' || e.key === 'ArrowDown'))) return;
+    const col = lastInteractedColumn || '_ts';
+    const dir = e.key === 'ArrowUp' ? 'asc' : 'desc';
+    sortState = [{ column: col, direction: dir }];
+    console.log('Sort applied:', sortState);
+    e.preventDefault();
+    renderPage();
+  }catch(err){}
+});
+
+// Keyboard reordering for focused header: Ctrl+ArrowLeft / Ctrl+ArrowRight
+document.addEventListener('keydown', (e)=>{
+  try{
+    if(!(e.ctrlKey && (e.key === 'ArrowLeft' || e.key === 'ArrowRight'))) return;
+    const active = document.activeElement;
+    if(!active || active.tagName !== 'TH') return;
+    const col = active.getAttribute('data-col');
+    if(!col) return;
+    // operate among visible columns
+    const visible = columnOrder.filter(k=>columnVisibility[k]);
+    const idx = visible.indexOf(col);
+    if(idx < 0) return;
+    const swapWith = e.key === 'ArrowLeft' ? idx-1 : idx+1;
+    if(swapWith < 0 || swapWith >= visible.length) return;
+    const newVisible = visible.slice(); const item = newVisible.splice(idx,1)[0]; newVisible.splice(swapWith,0,item);
+    // rebuild columnOrder keeping hidden columns in place
+    const newOrder = []; let vPtr = 0; for(const k of columnOrder){ if(columnVisibility[k]){ newOrder.push(newVisible[vPtr++]); } else newOrder.push(k); }
+    columnOrder = newOrder;
+    console.log('Column order:', columnOrder);
+    e.preventDefault();
+    renderTable(lastRenderedItems);
+    // restore focus to moved header
+    setTimeout(()=>{ try{ const wrap = document.getElementById('tableWrap'); const th = wrap.querySelector(`th[data-col="${col}"]`); if(th) { th.focus(); th.classList.add('col-kb-move'); setTimeout(()=>th.classList.remove('col-kb-move'), 320); } }catch(_){} }, 0);
+  }catch(err){}
+});
+
+function collapseAnyDetailRow(){
+  const wrap = document.getElementById('tableWrap');
+  if(!wrap) return false;
+  const tbody = wrap.querySelector('tbody');
+  if(!tbody) return false;
+  const detail = tbody.querySelector('tr.detail-row');
+  if(detail){ detail.remove(); return true; }
+  return false;
+}
+
+// Expand all visible rows on current page (no re-render, no dataset mutation)
+// Expand all rows on the current page deterministically
+function expandAll(){
+  if(!lastRenderedItems || !Array.isArray(lastRenderedItems)) return;
+  expandedSet.clear();
+  for(let i=0;i<lastRenderedItems.length;i++) expandedSet.add(i);
+  renderTable(lastRenderedItems);
+  console.log('Expand All triggered', expandedSet.size);
+}
+
+// Collapse all rows on the current page; preserve keyboard focus index
+function collapseAll(){
+  expandedSet.clear();
+  if(typeof lastRenderedItems !== 'undefined') renderTable(lastRenderedItems);
+  console.log('Collapse All triggered');
+}
 
 </script>
 </body>
